@@ -1,7 +1,16 @@
-import mongoose from "mongoose";
+import { client } from "../../config/db";
 import { PinataSDK } from "pinata-web3";
 import { env } from "../../config/env";
 import { createEmbedding } from "../CreateEmbeddings";
+import { COLLECTION_NAME } from "../../modals/AdCampaignModel";
+
+interface PinataMetadata {
+  data: {
+    description?: string;
+    [key: string]: any;
+  };
+}
+
 export const AdCampaignCreated = async (
   id: number,
   owner: `0x${string}`,
@@ -20,23 +29,25 @@ export const AdCampaignCreated = async (
     console.log("Metadata not found");
     return;
   }
-  const metadataJson = await pinata.gateways.get(metadata);
+  const metadataJson = (await pinata.gateways.get(metadata)) as PinataMetadata;
   console.log(metadataJson.data);
 
-  // Check if the ad space already exists.
-  const adSpace = await mongoose.connection
-    .collection("adCampaigns")
+  const db = client.db();
+
+  // Check if the ad campaign already exists
+  const existingCampaign = await db
+    .collection(COLLECTION_NAME)
     .findOne({ id: id });
 
-  if (adSpace) {
+  if (existingCampaign) {
     return "Ad campaign already exists";
   }
 
   // Create Embedding for the ad space.
-  const embedding = await createEmbedding(JSON.stringify(metadataJson.data));
+  const embedding = await createEmbedding(metadataJson.data?.description || "");
 
   // Create the ad space.
-  await mongoose.connection.collection("adCampaigns").insertOne({
+  await db.collection(COLLECTION_NAME).insertOne({
     id: id,
     owner: owner,
     metadata: metadataJson.data,

@@ -5,7 +5,7 @@ const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
 });
 
-export const createEmbedding = async (metadata: any) => {
+export const createEmbedding = async (metadata: string) => {
   const embedding = await openai.embeddings.create({
     model: "text-embedding-3-small",
     input: metadata,

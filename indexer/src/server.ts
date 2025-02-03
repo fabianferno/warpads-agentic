@@ -5,7 +5,7 @@ import { JsonRpcProvider } from "ethers";
 import { Contract } from "ethers";
 
 import { WarpAdsABI } from "./abi/WarpAds";
-import connectDB from "./config/db";
+import connectDB, { client } from "./config/db";
 import { env } from "./config/env";
 import { AdSpaceRegister } from "./utilities/EventHandlers/AdSpaceRegister";
 import { AdCampaignCreated } from "./utilities/EventHandlers/AdCampaignCreated";
@@ -33,8 +33,33 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // DB connection
+const MAX_RETRIES = 5;
+const RETRY_INTERVAL = 5000; // 5 seconds
 
-connectDB();
+const connectWithRetry = async (retryCount = 0) => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error(
+      `Failed to connect to MongoDB (attempt ${
+        retryCount + 1
+      }/${MAX_RETRIES}):`,
+      err
+    );
+    if (retryCount < MAX_RETRIES) {
+      console.log(`Retrying in ${RETRY_INTERVAL / 1000} seconds...`);
+      setTimeout(() => connectWithRetry(retryCount + 1), RETRY_INTERVAL);
+    } else {
+      console.error("Max retries reached. Exiting...");
+      process.exit(1);
+    }
+  }
+};
+
+connectWithRetry();
 
 // Indexer
 
@@ -85,7 +110,3 @@ const contractListener = async () => {
 };
 
 contractListener();
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
