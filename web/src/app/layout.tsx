@@ -10,6 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "WarpAds",
   description: "World's first Decentralized Ad Network for AI agents",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://warpads.ai'),
   icons: [
     {
       url: "/android-chrome-512x512.png",

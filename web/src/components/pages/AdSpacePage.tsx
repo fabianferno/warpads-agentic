@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload } from "lucide-react";
-import { PinataSDK } from "pinata-web3";
-import { walletClient } from "@/lib/config";
 import { WARPADS_ADDRESS } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
 import { useAccount } from "wagmi";
+import type { PinataSDK } from "pinata-web3";
 
 export default function AdspaceForm() {
   const [agentName, setAgentName] = useState("");
@@ -22,11 +21,32 @@ export default function AdspaceForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { address } = useAccount();
+  const [pinata, setPinata] = useState<PinataSDK | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [walletClient, setWalletClient] = useState<any>(null);
 
-  const pinata = new PinataSDK({
-    pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
-    pinataGateway: "orange-select-opossum-767.mypinata.cloud",
-  });
+  useEffect(() => {
+    const initPinata = async () => {
+      try {
+        const { PinataSDK } = await import('pinata-web3');
+        setPinata(new PinataSDK({
+          pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
+          pinataGateway: "orange-select-opossum-767.mypinata.cloud",
+        }));
+      } catch (error) {
+        console.error("Failed to initialize Pinata:", error);
+      }
+    };
+    initPinata();
+  }, []);
+
+  useEffect(() => {
+    const initWalletClient = async () => {
+      const { walletClient } = await import('@/lib/config');
+      setWalletClient(walletClient);
+    };
+    initWalletClient();
+  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,8 +62,8 @@ export default function AdspaceForm() {
 
   const uploadImageToPinata = async () => {
     try {
-      if (!imageFile) {
-        throw new Error("No image file selected");
+      if (!imageFile || !pinata) {
+        throw new Error("No image file selected or Pinata not initialized");
       }
       const response = await pinata.upload.file(imageFile);
       console.log("Image uploaded to Pinata: ", response);
@@ -55,6 +75,10 @@ export default function AdspaceForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!pinata || !walletClient) {
+      console.error("Pinata or wallet client not initialized");
+      return;
+    }
     const cid = await uploadImageToPinata();
     const formData = {
       name: agentName,

@@ -98,7 +98,7 @@ export const Tweets = ({
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="relative rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10"
+            className="relative rounded-2xl bg-slate-900/50 ring-1 ring-white/10"
         >
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-50" />
             <div className="relative">

@@ -104,7 +104,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="relative max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 lg:w-[55rem] lg:max-w-none"
+                    className="relative max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4  lg:w-[50rem] lg:max-w-none"
                 >
                     <Tweets direction="right" speed="fast" pauseOnHover={true} />
                 </motion.div>
