@@ -201,18 +201,6 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
             "Fee transfer failed"
         );
 
-        // Distribute campaign cost to ad space owners
-        uint256 totalAdSpaces = adSpace.totalSupply();
-        require(totalAdSpaces > 0, "No ad spaces available");
-        uint256 rewardPerSpace = campaignCost / totalAdSpaces;
-
-        for (uint256 i = 0; i < totalAdSpaces; i++) {
-            AdSpace storage space = adSpaces[i];
-            if (space.isActive) {
-                space.rewardsAccumulated += rewardPerSpace;
-            }
-        }
-
         uint256 campaignId = campaign.mintCampaign(msg.sender, adContent);
         uint256 expiry = block.timestamp + (durationDays * 1 days);
 
@@ -332,5 +320,34 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
         space.rewardsAccumulated = 0;
 
         require(warpToken.transfer(msg.sender, amount), "Transfer failed");
+    }
+
+    /**
+     * @dev Set claimable rewards for an ad space (validator only)
+     * @param adSpaceId ID of the ad space
+     * @param amount Amount of rewards to set as claimable
+     */
+    function setClaimableRewards(
+        uint256 adSpaceId,
+        uint256 amount
+    ) external onlyValidator {
+        require(adSpaces[adSpaceId].isActive, "Ad space not active");
+        adSpaces[adSpaceId].rewardsAccumulated = amount;
+    }
+
+    /**
+     * @dev Set claimable rewards for multiple ad spaces in batch (validator only)
+     * @param adSpaceIds Array of ad space IDs
+     * @param amounts Array of reward amounts to set
+     */
+    function setBatchClaimableRewards(
+        uint256[] calldata adSpaceIds,
+        uint256[] calldata amounts
+    ) external onlyValidator {
+        require(adSpaceIds.length == amounts.length, "Array length mismatch");
+        for (uint256 i = 0; i < adSpaceIds.length; i++) {
+            require(adSpaces[adSpaceIds[i]].isActive, "Ad space not active");
+            adSpaces[adSpaceIds[i]].rewardsAccumulated = amounts[i];
+        }
     }
 }

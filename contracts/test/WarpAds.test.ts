@@ -142,18 +142,103 @@ describe("WarpAds E2E", function () {
       expect(campaign.owner).to.equal(await advertiser.getAddress());
       expect(campaign.priorityStake).to.equal(priorityStake);
 
-      // 5. Fast forward time
+      // 5. Set rewards by validator (new test)
+      const rewardAmount = parseEther("50");
+      await warpAds
+        .connect(oracle)
+        .setClaimableRewards(publisherTokenId, rewardAmount);
+
+      // 6. Verify rewards are set correctly
+      const adSpaceAfter = await warpAds.adSpaces(publisherTokenId);
+      expect(adSpaceAfter.rewardsAccumulated).to.equal(rewardAmount);
+
+      // 7. Test reward claiming
+      const publisherBalanceBefore = await warpToken.balanceOf(
+        publisher.getAddress()
+      );
+      await warpAds.connect(publisher).claimRewards(publisherTokenId);
+      const publisherBalanceAfter = await warpToken.balanceOf(
+        publisher.getAddress()
+      );
+      expect(publisherBalanceAfter - publisherBalanceBefore).to.equal(
+        rewardAmount
+      );
+
+      // 8. Fast forward time and verify campaign expiry
       await ethers.provider.send("evm_increaseTime", [
         durationDays * 24 * 60 * 60 + 1,
       ]);
       await ethers.provider.send("evm_mine", []);
-
-      // 6. Verify campaign is expired
       expect(await warpAds.isCampaignExpired(campaignId)).to.be.true;
+    });
 
-      // 7. Verify publisher earnings
-      const adSpaceAfter = await warpAds.adSpaces(publisherTokenId);
-      expect(adSpaceAfter.rewardsAccumulated).to.be.gt(0);
+    it("Should handle batch reward distribution", async function () {
+      // Create multiple ad spaces
+      const tokenIds = [];
+      for (let i = 0; i < 3; i++) {
+        const minStake = parseEther((50 + i * 50).toString());
+        const tx = await warpAds
+          .connect(publisher)
+          .registerAgent(`ipfs://test-metadata-${i}`, minStake);
+        const receipt = await tx.wait();
+        if (!receipt) throw new Error("Transaction failed");
+        const event = receipt.logs.find(
+          (log) =>
+            log instanceof EventLog && log.eventName === "AdSpaceRegistered"
+        ) as EventLog;
+        if (!event) throw new Error("Event not found");
+        tokenIds.push(event.args[0]);
+      }
+
+      // Set batch rewards
+      const rewards = tokenIds.map((_, i) =>
+        parseEther((10 * (i + 1)).toString())
+      );
+      await warpAds.connect(oracle).setBatchClaimableRewards(tokenIds, rewards);
+
+      // Verify rewards are set correctly
+      for (let i = 0; i < tokenIds.length; i++) {
+        const adSpace = await warpAds.adSpaces(tokenIds[i]);
+        expect(adSpace.rewardsAccumulated).to.equal(rewards[i]);
+      }
+
+      // Test claiming rewards
+      for (let i = 0; i < tokenIds.length; i++) {
+        const balanceBefore = await warpToken.balanceOf(publisher.getAddress());
+        await warpAds.connect(publisher).claimRewards(tokenIds[i]);
+        const balanceAfter = await warpToken.balanceOf(publisher.getAddress());
+        expect(balanceAfter - balanceBefore).to.equal(rewards[i]);
+      }
+    });
+
+    it("Should reject unauthorized reward settings", async function () {
+      // Create an ad space
+      const minStake = parseEther("100");
+      const tx = await warpAds
+        .connect(publisher)
+        .registerAgent("ipfs://test-metadata", minStake);
+      const receipt = await tx.wait();
+      if (!receipt) throw new Error("Transaction failed");
+      const event = receipt.logs.find(
+        (log) =>
+          log instanceof EventLog && log.eventName === "AdSpaceRegistered"
+      ) as EventLog;
+      if (!event) throw new Error("Event not found");
+      const tokenId = event.args[0];
+
+      // Try to set rewards from non-validator account
+      await expect(
+        warpAds
+          .connect(advertiser)
+          .setClaimableRewards(tokenId, parseEther("50"))
+      ).to.be.revertedWith("Only validator can call");
+
+      // Try to set batch rewards from non-validator account
+      await expect(
+        warpAds
+          .connect(advertiser)
+          .setBatchClaimableRewards([tokenId], [parseEther("50")])
+      ).to.be.revertedWith("Only validator can call");
     });
 
     it("Should handle multiple concurrent ad spaces and campaigns", async function () {
