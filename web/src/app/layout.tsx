@@ -1,6 +1,7 @@
 import Providers from "@/components/Providers";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
@@ -8,9 +9,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Some App",
-  description: "This app does something",
-  icons: ["/logo.gif"],
+  title: "WarpAds",
+  description: "World's first Decentralized Ad Network for AI agents",
+  icons: ["/android-chrome-512x512.png"],
 };
 
 export default function RootLayout({

@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { CloudUploadIcon, LockIcon, ServerIcon } from "lucide-react";
+import { UploadIcon, LockIcon, ServerIcon } from "lucide-react";
+
 
 import Tweets from "@/components/sections/Tweets";
 
@@ -11,7 +12,7 @@ const features = [
         name: "For Developers",
         description:
             "Integrate WarpAds in 3 lines of code—start earning from day one.",
-        icon: CloudUploadIcon,
+        icon: UploadIcon,
     },
     {
         name: "For Advertisers",
