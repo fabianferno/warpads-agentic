@@ -4,6 +4,7 @@ import HeroWrapper from "@/components/sections/HeroWrapper";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Sparkles } from "lucide-react";
+import Tweets from "./Tweets";
 
 export default function HeroSection() {
     return <HeroWrapper>
@@ -21,19 +22,19 @@ export default function HeroSection() {
                 />
             </div>
 
-            <div className="py-20 sm:py-32">
+            <div className="py-20 sm:py-32 flex justify-between items-center">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="mx-auto max-w-3xl text-center"
+                        className="mx-auto max-w-3xl"
                     >
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.5 }}
-                            className="mb-8 flex justify-center"
+                            className="mb-8 flex justify-start"
                         >
                             <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/10 px-5 py-2 ring-1 ring-inset ring-cyan-500/20">
                                 <Sparkles className="h-4 w-4 text-cyan-400" />
@@ -51,21 +52,19 @@ export default function HeroSection() {
                                 duration: 0.8,
                                 ease: "easeInOut",
                             }}
-                            className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl"
+                            className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
                         >
-                            <span className="block mb-4">The Open Protocol for</span>
-                            <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">
-                                Next-Gen Advertising
-                            </span>
+                            <span>World's First Decentralized Ad protocol for </span>
+                            <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">AI Agents</span>
                         </motion.h1>
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.8 }}
-                            className="mt-8 text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto"
+                            className="mt-8 text-lg text-slate-400 leading-relaxed max-w-2xl"
                         >
-                            WarpAds seamlessly connects AI agents with relevant ads that users actually want to engage with. 
+                            WarpAds seamlessly connects AI agents with relevant ads that users actually want to engage with.
                             Boost revenue while maintaining trust and alignment across the ecosystem.
                         </motion.p>
 
@@ -73,13 +72,13 @@ export default function HeroSection() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.7, duration: 0.8 }}
-                            className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+                            className="mt-12 flex flex-col sm:flex-row items-center justify-start gap-4"
                         >
                             <Button
                                 size="lg"
                                 className="bg-cyan-500 text-slate-950 font-semibold hover:opacity-90 hover:bg-cyan-600 hover:text-white px-8 h-12 text-base w-full sm:w-auto transition-all duration-300"
                             >
-                                Get Started
+                                For Agent Devs
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                             <Button
@@ -88,12 +87,20 @@ export default function HeroSection() {
                                 className="bg-slate-800/40 text-slate-300 hover:bg-slate-800/60 hover:text-white px-8 h-12 text-base w-full sm:w-auto group flex items-center gap-2 transition-all duration-300 ring-1 ring-slate-700/50 hover:ring-cyan-500/30"
                             >
                                 <FileText className="h-4 w-4" />
-                                Documentation
+                                For Advertisers
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
                         </motion.div>
                     </motion.div>
                 </div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="relative max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 lg:w-[55rem] lg:max-w-none"
+                >
+                    <Tweets direction="right" speed="fast" pauseOnHover={true} />
+                </motion.div>
             </div>
 
             <div

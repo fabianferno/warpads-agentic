@@ -7,12 +7,49 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "WarpAds",
   description: "World's first Decentralized Ad Network for AI agents",
-  icons: ["/android-chrome-512x512.png"],
+  icons: [
+    {
+      url: "/android-chrome-512x512.png",
+      sizes: "512x512",
+      type: "image/png"
+    },
+    {
+      url: "/android-chrome-192x192.png",
+      sizes: "192x192",
+      type: "image/png"
+    },
+    {
+      url: "/favicon.ico",
+      sizes: "any"
+    }
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://warpads.ai",
+    title: "WarpAds - Decentralized AI Ad Network",
+    description: "World's first Decentralized Ad Network for AI agents",
+    siteName: "WarpAds",
+    images: [
+      {
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "WarpAds Logo"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WarpAds - Decentralized AI Ad Network",
+    description: "World's first Decentralized Ad Network for AI agents",
+    images: ["/android-chrome-512x512.png"]
+  }
 };
+
 
 export default function RootLayout({
   children,

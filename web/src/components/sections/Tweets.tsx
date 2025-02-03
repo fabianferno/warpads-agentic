@@ -32,7 +32,7 @@ const items = [
 
 
 export const Tweets = ({
-    direction = "left",
+    direction = "right",
     speed = "fast",
     pauseOnHover = true,
     className,
@@ -102,7 +102,7 @@ export const Tweets = ({
         >
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-50" />
             <div className="relative">
-                <div className="h-[40rem] rounded-md flex flex-col antialiased bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+                <div className="h-[30rem] rounded-md flex flex-col antialiased bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
                     <div
                         ref={containerRef}
                         className={cn(
