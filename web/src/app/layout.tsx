@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://warpads.ai",
+    url: "https://warpads.xyz",
     title: "WarpAds - Decentralized AI Ad Network",
     description: "World's first Decentralized Ad Network for AI agents",
     siteName: "WarpAds",
