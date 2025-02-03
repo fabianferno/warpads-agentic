@@ -18,6 +18,7 @@ import Image from "next/image";
 import { WARPADS_ADDRESS } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
 import type { PinataSDK } from "pinata-web3";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function AdCampaignForm() {
   const [categories, setCategories] = useState<string[]>([]);
@@ -28,20 +29,24 @@ export default function AdCampaignForm() {
   const [deadline, setDeadline] = useState<Date>();
   const [daysRemaining, setDaysRemaining] = useState(0);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [ad, setAd] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { address } = useAccount();
   const [pinata, setPinata] = useState<PinataSDK | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [walletClient, setWalletClient] = useState<any>(null);
 
   useEffect(() => {
     const initPinata = async () => {
       try {
-        const { PinataSDK } = await import('pinata-web3');
-        setPinata(new PinataSDK({
-          pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
-          pinataGateway: "orange-select-opossum-767.mypinata.cloud",
-        }));
+        const { PinataSDK } = await import("pinata-web3");
+        setPinata(
+          new PinataSDK({
+            pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
+            pinataGateway: "orange-select-opossum-767.mypinata.cloud",
+          })
+        );
       } catch (error) {
         console.error("Failed to initialize Pinata:", error);
       }
@@ -51,7 +56,7 @@ export default function AdCampaignForm() {
 
   useEffect(() => {
     const initWalletClient = async () => {
-      const { walletClient } = await import('@/lib/config');
+      const { walletClient } = await import("@/lib/config");
       setWalletClient(walletClient);
     };
     initWalletClient();
@@ -111,6 +116,7 @@ export default function AdCampaignForm() {
     const imageHash = await uploadImageToPinata();
     const formData = {
       name,
+      ad,
       description,
       stakeAmount,
       imageHash,
@@ -134,6 +140,7 @@ export default function AdCampaignForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8">
       <div className="mx-auto max-w-4xl">
+        <ConnectButton />
         <div className="relative rounded-xl overflow-hidden p-[1px]">
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
 
@@ -192,6 +199,18 @@ export default function AdCampaignForm() {
                     ))}
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ad" className="text-white">
+                    Advertisement
+                  </Label>
+                  <Input
+                    id="ad"
+                    value={ad}
+                    onChange={(e) => setAd(e.target.value)}
+                    placeholder="What are you advertising?"
+                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
+                  />
+                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-white">
@@ -201,7 +220,7 @@ export default function AdCampaignForm() {
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe your ad campaign in detail..."
+                    placeholder="Describe your product or service in detail..."
                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 min-h-[100px]"
                   />
                 </div>

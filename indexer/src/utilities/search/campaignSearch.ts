@@ -11,11 +11,11 @@ export const searchCampaigns = async (query: string) => {
     .collection<IAdCampaign>(COLLECTION_NAME)
     .aggregate([
       {
-        $vectorMatch: {
+        $vectorSearch: {
           queryVector: queryEmbeddings,
           path: "embedding",
           numCandidates: 100,
-          limit: 5,
+          limit: 3,
           index: "ad_vector_index",
           filter: {
             active: true,

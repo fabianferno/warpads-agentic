@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { searchCampaigns } from "../search/campaignSearch";
 import { env } from "../../config/env";
+import { parseMetadata } from "../MetadataParser";
 
 const openai = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
@@ -9,6 +10,14 @@ const openai = new OpenAI({
 export const adEngine = async (query: string) => {
   // This will give the top 3 adcampaigns
   const campaigns = await searchCampaigns(query);
+
+  const parsedCampaigns = campaigns.map((c) => {
+    return {
+      text: parseMetadata(JSON.stringify(c.metadata)),
+      score: c.similarity,
+    };
+  });
+  console.log(parsedCampaigns);
 
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
@@ -21,9 +30,12 @@ export const adEngine = async (query: string) => {
         1. You will be given a query and relevant ad campaigns.
         2. You need to select the most appropriate ad campaign from the given query.
         3. You need to provide a oneliner ad to be appended with the tweet.
-        4. If you are unable to find the best suitable ad campaign , you need to return "No ad found"
-        5. If there are multiple ads or the score of the relavance of the ads are same or very close , in the ad campaign , you might find the priority stake , so choose the one with more stake.
-        6. But keep in mind the ad relavance is more important than the stake.
+        4. If there are multiple ads or the score of the relavance of the ads are same or very close , in the ad campaign , you might find the priority stake , so choose the one with more stake.
+        5. But keep in mind the ad relavance is more important than the stake.
+        6. Generate the ads only from the provided ad campaigns , do not make up any ad or any other text.
+        7. Avoid suggesting ads which are not related to the query and dont include any other text except the ad data .
+        8. If you are unable to find the best suitable ad campaign , you need to return "No ad found"
+
 
         Example:
         1. Query: "@WanderGuideBot Best budget destinations in Europe?
@@ -47,13 +59,11 @@ export const adEngine = async (query: string) => {
       },
       {
         role: "user",
-        content: `Query: ${query}\nRelevant Campaigns:\n${campaigns
+        content: `Query: ${query}\nRelevant Campaigns:\n${parsedCampaigns
           .map((c) => c.text)
           .join("\n")}`,
       },
     ],
-    temperature: 0.7,
-    max_tokens: 500,
   });
 
   console.log(response.choices[0].message.content);

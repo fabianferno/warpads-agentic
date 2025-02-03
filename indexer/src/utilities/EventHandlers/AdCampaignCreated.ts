@@ -3,6 +3,7 @@ import { PinataSDK } from "pinata-web3";
 import { env } from "../../config/env";
 import { createEmbedding } from "../CreateEmbeddings";
 import { COLLECTION_NAME } from "../../modals/AdCampaignModel";
+import { parseMetadata } from "../MetadataParser";
 
 interface PinataMetadata {
   data: {
@@ -43,8 +44,10 @@ export const AdCampaignCreated = async (
     return "Ad campaign already exists";
   }
 
+  const parsedMetadata = parseMetadata(JSON.stringify(metadataJson.data));
+
   // Create Embedding for the ad space.
-  const embedding = await createEmbedding(metadataJson.data?.description || "");
+  const embedding = await createEmbedding(parsedMetadata);
 
   // Create the ad space.
   await db.collection(COLLECTION_NAME).insertOne({
