@@ -1,92 +1,38 @@
-type AdSpaceRegistered @entity(immutable: true) {
-  id: Bytes!
-  adSpaceId: BigInt! # uint256
-  owner: Bytes! # address
-  stake: BigInt! # uint256
-  metadataURI: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type AdSpace @entity {
+  id: ID! # Unique identifier, usually the NFT (or event) id.
+  owner: Bytes! # Address of the ad space owner.
+  stakedWarp: BigInt! # Amount of WARP tokens staked.
+  metadataURI: String! # IPFS URI for metadata.
+  rewardsAccumulated: BigInt! # Total rewards accumulated so far.
+  isActive: Boolean! # Whether the ad space is currently active.
+  # Relationships
+  user: User @derivedFrom(field: "adSpaces") # Back-reference to the owning User
+  # Extra fields for indexing and debugging
+  createdAt: BigInt! # Timestamp (in seconds) when this record was created.
+  updatedAt: BigInt # Timestamp when this record was last updated (if applicable).
+  transactionHash: Bytes! # Transaction hash that created this record.
 }
 
-type CampaignRegistered @entity(immutable: true) {
-  id: Bytes!
-  campaignId: BigInt! # uint256
-  owner: Bytes! # address
-  expiry: BigInt! # uint256
-  priorityStake: BigInt! # uint256
-  adContent: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type AdCampaign @entity {
+  id: ID! # Unique identifier, typically the campaign NFT id.
+  owner: Bytes! # Address of the campaign owner.
+  expiry: BigInt! # Timestamp (in seconds) when the campaign expires.
+  priorityStake: BigInt! # Amount staked for campaign priority.
+  adContent: String! # IPFS URI or ad content reference.
+  isActive: Boolean! # Whether the campaign is active.
+  # Relationships
+  user: User @derivedFrom(field: "adCampaigns") # Back-reference to the owning User
+  # Extra fields for indexing and debugging
+  createdAt: BigInt! # Timestamp (in seconds) when this campaign was registered.
+  updatedAt: BigInt # Timestamp when this campaign record was last updated (if applicable).
+  transactionHash: Bytes! # Transaction hash that created this campaign record.
 }
 
-type CampaignTerminated @entity(immutable: true) {
-  id: Bytes!
-  campaignId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EmergencyShutdown @entity(immutable: true) {
-  id: Bytes!
-  triggeredBy: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Paused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type StakeSlashed @entity(immutable: true) {
-  id: Bytes!
-  adSpaceId: BigInt! # uint256
-  amount: BigInt! # uint256
-  reason: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type StakeWithdrawn @entity(immutable: true) {
-  id: Bytes!
-  adSpaceId: BigInt! # uint256
-  owner: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Unpaused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ValidatorUpdated @entity(immutable: true) {
-  id: Bytes!
-  oldValidator: Bytes! # address
-  newValidator: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type User @entity {
+  id: ID! # User's address as a unique identifier.
+  adSpaces: [AdSpace!]! # List of ad spaces registered by the user.
+  adCampaigns: [AdCampaign!]! # List of ad campaigns launched by the user.
+  # Optional: Additional user profile information (if available)
+  createdAt: BigInt! # Timestamp when the user was first seen interacting with the protocol.
+  updatedAt: BigInt # Timestamp for the latest update of the user record.
 }

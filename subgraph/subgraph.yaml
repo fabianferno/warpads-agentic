@@ -16,16 +16,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AdSpaceRegistered
-        - CampaignRegistered
-        - CampaignTerminated
-        - EmergencyShutdown
-        - OwnershipTransferred
-        - Paused
-        - StakeSlashed
-        - StakeWithdrawn
-        - Unpaused
-        - ValidatorUpdated
+        - AdSpace
+        - AdCampaign
+        - User
       abis:
         - name: WarpadsProtocol
           file: ./abis/WarpadsProtocol.json
@@ -38,8 +31,6 @@ dataSources:
           handler: handleCampaignTerminated
         - event: EmergencyShutdown(indexed address)
           handler: handleEmergencyShutdown
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Paused(address)
           handler: handlePaused
         - event: StakeSlashed(indexed uint256,uint256,string)

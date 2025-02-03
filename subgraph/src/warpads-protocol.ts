@@ -8,162 +8,126 @@ import {
   StakeSlashed as StakeSlashedEvent,
   StakeWithdrawn as StakeWithdrawnEvent,
   Unpaused as UnpausedEvent,
-  ValidatorUpdated as ValidatorUpdatedEvent
-} from "../generated/WarpadsProtocol/WarpadsProtocol"
-import {
-  AdSpaceRegistered,
-  CampaignRegistered,
-  CampaignTerminated,
-  EmergencyShutdown,
-  OwnershipTransferred,
-  Paused,
-  StakeSlashed,
-  StakeWithdrawn,
-  Unpaused,
-  ValidatorUpdated
-} from "../generated/schema"
+  ValidatorUpdated as ValidatorUpdatedEvent,
+} from "../generated/WarpadsProtocol/WarpadsProtocol";
+
+import { AdSpace, AdCampaign, User } from "../generated/schema";
+import { BigInt, log } from "@graphprotocol/graph-ts";
 
 export function handleAdSpaceRegistered(event: AdSpaceRegisteredEvent): void {
-  let entity = new AdSpaceRegistered(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.adSpaceId = event.params.adSpaceId
-  entity.owner = event.params.owner
-  entity.stake = event.params.stake
-  entity.metadataURI = event.params.metadataURI
+  let adSpaceId = event.params.adSpaceId.toString();
+  let adSpace = new AdSpace(adSpaceId);
+  adSpace.owner = event.params.owner;
+  adSpace.stakedWarp = event.params.stake;
+  adSpace.metadataURI = event.params.metadataURI;
+  adSpace.rewardsAccumulated = BigInt.fromI32(0);
+  adSpace.isActive = true;
+  adSpace.createdAt = event.block.timestamp;
+  adSpace.transactionHash = event.transaction.hash;
+  adSpace.save();
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // Update the User entity for the owner
+  let userId = event.params.owner.toHex();
+  let user = User.load(userId);
+  if (user == null) {
+    user = new User(userId);
+    user.adSpaces = [];
+    user.adCampaigns = [];
+    user.createdAt = event.block.timestamp;
+  }
+  let adSpaces = user.adSpaces;
+  adSpaces.push(adSpace.id);
+  user.adSpaces = adSpaces;
+  user.updatedAt = event.block.timestamp;
+  user.save();
 }
 
 export function handleCampaignRegistered(event: CampaignRegisteredEvent): void {
-  let entity = new CampaignRegistered(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.campaignId = event.params.campaignId
-  entity.owner = event.params.owner
-  entity.expiry = event.params.expiry
-  entity.priorityStake = event.params.priorityStake
-  entity.adContent = event.params.adContent
+  let campaignId = event.params.campaignId.toString();
+  let campaign = new AdCampaign(campaignId);
+  campaign.owner = event.params.owner;
+  campaign.expiry = event.params.expiry;
+  campaign.priorityStake = event.params.priorityStake;
+  campaign.adContent = event.params.adContent;
+  campaign.isActive = true;
+  campaign.createdAt = event.block.timestamp;
+  campaign.transactionHash = event.transaction.hash;
+  campaign.save();
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // Update the User entity for the owner
+  let userId = event.params.owner.toHex();
+  let user = User.load(userId);
+  if (user == null) {
+    user = new User(userId);
+    user.adSpaces = [];
+    user.adCampaigns = [];
+    user.createdAt = event.block.timestamp;
+  }
+  let campaigns = user.adCampaigns;
+  campaigns.push(campaign.id);
+  user.adCampaigns = campaigns;
+  user.updatedAt = event.block.timestamp;
+  user.save();
 }
 
 export function handleCampaignTerminated(event: CampaignTerminatedEvent): void {
-  let entity = new CampaignTerminated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.campaignId = event.params.campaignId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let campaignId = event.params.campaignId.toString();
+  let campaign = AdCampaign.load(campaignId);
+  if (campaign == null) {
+    return;
+  }
+  campaign.isActive = false;
+  campaign.updatedAt = event.block.timestamp;
+  campaign.save();
 }
 
 export function handleEmergencyShutdown(event: EmergencyShutdownEvent): void {
-  let entity = new EmergencyShutdown(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.triggeredBy = event.params.triggeredBy
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleOwnershipTransferred(
-  event: OwnershipTransferredEvent
-): void {
-  let entity = new OwnershipTransferred(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousOwner = event.params.previousOwner
-  entity.newOwner = event.params.newOwner
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // TODO: Implement this
+  log.info("Emergency shutdown triggered by {}", [
+    event.params.triggeredBy.toHex(),
+  ]);
 }
 
 export function handlePaused(event: PausedEvent): void {
-  let entity = new Paused(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.account = event.params.account
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // TODO: Implement this
+  log.info("Paused event triggered by {}", [event.params.account.toHex()]);
 }
 
 export function handleStakeSlashed(event: StakeSlashedEvent): void {
-  let entity = new StakeSlashed(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.adSpaceId = event.params.adSpaceId
-  entity.amount = event.params.amount
-  entity.reason = event.params.reason
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let adSpaceId = event.params.adSpaceId.toString();
+  let adSpace = AdSpace.load(adSpaceId);
+  if (adSpace == null) {
+    // If the ad space does not exist, exit early.
+    return;
+  }
+  // Subtract the withdrawn amount from the stakedWarp
+  adSpace.stakedWarp = adSpace.stakedWarp.minus(event.params.amount);
+  adSpace.updatedAt = event.block.timestamp;
+  adSpace.save();
 }
 
 export function handleStakeWithdrawn(event: StakeWithdrawnEvent): void {
-  let entity = new StakeWithdrawn(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.adSpaceId = event.params.adSpaceId
-  entity.owner = event.params.owner
-  entity.amount = event.params.amount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let adSpaceId = event.params.adSpaceId.toString();
+  let adSpace = AdSpace.load(adSpaceId);
+  if (adSpace == null) {
+    // If the ad space does not exist, exit early.
+    return;
+  }
+  // Subtract the withdrawn amount from the stakedWarp
+  adSpace.stakedWarp = adSpace.stakedWarp.minus(event.params.amount);
+  adSpace.updatedAt = event.block.timestamp;
+  adSpace.save();
 }
 
 export function handleUnpaused(event: UnpausedEvent): void {
-  let entity = new Unpaused(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.account = event.params.account
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // TODO: Implement this
+  log.info("Unpaused event triggered by {}", [event.params.account.toHex()]);
 }
 
 export function handleValidatorUpdated(event: ValidatorUpdatedEvent): void {
-  let entity = new ValidatorUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.oldValidator = event.params.oldValidator
-  entity.newValidator = event.params.newValidator
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // TODO: Implement this
+  log.info("Validator updated event triggered by {}", [
+    event.params.oldValidator.toHex(),
+    event.params.newValidator.toHex(),
+  ]);
 }
