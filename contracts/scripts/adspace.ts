@@ -12,11 +12,11 @@ async function main() {
 
   await warpsToken.mint(
     "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
-    BigInt(2e18)
+    BigInt(200e18)
   );
   await warpsToken.approve(
     "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad",
-    BigInt(1e18)
+    BigInt(100e18)
   );
   const metadataURI = JSON.stringify({
     name: "DeFi Alpha Bot",
