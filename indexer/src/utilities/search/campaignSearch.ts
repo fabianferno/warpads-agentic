@@ -20,10 +20,21 @@ export const searchCampaigns = async (query: string) => {
   const db = client.db();
   const campaigns = await db
     .collection<IAdCampaign>(COLLECTION_NAME)
-    .find({
-      active: true,
-      expiry: { $gt: nowInSeconds },
-    })
+    .aggregate([
+      {
+        $vectorMatch: {
+          queryVector: queryEmbeddings,
+          path: "embedding",
+          numCandidates: 100,
+          limit: 5,
+          index: "ad_vector_index",
+          filter: {
+            active: true,
+            expiry: { $gt: nowInSeconds },
+          },
+        },
+      },
+    ])
     .toArray();
 
   console.log(`Found ${campaigns?.length} campaigns`);
