@@ -25,7 +25,6 @@ export default function AdCampaignForm() {
   const [currentCategory, setCurrentCategory] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [oneLiner, setOneLiner] = useState("");
   const [stakeAmount, setStakeAmount] = useState("");
   const [deadline, setDeadline] = useState<Date>();
   const [daysRemaining, setDaysRemaining] = useState(0);
@@ -89,9 +88,7 @@ export default function AdCampaignForm() {
     const formData = {
       name,
       description,
-      oneLiner,
       stakeAmount,
-      deadline,
       imageHash,
       categories,
     };
@@ -182,19 +179,6 @@ export default function AdCampaignForm() {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Describe your ad campaign in detail..."
                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 min-h-[100px]"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="oneLiner" className="text-white">
-                    One-liner
-                  </Label>
-                  <Input
-                    id="oneLiner"
-                    value={oneLiner}
-                    onChange={(e) => setOneLiner(e.target.value)}
-                    placeholder="Short catchy phrase for your ad"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
                   />
                 </div>
 
