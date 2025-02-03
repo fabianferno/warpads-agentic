@@ -15,6 +15,7 @@ import {
   sepolia,
   optimismSepolia,
   arbitrumSepolia,
+  baseSepolia,
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 const queryClient = new QueryClient();
@@ -22,14 +23,7 @@ const queryClient = new QueryClient();
 const config = getDefaultConfig({
   appName: "Some App",
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "",
-  chains: [
-    mainnet,
-    optimism,
-    arbitrum,
-    sepolia,
-    optimismSepolia,
-    arbitrumSepolia,
-  ],
+  chains: [baseSepolia],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
 

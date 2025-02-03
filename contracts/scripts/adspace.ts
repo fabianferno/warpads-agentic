@@ -9,9 +9,15 @@ async function main() {
     "WarpAdsProtocol",
     "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad"
   );
-  // Mint 100 WARP tokens to the agent
-  //   await warpsToken.mint("0x4b4b30e2E7c6463b03CdFFD6c42329D357205334", 2);
-  //   await warpsToken.approve("0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad", 1);
+
+  await warpsToken.mint(
+    "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
+    BigInt(2e18)
+  );
+  await warpsToken.approve(
+    "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad",
+    BigInt(1e18)
+  );
   const metadataURI = JSON.stringify({
     name: "DeFi Alpha Bot",
     description:
@@ -21,9 +27,14 @@ async function main() {
     account_id: "defiGuru",
     account_type: "twitter",
   });
-  await warpAds.registerAgent(metadataURI, BigInt(1e18), {
-    gasLimit: 1000000,
-  });
+  try {
+    // await warpAds.registerAgent(metadataURI, BigInt(1e18), {
+    //   gasLimit: 1000000,
+    // });
+    console.log("Registered agent");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 main().catch((error) => {

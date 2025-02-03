@@ -3,7 +3,6 @@ import {
   CampaignRegistered as CampaignRegisteredEvent,
   CampaignTerminated as CampaignTerminatedEvent,
   EmergencyShutdown as EmergencyShutdownEvent,
-  OwnershipTransferred as OwnershipTransferredEvent,
   Paused as PausedEvent,
   StakeSlashed as StakeSlashedEvent,
   StakeWithdrawn as StakeWithdrawnEvent,
