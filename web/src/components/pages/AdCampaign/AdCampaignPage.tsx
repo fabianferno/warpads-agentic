@@ -12,6 +12,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Upload } from "lucide-react";
+import { useAccount } from "wagmi";
+import { PinataSDK } from "pinata-web3";
+import Image from "next/image";
+import { walletClient } from "@/lib/config";
+import { WARPADS_ADDRESS } from "@/lib/const";
+import { WarpadsABI } from "@/lib/abi/Warpads";
 
 export default function AdCampaignForm() {
   const [categories, setCategories] = useState<string[]>([]);
@@ -22,6 +29,39 @@ export default function AdCampaignForm() {
   const [stakeAmount, setStakeAmount] = useState("");
   const [deadline, setDeadline] = useState<Date>();
   const [daysRemaining, setDaysRemaining] = useState(0);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const { address } = useAccount();
+
+  const pinata = new PinataSDK({
+    pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
+    pinataGateway: "orange-select-opossum-767.mypinata.cloud",
+  });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImageToPinata = async () => {
+    try {
+      if (!imageFile) {
+        throw new Error("No image file selected");
+      }
+      const response = await pinata.upload.file(imageFile);
+      console.log("Image uploaded to Pinata: ", response);
+      return response.IpfsHash;
+    } catch (error) {
+      console.error("Error uploading image to Pinata: ", error);
+    }
+  };
 
   const handleAddCategory = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && currentCategory.trim()) {
@@ -43,6 +83,33 @@ export default function AdCampaignForm() {
     setDaysRemaining(days);
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const imageHash = await uploadImageToPinata();
+    const formData = {
+      name,
+      description,
+      oneLiner,
+      stakeAmount,
+      deadline,
+      imageHash,
+      categories,
+    };
+    const metadataURI = await pinata.upload.json(formData);
+    const tx = await walletClient.writeContract({
+      address: WARPADS_ADDRESS,
+      abi: WarpadsABI,
+      functionName: "registerCampaign",
+      args: [
+        daysRemaining,
+        BigInt(parseFloat(stakeAmount) * 10 ** 18),
+        metadataURI.IpfsHash,
+      ],
+      account: address as `0x${string}`,
+    });
+    console.log(tx);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8">
       <div className="mx-auto max-w-4xl">
@@ -60,7 +127,7 @@ export default function AdCampaignForm() {
                 </p>
               </div>
 
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-white">
                     Ad Name
@@ -191,7 +258,35 @@ export default function AdCampaignForm() {
                   </p>
                 </div>
 
-                {/* Rest of the form fields... */}
+                <div className="space-y-2">
+                  <Label htmlFor="image" className="text-white">
+                    Campaign Image
+                  </Label>
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="w-full h-48 relative border-2 border-dashed border-white/20 rounded-lg overflow-hidden">
+                      {imagePreview ? (
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                          <Upload className="w-8 h-8 mb-2" />
+                          <p>Drop your image here or click to upload</p>
+                        </div>
+                      )}
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <Button
                   type="submit"
