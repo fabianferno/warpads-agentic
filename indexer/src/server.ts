@@ -7,6 +7,7 @@ import { Contract } from "ethers";
 import { WarpAdsABI } from "./abi/WarpAds";
 import connectDB from "./config/db";
 import { env } from "./config/env";
+import { AdSpaceRegister } from "./utilities/EventHandlers/AdSpaceRegister";
 
 const app: Application = express();
 const PORT = env.PORT || 3000;
@@ -57,6 +58,8 @@ const contractListener = async () => {
         console.log("Metadata URI:", metadataURI);
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
+
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake);
       }
     );
 
