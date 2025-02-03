@@ -1,0 +1,38 @@
+type AdSpace @entity {
+  id: ID! # Unique identifier, usually the NFT (or event) id.
+  owner: Bytes! # Address of the ad space owner.
+  stakedWarp: BigInt! # Amount of WARP tokens staked.
+  metadataURI: String! # IPFS URI for metadata.
+  rewardsAccumulated: BigInt! # Total rewards accumulated so far.
+  isActive: Boolean! # Whether the ad space is currently active.
+  # Relationships
+  user: User @derivedFrom(field: "adSpaces") # Back-reference to the owning User
+  # Extra fields for indexing and debugging
+  createdAt: BigInt! # Timestamp (in seconds) when this record was created.
+  updatedAt: BigInt # Timestamp when this record was last updated (if applicable).
+  transactionHash: Bytes! # Transaction hash that created this record.
+}
+
+type AdCampaign @entity {
+  id: ID! # Unique identifier, typically the campaign NFT id.
+  owner: Bytes! # Address of the campaign owner.
+  expiry: BigInt! # Timestamp (in seconds) when the campaign expires.
+  priorityStake: BigInt! # Amount staked for campaign priority.
+  adContent: String! # IPFS URI or ad content reference.
+  isActive: Boolean! # Whether the campaign is active.
+  # Relationships
+  user: User @derivedFrom(field: "adCampaigns") # Back-reference to the owning User
+  # Extra fields for indexing and debugging
+  createdAt: BigInt! # Timestamp (in seconds) when this campaign was registered.
+  updatedAt: BigInt # Timestamp when this campaign record was last updated (if applicable).
+  transactionHash: Bytes! # Transaction hash that created this campaign record.
+}
+
+type User @entity {
+  id: ID! # User's address as a unique identifier.
+  adSpaces: [AdSpace!]! # List of ad spaces registered by the user.
+  adCampaigns: [AdCampaign!]! # List of ad campaigns launched by the user.
+  # Optional: Additional user profile information (if available)
+  createdAt: BigInt! # Timestamp when the user was first seen interacting with the protocol.
+  updatedAt: BigInt # Timestamp for the latest update of the user record.
+}

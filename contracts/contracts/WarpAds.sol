@@ -57,12 +57,15 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
     event AdSpaceRegistered(
         uint256 indexed adSpaceId,
         address indexed owner,
-        uint256 stake
+        uint256 stake,
+        string metadataURI
     );
     event CampaignRegistered(
         uint256 indexed campaignId,
         address indexed owner,
-        uint256 expiry
+        uint256 expiry,
+        uint256 priorityStake,
+        string adContent
     );
     event StakeWithdrawn(
         uint256 indexed adSpaceId,
@@ -160,7 +163,7 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
             "Warp token transfer failed"
         );
 
-        emit AdSpaceRegistered(adSpaceId, msg.sender, warpStake);
+        emit AdSpaceRegistered(adSpaceId, msg.sender, warpStake, metadataURI);
     }
 
     /**
@@ -212,7 +215,13 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
             isActive: true
         });
 
-        emit CampaignRegistered(campaignId, msg.sender, expiry);
+        emit CampaignRegistered(
+            campaignId,
+            msg.sender,
+            expiry,
+            priorityStake,
+            adContent
+        );
     }
 
     /**
