@@ -2,10 +2,7 @@
 
 import { motion } from "framer-motion";
 import { UploadIcon, LockIcon, ServerIcon } from "lucide-react";
-
-
-import Tweets from "@/components/sections/Tweets";
-
+import Image from "next/image";
 
 const features = [
     {
@@ -48,17 +45,6 @@ export default function CallToValue() {
                     >
                         Earn More with Ads That Adapt to Your Users&apos; Needs
                     </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="mt-6 text-lg/8 text-gray-300"
-                    >
-                        Unlock a decentralized, transparent, and fair advertising system
-                        tailored for Web3 social platforms. Empower creators,
-                        advertisers, and communities to take control of digital
-                        advertising.
-                    </motion.p>
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -66,7 +52,7 @@ export default function CallToValue() {
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 lg:w-[64rem] lg:max-w-none"
                 >
-                    <Tweets />
+                    <Image src="/assets/Plugin.png" className="rounded-xl " alt="Call to Value" width={665} height={442} />
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

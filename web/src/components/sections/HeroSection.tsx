@@ -75,19 +75,26 @@ export default function HeroSection() {
                             className="mt-12 flex flex-col sm:flex-row items-center justify-start gap-4"
                         >
                             <Button
+                                onClick={() => {
+                                    window.location.href = "/adspace";
+                                }}
                                 size="lg"
                                 className="bg-cyan-500 text-slate-950 font-semibold hover:opacity-90 hover:bg-cyan-600 hover:text-white px-8 h-12 text-base w-full sm:w-auto transition-all duration-300"
                             >
-                                For Agent Devs
+
+                                Earn with your Agent
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                             <Button
+                                onClick={() => {
+                                    window.location.href = "/adcampaign";
+                                }}
                                 variant="ghost"
                                 size="lg"
                                 className="bg-slate-800/40 text-slate-300 hover:bg-slate-800/60 hover:text-white px-8 h-12 text-base w-full sm:w-auto group flex items-center gap-2 transition-all duration-300 ring-1 ring-slate-700/50 hover:ring-cyan-500/30"
                             >
                                 <FileText className="h-4 w-4" />
-                                For Advertisers
+                                Create Ad
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
                         </motion.div>

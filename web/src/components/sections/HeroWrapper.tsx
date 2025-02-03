@@ -14,10 +14,11 @@ export const HeroWrapper = ({
     return (
         <div
             className={cn(
-                "relative flex min-h-[65vh] flex-col items-center justify-center overflow-hidden w-full rounded-md z-0",
+                "relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden w-full rounded-md z-0",
                 className
             )}
         >
+
             <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0 opacity-80">
                 <motion.div
                     initial={{ opacity: 0.5, width: "15rem" }}
