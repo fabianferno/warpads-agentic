@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import { run } from "hardhat";
 
 async function main() {
   console.log("Starting deployment sequence...");
@@ -31,31 +32,74 @@ async function main() {
   console.log("\nDeploying WarpAds contract...");
   const WarpAds = await ethers.getContractFactory("WarpAdsProtocol");
   const warpAds = await WarpAds.deploy(
+    "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
     warpTokenAddress,
     adspaceAddress,
-    adCampaignAddress
+    adCampaignAddress,
+    "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334"
   );
   await warpAds.waitForDeployment();
   const warpAdsAddress = await warpAds.getAddress();
   console.log("WarpAds deployed to:", warpAdsAddress);
 
-  // // Transfer ownership of Adspace and AdCampaign to WarpAds
-  // await adspace.(warpAdsAddress);
-  // console.log("Adspace ownership transferred to WarpAds");
-  // await adCampaign.transferOwnership(warpAdsAddress);
-  // console.log("AdCampaign ownership transferred to WarpAds");
-
-  // Get the AdNFT address
-  // const adNFTAddress = await warpAds.adNFT();
-  // console.log("AdNFT deployed to:", adNFTAddress);
-
-  console.log("\nVerification commands:");
-  console.log(`npx hardhat verify --network base-sepolia ${warpTokenAddress}`);
-  console.log(`npx hardhat verify --network base-sepolia ${adspaceAddress}`);
-  console.log(`npx hardhat verify --network base-sepolia ${adCampaignAddress}`);
+  // 5. Transfer ownership of Adspace and AdCampaign to WarpAds
   console.log(
-    `npx hardhat verify --network base-sepolia ${warpAdsAddress} ${warpTokenAddress} ${adspaceAddress} ${adCampaignAddress}`
+    "\nTransferring ownership of Adspace and AdCampaign to WarpAds..."
   );
+  await adspace.transferOwnership(warpAdsAddress);
+  console.log("Adspace ownership transferred to WarpAds");
+  await adCampaign.transferOwnership(warpAdsAddress);
+  console.log("AdCampaign ownership transferred to WarpAds");
+
+  // 6. I want to verify all the 4 contracts.
+  console.log("\nVerifying contracts...");
+  try {
+    await run("verify:verify", {
+      address: warpTokenAddress,
+      constructorArguments: ["WarpToken", "WARP"],
+    });
+    console.log("WarpToken verified");
+  } catch (error) {
+    console.error("Error verifying WarpToken:", error);
+  }
+
+  try {
+    await run("verify:verify", {
+      address: adspaceAddress,
+      constructorArguments: ["AdSpace", "ADSPACE"],
+    });
+    console.log("Adspace verified");
+  } catch (error) {
+    console.error("Error verifying Adspace:", error);
+  }
+
+  try {
+    await run("verify:verify", {
+      address: adCampaignAddress,
+      constructorArguments: ["AdCampaign", "ADCAMPAIGN"],
+    });
+    console.log("AdCampaign verified");
+  } catch (error) {
+    console.error("Error verifying AdCampaign:", error);
+  }
+
+  try {
+    await run("verify:verify", {
+      address: warpAdsAddress,
+      constructorArguments: [
+        "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
+        warpTokenAddress,
+        adspaceAddress,
+        adCampaignAddress,
+        "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
+      ],
+    });
+    console.log("WarpAds verified");
+  } catch (error) {
+    console.error("Error verifying WarpAds:", error);
+  }
+
+  console.log("\nDeployment sequence completed successfully.");
 }
 
 main()

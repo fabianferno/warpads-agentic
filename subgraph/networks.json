@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "WarpadsProtocol": {
+      "address": "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad",
+      "startBlock": 21329469
+    }
+  }
+}

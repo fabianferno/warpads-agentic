@@ -1,0 +1,53 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: WarpadsProtocol
+    network: base-sepolia
+    source:
+      address: "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad"
+      abi: WarpadsProtocol
+      startBlock: 21329469
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdSpaceRegistered
+        - CampaignRegistered
+        - CampaignTerminated
+        - EmergencyShutdown
+        - OwnershipTransferred
+        - Paused
+        - StakeSlashed
+        - StakeWithdrawn
+        - Unpaused
+        - ValidatorUpdated
+      abis:
+        - name: WarpadsProtocol
+          file: ./abis/WarpadsProtocol.json
+      eventHandlers:
+        - event: AdSpaceRegistered(indexed uint256,indexed address,uint256,string)
+          handler: handleAdSpaceRegistered
+        - event: CampaignRegistered(indexed uint256,indexed address,uint256,uint256,string)
+          handler: handleCampaignRegistered
+        - event: CampaignTerminated(indexed uint256)
+          handler: handleCampaignTerminated
+        - event: EmergencyShutdown(indexed address)
+          handler: handleEmergencyShutdown
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: StakeSlashed(indexed uint256,uint256,string)
+          handler: handleStakeSlashed
+        - event: StakeWithdrawn(indexed uint256,indexed address,uint256)
+          handler: handleStakeWithdrawn
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: ValidatorUpdated(indexed address,indexed address)
+          handler: handleValidatorUpdated
+      file: ./src/warpads-protocol.ts

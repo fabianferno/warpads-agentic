@@ -1,0 +1,92 @@
+type AdSpaceRegistered @entity(immutable: true) {
+  id: Bytes!
+  adSpaceId: BigInt! # uint256
+  owner: Bytes! # address
+  stake: BigInt! # uint256
+  metadataURI: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CampaignRegistered @entity(immutable: true) {
+  id: Bytes!
+  campaignId: BigInt! # uint256
+  owner: Bytes! # address
+  expiry: BigInt! # uint256
+  priorityStake: BigInt! # uint256
+  adContent: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CampaignTerminated @entity(immutable: true) {
+  id: Bytes!
+  campaignId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EmergencyShutdown @entity(immutable: true) {
+  id: Bytes!
+  triggeredBy: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Paused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type StakeSlashed @entity(immutable: true) {
+  id: Bytes!
+  adSpaceId: BigInt! # uint256
+  amount: BigInt! # uint256
+  reason: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type StakeWithdrawn @entity(immutable: true) {
+  id: Bytes!
+  adSpaceId: BigInt! # uint256
+  owner: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Unpaused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ValidatorUpdated @entity(immutable: true) {
+  id: Bytes!
+  oldValidator: Bytes! # address
+  newValidator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
