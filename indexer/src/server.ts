@@ -3,13 +3,13 @@ import path from "path";
 import indexRouter from "./routes/index";
 import { JsonRpcProvider } from "ethers";
 import { Contract } from "ethers";
-import dotenv from "dotenv";
-import { WarpAdsABI } from "./abi/WarpAds";
 
-dotenv.config();
+import { WarpAdsABI } from "./abi/WarpAds";
+import connectDB from "./config/db";
+import { env } from "./config/env";
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -30,9 +30,13 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send("Something broke!");
 });
 
+// DB connection
+
+connectDB();
+
 // Indexer
 
-const PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`;
+const PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
 const CONTRACT_ADDRESS = "0x63b87AE482CB7Bb0C5dF0731562fB6768364A216";
 
 const provider = new JsonRpcProvider(PROVIDER_URL);
