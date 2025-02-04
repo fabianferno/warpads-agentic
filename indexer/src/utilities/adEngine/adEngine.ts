@@ -35,7 +35,8 @@ export const adEngine = async (query: string) => {
         6. Generate the ads only from the provided ad campaigns , do not make up any ad or any other text.
         7. Avoid suggesting ads which are not related to the query and dont include any other text except the ad data .
         8. If you are unable to find the best suitable ad campaign , you need to return "No ad found"
-
+        9. once you have selected the ad , you need to rethink again to verify the ad is most relevant to the query.
+        10. if you are unable to find the best suitable ad campaign , you need to return "No ad found"
 
         Example:
         1. Query: "@WanderGuideBot Best budget destinations in Europe?
