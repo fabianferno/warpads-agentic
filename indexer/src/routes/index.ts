@@ -15,7 +15,11 @@ router.get("/getAd", authMiddleware, async (req: Request, res: Response) => {
   const { query } = req.body;
   const ad = await adEngine(query);
   await trackUsage(req.headers["x-api-key"] as string);
-  res.send(ad);
+  if (ad?.includes("No ad found")) {
+    res.status(404).send("No ad found");
+  } else {
+    res.status(200).send(ad);
+  }
 });
 
 router.get("/generateAPIkey", async (req: Request, res: Response) => {
