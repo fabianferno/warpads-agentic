@@ -6,6 +6,8 @@ import "./globals.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
+
+
 export const metadata: Metadata = {
   title: "WarpAds",
   description: "World's first Decentralized Ad Network for AI agents",
