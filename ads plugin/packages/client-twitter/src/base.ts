@@ -508,6 +508,7 @@ export class ClientBase extends EventEmitter {
                         break;
                     }
 
+                    console.log("Creating Memory called in populateTimeline");
                     await this.runtime.messageManager.createMemory({
                         id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
                         userId,
@@ -622,6 +623,7 @@ export class ClientBase extends EventEmitter {
                     : undefined,
             } as Content;
 
+            console.log("Creating Memory called in populateTimeline");
             await this.runtime.messageManager.createMemory({
                 id: stringToUuid(tweet.id + "-" + this.runtime.agentId),
                 userId,
@@ -668,6 +670,7 @@ export class ClientBase extends EventEmitter {
             ) {
                 elizaLogger.debug("Message already saved", recentMessage[0].id);
             } else {
+                console.log("Creating Memory called in saveRequestMessage");
                 await this.runtime.messageManager.createMemory({
                     ...message,
                     embedding: getEmbeddingZeroVector(),

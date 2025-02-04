@@ -1070,6 +1070,7 @@ export class MessageManager {
                 embedding: getEmbeddingZeroVector(),
             };
 
+            console.log("Creating Memory called in handleMessage");
             // Create memory
             await this.runtime.messageManager.createMemory(memory);
 
@@ -1119,6 +1120,7 @@ export class MessageManager {
                             ? "CONTINUE"
                             : content.action;
 
+                        console.log("Creating Memory called in callback");
                         await this.runtime.messageManager.createMemory(memory);
                         memories.push(memory);
                     }

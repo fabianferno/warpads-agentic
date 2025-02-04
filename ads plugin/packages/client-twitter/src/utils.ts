@@ -73,6 +73,7 @@ export async function buildConversationThread(
                 "twitter"
             );
 
+            console.log("Creating Memory called in client");
             await client.runtime.messageManager.createMemory({
                 id: stringToUuid(
                     currentTweet.id + "-" + client.runtime.agentId

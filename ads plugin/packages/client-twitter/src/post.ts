@@ -348,6 +348,7 @@ export class TwitterPostClient {
         await runtime.ensureRoomExists(roomId);
         await runtime.ensureParticipantInRoom(runtime.agentId, roomId);
 
+        console.log("Creating Memory called in post");
         // Create a memory for the tweet
         await runtime.messageManager.createMemory({
             id: stringToUuid(tweet.id + "-" + runtime.agentId),

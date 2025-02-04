@@ -64,6 +64,7 @@ export class TwitterSearchClient {
         elizaLogger.log(
             `Next twitter search scheduled in ${randomMinutes} minutes`
         );
+        // Convert minutes to milliseconds (1 min = 60 sec = 60000 ms)
         setTimeout(
             () => this.engageWithSearchTermsLoop(),
             randomMinutes * 60 * 1000
