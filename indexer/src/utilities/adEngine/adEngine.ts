@@ -67,5 +67,12 @@ export const adEngine = async (query: string) => {
   });
 
   console.log(response.choices[0].message.content);
-  return response.choices[0].message.content;
+
+  const ad = response.choices[0].message.content;
+
+  // if no ad is found , return "No ad found"
+  if (ad?.includes("No ad found")) {
+    return "No ad found";
+  }
+  return ad;
 };

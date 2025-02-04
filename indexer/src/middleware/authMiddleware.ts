@@ -15,8 +15,8 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const apiKey = req.headers["X-API-KEY"] as string;
-
+  const apiKey = req.headers["x-api-key"] as string;
+  console.log(apiKey);
   if (!apiKey) {
     return res.status(401).json({ message: "Unauthorized : Missing API Key" });
   }
