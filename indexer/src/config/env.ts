@@ -13,6 +13,7 @@ const envSchema = z.object({
   PINATA_JWT: z.string().min(1),
   PINATA_GATEWAY: z.string().min(1),
   OPENAI_API_KEY: z.string().min(1),
+  COOKIE_API_KEY: z.string().min(1),
 });
 
 const env = envSchema.parse(process.env);
