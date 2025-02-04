@@ -1,67 +1,137 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Droplets } from "lucide-react";
+import { Loader2, Droplets, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { publicClient, walletClient } from "@/lib/config";
-import { WARP_TOKEN_ADDRESS, WARPADS_ADDRESS } from "@/lib/const";
+import { contractsConfig } from "@/lib/const";
 import { WARP_TOKEN_ABI } from "@/lib/abi/WarpToken";
 import { useAccount } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useChainId } from "wagmi";
+import PrivyConnectButton from "@/components/PrivyConnectButton";
+import { isAddress } from "viem";
+
+// Configuration constants
+const MINT_AMOUNT = BigInt(10e18); // 10 tokens
+const BLOCK_EXPLORER_URL = "https://sepolia.etherscan.io/tx/";
 
 export default function FaucetForm() {
-  const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
-  const { address: accountAddress } = useAccount();
-  console.log(accountAddress);
+  const [needsApproval, setNeedsApproval] = useState(true);
+  const { address: accountAddress, isConnected } = useAccount();
+  const chainId = useChainId();
+
+  // Check if approval is needed
+  useEffect(() => {
+    const checkAllowance = async () => {
+      if (!accountAddress) return;
+
+      try {
+        const allowance = await publicClient.readContract({
+          address: contractsConfig[chainId].warpTokenAddress,
+          abi: WARP_TOKEN_ABI,
+          functionName: "allowance",
+          args: [accountAddress, contractsConfig[chainId].warpadsAddress],
+        }) as bigint;
+
+
+        setNeedsApproval(allowance < MINT_AMOUNT);
+      } catch (error) {
+        console.error("Error checking allowance:", error);
+      }
+    };
+
+    checkAllowance();
+  }, [accountAddress]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!address) {
-      console.error("Please enter an address");
+
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
+    if (!accountAddress || !isAddress(accountAddress)) {
+      toast.error("Invalid wallet address");
       return;
     }
 
     setIsLoading(true);
     try {
-      // Simulate API call
+      // Mint tokens
       const tx = await walletClient.writeContract({
-        address: WARP_TOKEN_ADDRESS,
+        address: contractsConfig[chainId].warpTokenAddress,
         abi: WARP_TOKEN_ABI,
         functionName: "mint",
-        args: [address, BigInt(10e18)],
-        account: accountAddress as `0x${string}`,
+        args: [accountAddress, MINT_AMOUNT],
+        account: accountAddress,
       });
-      console.log(tx);
 
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
+
+      toast.promise(
+        publicClient.waitForTransactionReceipt({ hash: tx }),
+        {
+          loading: "Minting tokens...",
+          success: <div>
+            Tokens minted successfully!
+            <a
+              href={`${BLOCK_EXPLORER_URL}${tx}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-primary hover:underline"
+            >
+              View transaction <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>,
+          error: "Failed to mint tokens"
+        }
+      );
+
+      const receipt = await publicClient.waitForTransactionReceipt({ hash: tx });
       setIsLoading(false);
-      setIsApproving(true);
 
-      // Approve the contract to spend the tokens
-      const approveTx = await walletClient.writeContract({
-        address: WARP_TOKEN_ADDRESS,
-        abi: WARP_TOKEN_ABI,
-        functionName: "approve",
-        args: [WARPADS_ADDRESS, BigInt(10e18)],
-        account: accountAddress as `0x${string}`,
-      });
+      // Only proceed with approval if needed
+      if (needsApproval) {
+        setIsApproving(true);
+        const approveTx = await walletClient.writeContract({
+          address: contractsConfig[chainId].warpTokenAddress,
+          abi: WARP_TOKEN_ABI,
+          functionName: "approve",
+          args: [contractsConfig[chainId].warpadsAddress, MINT_AMOUNT],
+          account: accountAddress,
+        });
 
-      const approveReceipt = await publicClient.waitForTransactionReceipt({
-        hash: approveTx,
-      });
 
-      console.log(receipt);
-      setIsApproving(false);
-    } catch (error) {
+        toast.promise(
+          publicClient.waitForTransactionReceipt({ hash: approveTx }),
+          {
+            loading: "Approving WarpAds contract...",
+            success: <div>
+              Approval successful!
+              <a
+                href={`${BLOCK_EXPLORER_URL}${approveTx}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-primary hover:underline"
+              >
+                View transaction <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>,
+            error: "Failed to approve WarpAds contract"
+          }
+        );
+
+        await publicClient.waitForTransactionReceipt({ hash: approveTx });
+        setNeedsApproval(false);
+      }
+    } catch (error: any) {
       console.error(error);
-      toast.error("Failed to send tokens. Please try again.");
+      toast.error(error?.message || "Failed to process transaction. Please try again.");
     } finally {
       setIsLoading(false);
       setIsApproving(false);
@@ -70,8 +140,10 @@ export default function FaucetForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8 flex items-center justify-center">
-      <div className="w-full max-w-md">
-        <ConnectButton />
+      <div className="w-full max-w-md space-y-4">
+        <div className="flex justify-end">
+          <PrivyConnectButton />
+        </div>
         <Card className="backdrop-blur-xl bg-white/10">
           <CardContent className="p-6">
             <div className="flex flex-col items-center mb-8">
@@ -82,16 +154,16 @@ export default function FaucetForm() {
                 Token Faucet
               </h1>
               <p className="text-gray-300 text-center">
-                Request test tokens by entering your address below
+                Get test tokens sent to your connected wallet
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Enter your wallet address (0x...)"
+                  value={accountAddress || ""}
+                  disabled
+                  placeholder="Connect your wallet to continue"
                   className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
                 />
               </div>
@@ -99,17 +171,19 @@ export default function FaucetForm() {
               <Button
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-white h-12 text-lg"
-                disabled={isLoading}
+                disabled={isLoading || isApproving || !isConnected}
               >
-                {isLoading ? (
+                {!isConnected ? (
+                  "Connect Wallet"
+                ) : isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Sending Tokens...
+                    Minting Tokens...
                   </>
                 ) : isApproving ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Approving...
+                    Approving WarpAds...
                   </>
                 ) : (
                   "Request Tokens"
@@ -119,8 +193,13 @@ export default function FaucetForm() {
               <div className="mt-4 text-center text-sm text-gray-400">
                 <p>Maximum request: 10 Warp per day</p>
                 <p className="mt-1">
-                  Please allow a few moments for the transaction to process
+                  Please allow a few moments for the transactions to process
                 </p>
+                {needsApproval && (
+                  <p className="mt-1 text-yellow-400">
+                    Note: This will require two transactions - mint and approve
+                  </p>
+                )}
               </div>
             </form>
           </CardContent>

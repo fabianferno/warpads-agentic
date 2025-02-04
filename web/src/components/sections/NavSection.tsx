@@ -11,6 +11,7 @@ const navigation = [
     { name: "Advertisers", href: "/adcampaign" },
     { name: "Developers", href: "/adspaces" },
     { name: "About", href: "/about" },
+    { name: "Faucet", href: "/faucet" },
 ];
 
 

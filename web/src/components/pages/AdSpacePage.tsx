@@ -8,10 +8,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload } from "lucide-react";
-import { WARPADS_ADDRESS } from "@/lib/const";
+import { contractsConfig } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
 import { useAccount } from "wagmi";
 import type { PinataSDK } from "pinata-web3";
+import { useChainId } from "wagmi";
+
 
 export default function AdspaceForm() {
   const [agentName, setAgentName] = useState("");
@@ -24,6 +26,8 @@ export default function AdspaceForm() {
   const [pinata, setPinata] = useState<PinataSDK | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [walletClient, setWalletClient] = useState<any>(null);
+
+  const chainId = useChainId();
 
   useEffect(() => {
     const initPinata = async () => {
@@ -92,11 +96,12 @@ export default function AdspaceForm() {
     console.log("Make Contract Call");
 
     const tx = await walletClient.writeContract({
-      address: WARPADS_ADDRESS,
+      address: contractsConfig[chainId].warpadsAddress,
       abi: WarpadsABI,
       functionName: "registerAgent",
       args: [response.IpfsHash, BigInt(parseFloat(stakeAmount) * 10 ** 18)],
       account: address as `0x${string}`,
+
     });
     console.log(tx);
     console.log("Submitting form: ", formData);

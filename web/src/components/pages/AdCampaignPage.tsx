@@ -15,10 +15,12 @@ import {
 import { Upload } from "lucide-react";
 import { useAccount } from "wagmi";
 import Image from "next/image";
-import { WARPADS_ADDRESS } from "@/lib/const";
+import { contractsConfig } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
 import type { PinataSDK } from "pinata-web3";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import PrivyConnectButton from "@/components/PrivyConnectButton";
+import { useChainId } from "wagmi";
+
 
 export default function AdCampaignForm() {
   const [categories, setCategories] = useState<string[]>([]);
@@ -33,6 +35,7 @@ export default function AdCampaignForm() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { address } = useAccount();
   const [pinata, setPinata] = useState<PinataSDK | null>(null);
+  const chainId = useChainId();
 
   const [isLoading, setIsLoading] = useState(false);
   const [walletClient, setWalletClient] = useState<any>(null);
@@ -124,7 +127,7 @@ export default function AdCampaignForm() {
     };
     const metadataURI = await pinata.upload.json(formData);
     const tx = await walletClient.writeContract({
-      address: WARPADS_ADDRESS,
+      address: contractsConfig[chainId].adcampaignAddress,
       abi: WarpadsABI,
       functionName: "registerCampaign",
       args: [
@@ -140,8 +143,9 @@ export default function AdCampaignForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8">
       <div className="mx-auto max-w-4xl">
-        <ConnectButton />
+        <PrivyConnectButton />
         <div className="relative rounded-xl overflow-hidden p-[1px]">
+
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
 
           <Card className="backdrop-blur-xl bg-slate-950/90 relative z-10">
