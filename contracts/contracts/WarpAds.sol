@@ -84,6 +84,12 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
         string reason
     );
 
+    event RewardsClaimed(
+        uint256 indexed adSpaceId,
+        address indexed owner,
+        uint256 amount
+    );
+
     /**
      * @dev Modifier to restrict access to validator
      */
@@ -329,6 +335,7 @@ contract WarpAdsProtocol is ReentrancyGuard, Ownable, Pausable {
         space.rewardsAccumulated = 0;
 
         require(warpToken.transfer(msg.sender, amount), "Transfer failed");
+        emit RewardsClaimed(adSpaceId, msg.sender, amount);
     }
 
     /**

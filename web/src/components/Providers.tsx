@@ -1,30 +1,28 @@
 "use client";
-import {
-  getDefaultConfig,
-  RainbowKitProvider,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
+
+import { PrivyProvider } from '@privy-io/react-auth';
+import { http } from 'wagmi';
 import { WagmiProvider } from "wagmi";
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import {
-  mainnet,
-  optimism,
-  arbitrum,
-  sepolia,
-  optimismSepolia,
-  arbitrumSepolia,
-  baseSepolia,
-} from "wagmi/chains";
+  baseSepolia, arbitrumSepolia, seiDevnet
+} from "viem/chains";
+import { createConfig } from '@privy-io/wagmi';
+
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+
 const queryClient = new QueryClient();
 
-const config = getDefaultConfig({
-  appName: "Some App",
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "",
-  chains: [baseSepolia],
-  ssr: true, // If your dApp uses server side rendering (SSR)
+export const config = createConfig({
+  chains: [baseSepolia, arbitrumSepolia, seiDevnet], // Pass your required chains as an array
+  transports: {
+    [baseSepolia.id]: http(),
+    [arbitrumSepolia.id]: http(),
+    [seiDevnet.id]: http(),
+  },
 });
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
@@ -33,17 +31,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+    <PrivyProvider appId={process.env.NEXT_PRIVY_APP_ID || ""}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={darkTheme({
-            accentColor: "#111111",
-            accentColorForeground: "white",
-            borderRadius: "medium",
-            fontStack: "system",
-            overlayBlur: "small",
-          })}
-        >
+        <WagmiProvider config={config}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -52,8 +42,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           >
             {children}
           </ThemeProvider>
-        </RainbowKitProvider>
+        </WagmiProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    </PrivyProvider>
   );
 }

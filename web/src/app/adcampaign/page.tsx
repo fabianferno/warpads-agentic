@@ -1,4 +1,4 @@
-import AdCampaignForm from "@/components/pages/AdCampaign/AdCampaignPage";
+import AdCampaignForm from "@/components/pages/AdCampaignPage";
 import React from "react";
 
 const page = () => {

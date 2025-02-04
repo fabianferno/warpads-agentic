@@ -1,4 +1,4 @@
-import AdSpacePage from "@/components/pages/AdSpace/AdSpacePage";
+import AdSpacePage from "@/components/pages/AdSpacePage";
 import React from "react";
 
 const page = () => {

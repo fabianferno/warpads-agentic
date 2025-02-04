@@ -5,9 +5,10 @@ import { JsonRpcProvider } from "ethers";
 import { Contract } from "ethers";
 
 import { WarpAdsABI } from "./abi/WarpAds";
-import connectDB from "./config/db";
+import connectDB, { client } from "./config/db";
 import { env } from "./config/env";
 import { AdSpaceRegister } from "./utilities/EventHandlers/AdSpaceRegister";
+import { AdCampaignCreated } from "./utilities/EventHandlers/AdCampaignCreated";
 
 const app: Application = express();
 const PORT = env.PORT || 3000;
@@ -32,13 +33,38 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // DB connection
+const MAX_RETRIES = 5;
+const RETRY_INTERVAL = 5000; // 5 seconds
 
-connectDB();
+const connectWithRetry = async (retryCount = 0) => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error(
+      `Failed to connect to MongoDB (attempt ${
+        retryCount + 1
+      }/${MAX_RETRIES}):`,
+      err
+    );
+    if (retryCount < MAX_RETRIES) {
+      console.log(`Retrying in ${RETRY_INTERVAL / 1000} seconds...`);
+      setTimeout(() => connectWithRetry(retryCount + 1), RETRY_INTERVAL);
+    } else {
+      console.error("Max retries reached. Exiting...");
+      process.exit(1);
+    }
+  }
+};
+
+connectWithRetry();
 
 // Indexer
 
 const PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
-const CONTRACT_ADDRESS = "0x63b87AE482CB7Bb0C5dF0731562fB6768364A216";
+const CONTRACT_ADDRESS = "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad";
 
 const provider = new JsonRpcProvider(PROVIDER_URL);
 const contract = new Contract(CONTRACT_ADDRESS, WarpAdsABI, provider);
@@ -47,7 +73,6 @@ const contractListener = async () => {
   try {
     // First verify the event exists in the ABI
     const eventFragment = contract.interface.getEvent("AdSpaceRegistered");
-    // console.log("Found event:", eventFragment);
 
     contract.on(
       "AdSpaceRegistered",
@@ -60,17 +85,28 @@ const contractListener = async () => {
         console.log("Additional args:", args);
 
         AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake);
+        console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
-    console.log("Listening for AdSpaceCreated events...");
+    contract.on(
+      "CampaignRegistered",
+      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+        console.log("AdCampaign Created:");
+        console.log("ID:", campaignId);
+        console.log("Owner:", owner);
+        console.log("Ad Content:", adContent);
+        console.log("Priority Stake:", priorityStake);
+        console.log("Expiry:", expiry);
+        console.log("Additional args:", args);
+
+        AdCampaignCreated(campaignId, owner, adContent, priorityStake, expiry);
+        console.log("Listening for AdCampaignCreated events...");
+      }
+    );
   } catch (error) {
     console.error("Error setting up event listener:", error);
   }
 };
 
 contractListener();
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});

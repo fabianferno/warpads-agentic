@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
-import { PinataSDK } from "pinata";
+import { client } from "../../config/db";
+import { PinataSDK } from "pinata-web3";
 import { env } from "../../config/env";
-import { createEmbedding } from "../CreateEmbeddings";
+import { generateAPIKey } from "../apikey/generateAPIkey";
+
 export const AdSpaceRegister = async (
   id: number,
   owner: `0x${string}`,
@@ -17,28 +18,28 @@ export const AdSpaceRegister = async (
   const metadataJson = await pinata.gateways.get(metadata);
   console.log(metadataJson.data);
 
-  // Check if the ad space already exists.
-  const adSpace = await mongoose.connection
-    .collection("adSpaces")
-    .findOne({ id: id });
+  const db = client.db();
+
+  // Check if the ad space already exists
+  const adSpace = await db.collection("adSpaces").findOne({ id: id });
 
   if (adSpace) {
     return "Ad space already exists";
   }
 
-  // Create Embedding for the ad space.
-  const embedding = await createEmbedding(metadataJson.data);
+  // Else generate a new API key for the ad space
+  const apiKey = await generateAPIKey(id);
 
-  // Create the ad space.
-  await mongoose.connection.collection("adSpaces").insertOne({
+  // Create the ad space
+  await db.collection("adSpaces").insertOne({
     id: id,
     owner: owner,
     metadata: metadataJson.data,
     stakedValue: stakedValue,
     active: true,
-    embedding: embedding,
     createdAt: new Date(),
     updatedAt: new Date(),
+    apiKey: apiKey,
   });
 
   console.log("Ad space created with id: ", id);
