@@ -11,7 +11,7 @@ router.get("/", (req: Request, res: Response) => {
   res.send("TypeScript Server is Running!");
 });
 
-router.get("/getAd", authMiddleware, async (req: Request, res: Response) => {
+router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   const { query } = req.body;
   const ad = await adEngine(query);
   await trackUsage(req.headers["x-api-key"] as string);
@@ -22,14 +22,14 @@ router.get("/getAd", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
-router.get("/generateAPIkey", async (req: Request, res: Response) => {
+router.get("/generate-api-key", async (req: Request, res: Response) => {
   const { id } = req.body;
   const apiKey = await generateAPIKey(id);
   res.send(apiKey);
 });
 
 router.post(
-  "/trackResponse",
+  "/track-response",
   authMiddleware,
   async (req: Request, res: Response) => {
     const { platform, id } = req.body;
