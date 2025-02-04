@@ -1,6 +1,7 @@
 import { client } from "../../config/db";
 import { PinataSDK } from "pinata-web3";
 import { env } from "../../config/env";
+import { generateAPIKey } from "../apikey/generateAPIkey";
 
 export const AdSpaceRegister = async (
   id: number,
@@ -26,6 +27,9 @@ export const AdSpaceRegister = async (
     return "Ad space already exists";
   }
 
+  // Else generate a new API key for the ad space
+  const apiKey = await generateAPIKey(id);
+
   // Create the ad space
   await db.collection("adSpaces").insertOne({
     id: id,
@@ -35,6 +39,7 @@ export const AdSpaceRegister = async (
     active: true,
     createdAt: new Date(),
     updatedAt: new Date(),
+    apiKey: apiKey,
   });
 
   console.log("Ad space created with id: ", id);
