@@ -375,6 +375,7 @@ export class MessageManager {
                                 console.log(
                                     "💾 Step 15: Saving response memory"
                                 );
+                                console.log("Creating Memory called in callback");
                                 await this.runtime.messageManager.createMemory(
                                     responseMemory
                                 );

@@ -1,7 +1,7 @@
 "use client";
 
-import { PrivyProvider } from '@privy-io/react-auth';
-import { http } from 'wagmi';
+import { PrivyProvider } from "@privy-io/react-auth";
+import { http } from "wagmi";
 import { WagmiProvider } from "wagmi";
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
@@ -11,7 +11,6 @@ import {
 } from "viem/chains";
 import { createConfig } from '@privy-io/wagmi';
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
 
 const queryClient = new QueryClient();
 export const config = createConfig({

@@ -4,43 +4,41 @@ import PrivyConnectButton from "@/components/PrivyConnectButton";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import Image from "next/image";
 
-
-
 export default function Layout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return <main className="container flex min-h-screen flex-col items-center justify-center p-10">
-        <div className="absolute top-5 right-12 mr-5">
-            <PrivyConnectButton />
-        </div>
-        <div className="absolute top-5 right-5">
-            <ModeToggle />
-        </div>
-        <div className="absolute top-5 left-5 flex flex-row items-center bg-zinc-900 rounded-md p-2">
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="w-full  bg-gradient-to-br from-black via-gray-900 to-black ">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
             <Image
-                className="relative rounded-md"
-                src="/logo.gif"
-                alt="Logo"
-                width={80}
-                height={80}
-                priority
+              className="rounded-md"
+              src="/logo.gif"
+              alt="Logo"
+              width={50}
+              height={50}
+              priority
             />
-            <div className="px-5 mb-1">
-                <div className="text-3xl font-bold">some app</div>
-                <div className="text-lg ">this app does something</div>
+            <div>
+              <h1 className="text-2xl font-bold">some app</h1>
+              <p className="text-sm text-muted-foreground">
+                this app does something
+              </p>
             </div>
-        </div>
+          </div>
 
-        <section className="lg:max-w-5xl lg:w-full">
-            <div className="ring-1 ring-zinc-700 rounded-xl p-8 w-full">
-                <div className="flex justify-center items-start flex-col">
-                    <div className="flex justify-center items-between flex-col w-full">
-                        {children}
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+          <div className="flex items-center space-x-4">
+            <PrivyConnectButton />
+            <ModeToggle />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="">{children}</main>
+    </div>
+  );
 }

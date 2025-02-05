@@ -85,6 +85,8 @@ async function set(
 
     for (const fragment of fragments) {
         const embedding = await embed(runtime, fragment);
+
+        console.log("Creating Memory called in knowledge");
         await runtime.knowledgeManager.createMemory({
             // We namespace the knowledge base uuid to avoid id
             // collision with the document above.

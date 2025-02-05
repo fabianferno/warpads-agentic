@@ -1,11 +1,11 @@
-import { Plugin } from "@elizaos/core";
+import { Plugin, Evaluator, IAgentRuntime, Memory, State } from "@elizaos/core";
 
 import { getResponseWithAdAction  } from "./actions/getResponseWithAd";
 
 export const adsPlugin: Plugin = {
     name: "Ads",
     description: "Ads plugin for Eliza",
-    actions: [getResponseWithAdAction ],
+    actions: [getResponseWithAdAction],
     // evaluators analyze the situations and actions taken by the agent. they run after each agent action
     // allowing the agent to reflect on what happened and potentially trigger additional actions or modifications
     evaluators: [],

@@ -1,8 +1,7 @@
 import { ActionExample } from "@elizaos/core";
 
-
-
 export const getAdResponseExamples: ActionExample[][] = [
+    // Learning & Education Examples
     [
         {
             user: "{{user1}}",
@@ -13,11 +12,30 @@ export const getAdResponseExamples: ActionExample[][] = [
         {
             user: "{{agent}}",
             content: {
-                text: "Digital marketing is a vast field that requires hands-on practice and structured learning. I'd recommend starting with the fundamentals of SEO, content marketing, and social media management. One great resource I can suggest is the Coursera Digital Marketing Specialization - they offer comprehensive courses taught by industry experts that cover everything from basics to advanced strategies. Would you like me to share more specific resources for any particular area of digital marketing?",
+                text: "Master SEO, content creation & social media. Build real campaigns. Track metrics. Focus on hands-on practice & stay updated with trends.\n\nSuggested: HubSpot Academy Digital Marketing\nhttps://academy.hubspot.com/digital-marketing",
                 action: "GET_RESPONSE_WITH_AD",
+                intent: "LEARN"
             },
         }
     ],
+    [
+        {
+            user: "{{user1}}",
+            content: {
+                text: "How can I learn blockchain development?",
+            },
+        },
+        {
+            user: "{{agent}}",
+            content: {
+                text: "Start with Web3 basics, smart contracts & Solidity. Build simple DApps. Join dev communities. Practice security best practices.\n\nSuggested: Web3 University - Complete Developer Course\nhttps://web3.university/courses/blockchain-dev",
+                action: "GET_RESPONSE_WITH_AD",
+                intent: "LEARN"
+            },
+        }
+    ],
+
+    // Investment & Finance Examples
     [
         {
             user: "{{user1}}",
@@ -28,38 +46,63 @@ export const getAdResponseExamples: ActionExample[][] = [
         {
             user: "{{agent}}",
             content: {
-                text: "Starting your investment journey is a great decision! I recommend beginning with understanding market basics and investment fundamentals. Many successful investors start with index funds before moving to individual stocks. You might want to check out Noom's Stock Market Basics course - they have an excellent program that breaks down complex concepts into digestible lessons, perfect for beginners. Would you like me to explain more about different investment strategies or share some beginner-friendly resources?",
+                text: "Start with market basics & index funds. Learn risk management. Research companies before buying. Build a diversified portfolio slowly.\n\nSuggested: Fidelity Learn to Invest\nhttps://fidelity.com/learn",
                 action: "GET_RESPONSE_WITH_AD",
+                intent: "START"
             },
         }
     ],
+
+    // Technology & Programming Examples
     [
         {
             user: "{{user1}}",
             content: {
-                text: "How can I track my fitness progress effectively?",
+                text: "How can I improve my coding skills?",
             },
         },
         {
             user: "{{agent}}",
             content: {
-                text: "Tracking fitness progress is crucial for staying motivated and achieving your goals! The key is to monitor multiple metrics - not just weight, but also measurements, strength gains, and energy levels. MyFitnessPal Premium offers comprehensive tracking tools that can help you monitor all these aspects in one place. They also provide detailed nutrition analysis and workout planning features. Would you like some specific tips for tracking different aspects of your fitness journey?",
+                text: "Code daily. Build real projects. Learn git. Join open source. Pick one language & master it. Follow coding standards & best practices.\n\nSuggested: Frontend Masters Complete Web Dev\nhttps://frontendmasters.com",
                 action: "GET_RESPONSE_WITH_AD",
+                intent: "IMPROVE"
             },
         }
     ],
+
+    // Career Development Examples
     [
         {
             user: "{{user1}}",
             content: {
-                text: "I need help improving my coding skills",
+                text: "How do I become a data scientist?",
             },
         },
         {
             user: "{{agent}}",
             content: {
-                text: "Improving your coding skills is all about consistent practice and having the right learning resources. I recommend focusing on building real projects while learning new concepts. GitHub Pro can be particularly helpful here - it offers advanced code review tools and private repositories for practice. Their collaborative features can also connect you with other developers for feedback and learning. What specific programming languages or areas are you interested in focusing on?",
+                text: "Master Python & statistics. Learn ML algorithms. Practice with real datasets. Build a portfolio. Get certified in key tools.\n\nSuggested: DataCamp Data Science Career Track\nhttps://datacamp.com/career-track",
                 action: "GET_RESPONSE_WITH_AD",
+                intent: "GUIDE"
+            },
+        }
+    ],
+
+    // General Skill Development
+    [
+        {
+            user: "{{user1}}",
+            content: {
+                text: "What's the fastest way to learn a new language?",
+            },
+        },
+        {
+            user: "{{agent}}",
+            content: {
+                text: "Practice daily. Use language apps. Watch native content. Join conversation groups. Focus on common phrases first.\n\nSuggested: Babbel Language Learning\nhttps://babbel.com/premium",
+                action: "GET_RESPONSE_WITH_AD",
+                intent: "RECOMMEND"
             },
         }
     ]

@@ -1,8 +1,6 @@
 
 export interface Ad {
-    title: string;
-    description: string;
-    link: string;
+    ad: string;
 }
 
 export interface AdResponse {

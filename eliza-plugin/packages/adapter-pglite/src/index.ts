@@ -326,6 +326,7 @@ export class PGLiteDatabaseAdapter
     }
 
     async createMemory(memory: Memory, tableName: string): Promise<void> {
+        console.log("Creating Memory called in pglite");
         return this.withDatabase(async () => {
             elizaLogger.debug("PostgresAdapter createMemory:", {
                 memoryId: memory.id,
