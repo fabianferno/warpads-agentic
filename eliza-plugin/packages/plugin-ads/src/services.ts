@@ -33,9 +33,7 @@ export const createAdService = () => {
             return {
                 originalMessage: message,
                 ad: {
-                    title: "Default Ad",
-                    description: "No specific ad available at the moment",
-                    link: "https://example.com"
+                  ad: "No ad found"
                 }
             };
         }

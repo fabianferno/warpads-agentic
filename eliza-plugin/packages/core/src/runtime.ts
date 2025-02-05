@@ -858,8 +858,6 @@ export class AgentRuntime implements IAgentRuntime {
             verifiableInferenceAdapter: this.verifiableInferenceAdapter,
         });
 
-        console.log("result", result);
-
         const evaluators = parseJsonArrayFromText(
             result
         ) as unknown as string[];

@@ -1,109 +1,81 @@
 import { ActionExample } from "@elizaos/core";
 
-export const getAdResponseExamples: ActionExample[][] = [
-    // Learning & Education Examples
+export const getAdResponseExamples: ActionExample[][] =
+[
     [
         {
-            user: "{{user1}}",
-            content: {
-                text: "What's the best way to learn digital marketing?",
-            },
+            "user": "{{user1}}",
+            "content": {
+                "text": "Can you recommend some unique restaurants in Tokyo for a special anniversary dinner?"
+            }
         },
         {
-            user: "{{agent}}",
-            content: {
-                text: "Master SEO, content creation & social media. Build real campaigns. Track metrics. Focus on hands-on practice & stay updated with trends.\n\nSuggested: HubSpot Academy Digital Marketing\nhttps://academy.hubspot.com/digital-marketing",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "LEARN"
-            },
+            "user": "{{agent}}",
+            "content": {
+                "text": "I'll search for extraordinary dining experiences in Tokyo that would be perfect for your anniversary.",
+                "action": "GET_RESPONSE_WITH_AD"
+            }
         }
-    ],
-    [
-        {
-            user: "{{user1}}",
-            content: {
-                text: "How can I learn blockchain development?",
-            },
-        },
-        {
-            user: "{{agent}}",
-            content: {
-                text: "Start with Web3 basics, smart contracts & Solidity. Build simple DApps. Join dev communities. Practice security best practices.\n\nSuggested: Web3 University - Complete Developer Course\nhttps://web3.university/courses/blockchain-dev",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "LEARN"
-            },
-        }
-    ],
 
-    // Investment & Finance Examples
+    ],
     [
         {
-            user: "{{user1}}",
-            content: {
-                text: "I want to start investing in stocks. Where should I begin?",
-            },
+            "user": "{{user1}}",
+            "content": {
+                "text": "I want to invest in cryptocurrency. What's the best strategy for a $10,000 investment?"
+            }
         },
         {
-            user: "{{agent}}",
-            content: {
-                text: "Start with market basics & index funds. Learn risk management. Research companies before buying. Build a diversified portfolio slowly.\n\nSuggested: Fidelity Learn to Invest\nhttps://fidelity.com/learn",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "START"
-            },
+            "user": "{{agent}}",
+            "content": {
+                "text": "I'll analyze current crypto market trends and suggest a diversified investment strategy.",
+                "action": "GET_RESPONSE_WITH_AD"
+            }
         }
     ],
-
-    // Technology & Programming Examples
     [
         {
-            user: "{{user1}}",
-            content: {
-                text: "How can I improve my coding skills?",
-            },
+            "user": "{{user1}}",
+            "content": {
+                "text": "What are the best adventure activities available in New Zealand for a 7-day trip?"
+            }
         },
         {
-            user: "{{agent}}",
-            content: {
-                text: "Code daily. Build real projects. Learn git. Join open source. Pick one language & master it. Follow coding standards & best practices.\n\nSuggested: Frontend Masters Complete Web Dev\nhttps://frontendmasters.com",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "IMPROVE"
-            },
+            "user": "{{agent}}",
+            "content": {
+                "text": "I'll search for the top-rated adventure activities across New Zealand that can fit into a week-long itinerary.",
+                "action": "GET_RESPONSE_WITH_AD"
+            }
         }
     ],
-
-    // Career Development Examples
     [
         {
-            user: "{{user1}}",
-            content: {
-                text: "How do I become a data scientist?",
-            },
+            "user": "{{user1}}",
+            "content": {
+                "text": "What sustainable tourism options are available in Costa Rica?"
+            }
         },
         {
-            user: "{{agent}}",
-            content: {
-                text: "Master Python & statistics. Learn ML algorithms. Practice with real datasets. Build a portfolio. Get certified in key tools.\n\nSuggested: DataCamp Data Science Career Track\nhttps://datacamp.com/career-track",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "GUIDE"
-            },
+            "user": "{{agent}}",
+            "content": {
+                "text": "I'll research eco-friendly accommodations and activities in Costa Rica that support sustainable tourism.",
+                "action": "GET_RESPONSE_WITH_AD"
+            }
         }
     ],
-
-    // General Skill Development
     [
         {
-            user: "{{user1}}",
-            content: {
-                text: "What's the fastest way to learn a new language?",
-            },
+            "user": "{{user1}}",
+            "content": {
+                "text": "I'm interested in starting a small business in Singapore. What sectors show the most promise?"
+            }
         },
         {
-            user: "{{agent}}",
-            content: {
-                text: "Practice daily. Use language apps. Watch native content. Join conversation groups. Focus on common phrases first.\n\nSuggested: Babbel Language Learning\nhttps://babbel.com/premium",
-                action: "GET_RESPONSE_WITH_AD",
-                intent: "RECOMMEND"
-            },
+            "user": "{{agent}}",
+            "content": {
+                "text": "I'll analyze Singapore's current business environment and growth sectors for small business opportunities.",
+                "action": "GET_RESPONSE_WITH_AD"
+            }
         }
     ]
-];
+]

@@ -181,7 +181,7 @@ export class MemoryManager implements IMemoryManager {
         }
 
         elizaLogger.log("Creating Memory", memory.id, memory.content.text);
-        console.log("Creating Memory called in core");
+
         await this.runtime.databaseAdapter.createMemory(
             memory,
             this.tableName,
