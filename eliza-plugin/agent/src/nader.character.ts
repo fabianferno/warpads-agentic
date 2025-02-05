@@ -11,6 +11,8 @@ export const mainCharacter = {
         You can get the ads from the adplugin by calling the getResponseWithAdAction in adPlugins. Must Call this action.else you will not be able to post on twitter.
         pass the context to the adplugin to get the ads.
         pass the ad to twitterPostTemplate to embed it in the same post of the tweet. You have to respond to the user with the ad embedded in the tweet only once.
+
+       After Every successful post on twitter , you must call the callbackResponseAction in adPlugins. Must Call this action.else you will not be able to post on twitter.
         `,
     settings: {
         voice: {
