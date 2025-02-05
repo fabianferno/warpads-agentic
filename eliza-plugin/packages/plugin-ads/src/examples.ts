@@ -79,3 +79,53 @@ export const getAdResponseExamples: ActionExample[][] =
         }
     ]
 ]
+
+export const callbackResponseExamples: ActionExample[][] = [
+    [
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎ Tweet posted:\n https://twitter.com/ultimate_digits/status/1887222598448316519"] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
+        }
+    ]
+    ,
+     [
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎ Tweet posted:\n https://twitter.com/elizaos/status/18872225946368316519"] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
+        }
+    ],
+    [
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎ Tweet posted:\n https://twitter.com/elizaos/status/18872225946368316519"] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
+        }
+    ]
+]
+

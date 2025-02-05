@@ -42,7 +42,7 @@ export const getResponseWithAdAction: Action = {
         const shouldHandle = matchingSimiles.length > 0;
         elizaLogger.debug("[GET_RESPONSE_WITH_AD] Should handle:", shouldHandle);
 
-        return shouldHandle;
+        return true;
     },
     handler: async (
         runtime: IAgentRuntime,
@@ -65,22 +65,22 @@ export const getResponseWithAdAction: Action = {
             elizaLogger.debug("[GET_RESPONSE_WITH_AD] Retrieved ad:", ad);
 
             // Generate AI response first
-            elizaLogger.debug("[GET_RESPONSE_WITH_AD] Generating AI response");
-            const aiResponse = await generateText({
-                runtime,
-                context: `Generate a helpful and concise response for: ${message.content.text}. Keep it informative but brief enough to fit in a tweet with an ${ad}. The ad should be a short description of the product or service. The ad contains only texts`,
-                modelClass: ModelClass.SMALL
-            });
-            elizaLogger.debug("[GET_RESPONSE_WITH_AD] Generated AI response:", aiResponse);
+            // elizaLogger.debug("[GET_RESPONSE_WITH_AD] Generating AI response");
+            // const aiResponse = await generateText({
+            //     runtime,
+            //     context: `Generate a helpful and concise response for: ${message.content.text}. Keep it informative but brief enough to fit in a tweet with an ${ad}. The ad should be a short description of the product or service. The ad contains only texts`,
+            //     modelClass: ModelClass.SMALL
+            // });
+            // elizaLogger.debug("[GET_RESPONSE_WITH_AD] Generated AI response:", aiResponse);
 
-            // Compose final response
-            const finalResponse = composeTwitterResponse(aiResponse, ad);
-            elizaLogger.debug("[GET_RESPONSE_WITH_AD] Final composed response:", finalResponse);
+            // // Compose final response
+            // const finalResponse = composeTwitterResponse(aiResponse, ad);
+            // elizaLogger.debug("[GET_RESPONSE_WITH_AD] Final composed response:", finalResponse);
 
             elizaLogger.success(`Successfully generated response with ad`);
 
             callback({
-                text: finalResponse,  // Changed from aiResponse to finalResponse
+                text: ad,  // Changed from aiResponse to finalResponse
                 action: "GET_RESPONSE_WITH_AD",
                 intent: "HELP"
             });
@@ -99,24 +99,24 @@ export const getResponseWithAdAction: Action = {
 
 export default getResponseWithAdAction;
 
-function composeTwitterResponse(aiResponse: string, ad: any): string {
+// function composeTwitterResponse(aiResponse: string, ad: any): string {
 
-    console.log("ad", ad);
-    console.log("aiResponse", aiResponse);
-    // Calculate available space for response after ad
+//     console.log("ad", ad);
+//     console.log("aiResponse", aiResponse);
+//     // Calculate available space for response after ad
 
-    const maxResponseLength = TWITTER_MAX_LENGTH - ad.length - 10; // 10 chars buffer
+//     const maxResponseLength = TWITTER_MAX_LENGTH - ad.length - 10; // 10 chars buffer
 
-    // Truncate AI response if needed
-    let truncatedResponse = aiResponse;
+//     // Truncate AI response if needed
+//     let truncatedResponse = aiResponse;
 
 
-    console.log("truncatedResponse", truncatedResponse);
+//     console.log("truncatedResponse", truncatedResponse);
 
-    console.log("ad", ad);
+//     console.log("ad", ad);
 
-    console.log("in the end", `${truncatedResponse} \n\n${ad}`);
+//     console.log("in the end", `${truncatedResponse} \n\n${ad}`);
 
-    return `${truncatedResponse} \n\n${ad}`;
-}
+//     return `${truncatedResponse} \n\n${ad}`;
+// }
 
