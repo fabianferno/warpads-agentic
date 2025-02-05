@@ -15,6 +15,20 @@ export const getAdResponseExamples: ActionExample[][] =
                 "text": "I'll search for extraordinary dining experiences in Tokyo that would be perfect for your anniversary.",
                 "action": "GET_RESPONSE_WITH_AD"
             }
+        },
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
         }
 
     ],
@@ -31,6 +45,20 @@ export const getAdResponseExamples: ActionExample[][] =
                 "text": "I'll analyze current crypto market trends and suggest a diversified investment strategy.",
                 "action": "GET_RESPONSE_WITH_AD"
             }
+        },
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
         }
     ],
     [
@@ -45,6 +73,20 @@ export const getAdResponseExamples: ActionExample[][] =
             "content": {
                 "text": "I'll search for the top-rated adventure activities across New Zealand that can fit into a week-long itinerary.",
                 "action": "GET_RESPONSE_WITH_AD"
+            }
+        },
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
             }
         }
     ],
@@ -61,6 +103,20 @@ export const getAdResponseExamples: ActionExample[][] =
                 "text": "I'll research eco-friendly accommodations and activities in Costa Rica that support sustainable tourism.",
                 "action": "GET_RESPONSE_WITH_AD"
             }
+        },
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
         }
     ],
     [
@@ -76,6 +132,20 @@ export const getAdResponseExamples: ActionExample[][] =
                 "text": "I'll analyze Singapore's current business environment and growth sectors for small business opportunities.",
                 "action": "GET_RESPONSE_WITH_AD"
             }
+        },
+        {
+            "user": "{{user1}}",
+            "content": {
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
+            }
+        },
+        {
+            "user": "{{agent}}",
+            "content": {
+                "text": "Response tracked",
+                "action": "CALLBACK_RESPONSE"
+            }
         }
     ]
 ]
@@ -85,7 +155,8 @@ export const callbackResponseExamples: ActionExample[][] = [
         {
             "user": "{{user1}}",
             "content": {
-                text: ` ["◎ Tweet posted:\n https://twitter.com/ultimate_digits/status/1887222598448316519"] `,
+                text: ` ["◎ New Tweet found 
+   https://twitter.com/cryptopyar/status/1887244856210440550 "] `,
             }
         },
         {
@@ -101,7 +172,8 @@ export const callbackResponseExamples: ActionExample[][] = [
         {
             "user": "{{user1}}",
             "content": {
-                text: ` ["◎ Tweet posted:\n https://twitter.com/elizaos/status/18872225946368316519"] `,
+                text: ` ["◎  New Tweet found 
+   https://twitter.com/cryptopyar/status/18872448562104587585759 "] `,
             }
         },
         {
@@ -116,7 +188,8 @@ export const callbackResponseExamples: ActionExample[][] = [
         {
             "user": "{{user1}}",
             "content": {
-                text: ` ["◎ Tweet posted:\n https://twitter.com/elizaos/status/18872225946368316519"] `,
+                text: ` [" New Tweet found 
+   https://twitter.com/cryptopyar/status/188724485621044785875"] `,
             }
         },
         {
