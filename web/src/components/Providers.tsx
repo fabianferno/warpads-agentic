@@ -10,12 +10,10 @@ import {
   baseSepolia, arbitrumSepolia, seiDevnet
 } from "viem/chains";
 import { createConfig } from '@privy-io/wagmi';
-
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 
 const queryClient = new QueryClient();
-
 export const config = createConfig({
   chains: [baseSepolia, arbitrumSepolia, seiDevnet], // Pass your required chains as an array
   transports: {
@@ -29,9 +27,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children, appId }: { children: React.ReactNode, appId: string }) {
   return (
-    <PrivyProvider appId={process.env.NEXT_PRIVY_APP_ID || ""}>
+    <PrivyProvider appId={appId}>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={config}>
           <ThemeProvider

@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} dark:bg-black`}>
-        <Providers>
+        <Providers appId={process.env.NEXT_PRIVY_APP_ID || ""}>
           {children}
         </Providers>
       </body>
