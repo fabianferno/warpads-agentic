@@ -63,18 +63,35 @@ connectWithRetry();
 
 // Indexer
 
-const PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
-const CONTRACT_ADDRESS = "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad";
+const BASE_PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
+const ARBITRUM_PROVIDER_URL = `https://arb-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
+const SEI_PROVIDER_URL = `https://evm-rpc-arctic-1.sei-apis.com`;
 
-const provider = new JsonRpcProvider(PROVIDER_URL);
-const contract = new Contract(CONTRACT_ADDRESS, WarpAdsABI, provider);
+const BASE_CONTRACT_ADDRESS = "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad";
+const ARBITRUM_CONTRACT_ADDRESS = "0x00fF72F211f714CaF9C3E7C68f03E706f9AbD3d2";
+const SEI_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
+
+const BaseProvider = new JsonRpcProvider(BASE_PROVIDER_URL);
+const ArbitrumProvider = new JsonRpcProvider(ARBITRUM_PROVIDER_URL);
+const SeiProvider = new JsonRpcProvider(SEI_PROVIDER_URL);
+
+const BaseContract = new Contract(
+  BASE_CONTRACT_ADDRESS,
+  WarpAdsABI,
+  BaseProvider
+);
+const ArbitrumContract = new Contract(
+  ARBITRUM_CONTRACT_ADDRESS,
+  WarpAdsABI,
+  ArbitrumProvider
+);
+const SeiContract = new Contract(SEI_CONTRACT_ADDRESS, WarpAdsABI, SeiProvider);
 
 const contractListener = async () => {
   try {
     // First verify the event exists in the ABI
-    const eventFragment = contract.interface.getEvent("AdSpaceRegistered");
 
-    contract.on(
+    BaseContract.on(
       "AdSpaceRegistered",
       (adSpaceId, owner, metadataURI, warpStake, ...args) => {
         console.log("AdSpace Registered:");
@@ -84,12 +101,12 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake);
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 84532);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
-    contract.on(
+    BaseContract.on(
       "CampaignRegistered",
       (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
@@ -100,7 +117,91 @@ const contractListener = async () => {
         console.log("Expiry:", expiry);
         console.log("Additional args:", args);
 
-        AdCampaignCreated(campaignId, owner, adContent, priorityStake, expiry);
+        AdCampaignCreated(
+          campaignId,
+          owner,
+          adContent,
+          priorityStake,
+          expiry,
+          84532
+        );
+      }
+    );
+
+    // Listen for events on the Arbitrum contract
+    ArbitrumContract.on(
+      "AdSpaceRegistered",
+      (adSpaceId, owner, metadataURI, warpStake, ...args) => {
+        console.log("AdSpace Registered:");
+        console.log("ID:", adSpaceId);
+        console.log("Owner:", owner);
+        console.log("Metadata URI:", metadataURI);
+        console.log("Warp Stake:", warpStake);
+        console.log("Additional args:", args);
+
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 421614);
+        console.log("Listening for AdSpaceRegistered events...");
+      }
+    );
+
+    ArbitrumContract.on(
+      "CampaignRegistered",
+      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+        console.log("AdCampaign Created:");
+        console.log("ID:", campaignId);
+        console.log("Owner:", owner);
+        console.log("Ad Content:", adContent);
+        console.log("Priority Stake:", priorityStake);
+        console.log("Expiry:", expiry);
+        console.log("Additional args:", args);
+
+        AdCampaignCreated(
+          campaignId,
+          owner,
+          adContent,
+          priorityStake,
+          expiry,
+          421614
+        );
+        console.log("Listening for AdCampaignCreated events...");
+      }
+    );
+
+    // SEI Listener
+    SeiContract.on(
+      "AdSpaceRegistered",
+      (adSpaceId, owner, metadataURI, warpStake, ...args) => {
+        console.log("AdSpace Registered:");
+        console.log("ID:", adSpaceId);
+        console.log("Owner:", owner);
+        console.log("Metadata URI:", metadataURI);
+        console.log("Warp Stake:", warpStake);
+        console.log("Additional args:", args);
+
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
+        console.log("Listening for AdSpaceRegistered events...");
+      }
+    );
+
+    SeiContract.on(
+      "CampaignRegistered",
+      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+        console.log("AdCampaign Created:");
+        console.log("ID:", campaignId);
+        console.log("Owner:", owner);
+        console.log("Ad Content:", adContent);
+        console.log("Priority Stake:", priorityStake);
+        console.log("Expiry:", expiry);
+        console.log("Additional args:", args);
+
+        AdCampaignCreated(
+          campaignId,
+          owner,
+          adContent,
+          priorityStake,
+          expiry,
+          713715
+        );
         console.log("Listening for AdCampaignCreated events...");
       }
     );

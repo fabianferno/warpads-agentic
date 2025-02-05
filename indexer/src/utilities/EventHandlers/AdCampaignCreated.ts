@@ -17,7 +17,8 @@ export const AdCampaignCreated = async (
   owner: `0x${string}`,
   metadata: string,
   priorityStake: number,
-  expiry: number
+  expiry: number,
+  chainId: number
 ) => {
   // Fetch the metadata from pinata.
   const pinata = new PinataSDK({

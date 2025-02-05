@@ -1,18 +1,15 @@
 "use client";
 
-import { PrivyProvider } from '@privy-io/react-auth';
-import { http } from 'wagmi';
+import { PrivyProvider } from "@privy-io/react-auth";
+import { http } from "wagmi";
 import { WagmiProvider } from "wagmi";
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
-import {
-  baseSepolia, arbitrumSepolia, seiDevnet
-} from "viem/chains";
-import { createConfig } from '@privy-io/wagmi';
+import { baseSepolia, arbitrumSepolia, seiDevnet } from "viem/chains";
+import { createConfig } from "@privy-io/wagmi";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
 
 const queryClient = new QueryClient();
 
@@ -31,7 +28,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <PrivyProvider appId={process.env.NEXT_PRIVY_APP_ID || ""}>
+    <PrivyProvider
+      appId={process.env.NEXT_PRIVY_APP_ID || "cm6rexp7r0059pj00tuxlcad3"}
+    >
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={config}>
           <ThemeProvider

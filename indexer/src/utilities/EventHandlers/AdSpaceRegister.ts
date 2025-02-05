@@ -7,7 +7,8 @@ export const AdSpaceRegister = async (
   id: number,
   owner: `0x${string}`,
   metadata: string,
-  stakedValue: number
+  stakedValue: number,
+  chainId: number
 ) => {
   // Fetch the metadata from pinata.
   const pinata = new PinataSDK({
