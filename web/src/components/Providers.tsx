@@ -11,6 +11,10 @@ import {
 import { WagmiProvider, createConfig } from '@privy-io/wagmi';
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { initMixpanel } from '../lib/mixpanelClient';
+
 
 const queryClient = new QueryClient();
 
@@ -29,6 +33,11 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 }
 
 export default function Providers({ children, appId }: { children: React.ReactNode, appId: string }) {
+
+  useEffect(() => {
+    initMixpanel(); // Initialize Mixpanel
+  }, []);
+
   return (
     <PrivyProvider
       appId={appId}

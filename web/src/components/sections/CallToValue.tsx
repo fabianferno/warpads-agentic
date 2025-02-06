@@ -3,6 +3,19 @@
 import { motion } from "framer-motion";
 import { UploadIcon, LockIcon, ServerIcon } from "lucide-react";
 import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+
+const plugins = [
+    {
+        name: "ElizaOS",
+        image: "/assets/Plugin1.png",
+    },
+    {
+        name: "LangChain",
+        image: "/assets/Plugin2.jpg",
+    },
+]
 
 const features = [
     {
@@ -25,9 +38,42 @@ const features = [
     },
 ];
 
-
-
 export default function CallToValue() {
+    const [activeTab, setActiveTab] = useState(0);
+    const timerRef = useRef<NodeJS.Timeout>();
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const startTimer = () => {
+            timerRef.current = setInterval(() => {
+                setActiveTab((prev) => (prev + 1) % plugins.length);
+            }, 4000);
+        };
+
+        startTimer();
+
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+        };
+    }, []);
+
+    const handleMouseEnter = () => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+        }
+        timerRef.current = setInterval(() => {
+            setActiveTab((prev) => (prev + 1) % plugins.length);
+        }, 4000);
+    };
+
     return <div className="mx-auto max-w-full sm:px-6 lg:px-8">
         <div className="relative isolate overflow-hidden px-6 py-20 sm:rounded-3xl sm:px-10 sm:py-24 lg:py-24 xl:px-24">
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center lg:gap-y-0">
@@ -47,12 +93,55 @@ export default function CallToValue() {
                     </motion.h2>
                 </motion.div>
                 <motion.div
+                    ref={containerRef}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 lg:w-[64rem] lg:max-w-none"
+                    className="relative min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4  lg:max-w-none"
                 >
-                    <Image src="/assets/Plugin.png" className="rounded-xl " alt="Call to Value" width={665} height={442} />
+                    <div className="flex flex-col items-end justify-start">
+                        <div className="flex flex-row justify-start gap-4 mb-4 relative z-10">
+                            {plugins.map((plugin, index) => (
+                                <Button
+                                    variant={activeTab === index ? "ghost" : "outline"}
+                                    key={plugin.name}
+                                    onClick={() => setActiveTab(index)}
+                                    className={`text-xl font-semibold transition-colors duration-200 cursor-pointer ${activeTab === index ? 'text-cyan-500' : 'text-white/70 hover:text-white'}`}
+                                >
+                                    {plugin.name}
+                                </Button>
+                            ))}
+                        </div>
+                        <div className="relative w-full h-[50vh]">
+                            {plugins.map((plugin, index) => (
+                                <motion.div
+                                    key={plugin.name}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: activeTab === index ? 1 : 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        visibility: activeTab === index ? 'visible' : 'hidden'
+                                    }}
+                                    className="text-center"
+                                >
+                                    <Image
+                                        src={plugin.image}
+                                        className="rounded-xl object-cover"
+                                        alt={plugin.name}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
                 </motion.div>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
