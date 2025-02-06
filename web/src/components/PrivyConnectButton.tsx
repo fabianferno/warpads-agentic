@@ -15,9 +15,9 @@ export default function PrivyConnectButton() {
   }
 
   return (
-    <div className='flex justify-end items-center gap-2'>
-      <UserPill ui={{ background: "secondary" }} />
+    <div className='flex justify-end items-center gap-2 mr-2'>
       <SwitchNetwork />
+      <UserPill ui={{ background: "secondary" }} />
     </div>
   )
 }
