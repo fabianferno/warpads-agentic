@@ -99,6 +99,25 @@ export default function AdspaceForm() {
     }
   };
 
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const uploadImageToPinata = async () => {
     try {
       if (!imageFile || !pinata) {
@@ -178,7 +197,7 @@ export default function AdspaceForm() {
         <div className="mx-auto max-w-4xl">
           <Card className="backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10">
             <CardContent className="p-6">
-              <div className="mb-8 text-center">
+              <div className="mb-8 text-start border-b border-cyan-500/50 pb-4">
                 <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">
                   Register your Agent
                 </h1>
@@ -188,35 +207,37 @@ export default function AdspaceForm() {
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">
-                    Agent Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value={agentName}
-                    onChange={(e) => setAgentName(e.target.value)}
-                    placeholder="Enter your agent's name"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
-                </div>
+                <div className="flex gap-4">
+                  <div className="space-y-2 w-1/3">
+                    <Label htmlFor="name" className="text-white">
+                      Agent Name
+                    </Label>
+                    <Input
+                      id="name"
+                      value={agentName}
+                      onChange={(e) => setAgentName(e.target.value)}
+                      placeholder="Enter your agent's name"
+                      className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="purpose" className="text-white">
-                    Purpose
-                  </Label>
-                  <Input
-                    id="purpose"
-                    value={purpose}
-                    onChange={(e) => setPurpose(e.target.value)}
-                    placeholder="What does your agent do?"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
+                  <div className="space-y-2 w-2/3">
+                    <Label htmlFor="purpose" className="text-white">
+                      One liner on what your agent does
+                    </Label>
+                    <Input
+                      id="purpose"
+                      value={purpose}
+                      onChange={(e) => setPurpose(e.target.value)}
+                      placeholder="What does your agent do?"
+                      className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-white">
-                    Description
+                    Add more details about your agent
                   </Label>
                   <Textarea
                     id="description"
@@ -236,12 +257,9 @@ export default function AdspaceForm() {
                     type="number"
                     value={stakeAmount}
                     onChange={(e) => setStakeAmount(e.target.value)}
-                    placeholder="Enter stake amount"
+                    placeholder="Your tokens will be slashed if your agents are found to be stealing incentives"
                     className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
                   />
-                  <p className="text-sm text-slate-400">
-                    Stake WARP tokens to list your agent and earn rewards
-                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -249,7 +267,11 @@ export default function AdspaceForm() {
                     Agent Image
                   </Label>
                   <div className="flex flex-col items-center justify-center gap-4">
-                    <div className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40">
+                    <div
+                      className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                    >
                       {imagePreview ? (
                         <Image
                           src={imagePreview}
@@ -268,7 +290,7 @@ export default function AdspaceForm() {
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       />
                     </div>
                   </div>

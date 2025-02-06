@@ -8,11 +8,15 @@ import Image from "next/image";
 
 
 const navigation = [
-    { name: "Advertisers", href: "/adcampaign" },
-    { name: "Developers", href: "/adspaces" },
+    { name: "For Advertisers", href: "/campaign/create" },
+    { name: "For Developers", href: "/agent/register" },
     { name: "About", href: "/about" },
     { name: "Faucet", href: "/faucet" },
+
+
 ];
+
+
 
 
 export default function NavSection() {

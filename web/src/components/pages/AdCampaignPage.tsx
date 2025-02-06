@@ -109,6 +109,25 @@ export default function AdCampaignForm() {
     }
   };
 
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const uploadImageToPinata = async () => {
     try {
       if (!imageFile || !pinata) {
@@ -210,10 +229,11 @@ export default function AdCampaignForm() {
         <div className="mx-auto max-w-4xl">
           <Card className="backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10">
             <CardContent className="p-6">
-              <div className="mb-8 text-center">
+              <div className="mb-8 text-start border-b border-cyan-500/50 pb-4">
                 <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">
                   Post an Ad
                 </h1>
+
                 <p className="text-slate-400">
                   Start your ad campaign today and reach your target audience
                 </p>
@@ -223,7 +243,7 @@ export default function AdCampaignForm() {
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-white">
-                    Campaign Name
+                    Name of your campaign
                   </Label>
                   <Input
                     id="name"
@@ -235,14 +255,41 @@ export default function AdCampaignForm() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="ad" className="text-white">
+                    What is the main content of your ad?
+                  </Label>
+                  <Input
+                    id="ad"
+                    value={ad}
+                    onChange={(e) => setAd(e.target.value)}
+                    placeholder="Enter the main message or headline for your ad"
+                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description" className="text-white">
+                    What is your ad about?
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Describe your ad campaign and target audience in detail..."
+                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30 min-h-[100px]"
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="categories" className="text-white">
-                    Categories (Press Enter to add)
+                    Categories <span className="text-xs text-slate-400">(Press Enter to add)</span>
                   </Label>
                   <Input
                     id="categories"
                     value={currentCategory}
                     onChange={(e) => setCurrentCategory(e.target.value)}
                     onKeyDown={handleAddCategory}
+
                     placeholder="Add campaign categories"
                     className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
                   />
@@ -265,95 +312,74 @@ export default function AdCampaignForm() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="ad" className="text-white">
-                    Advertisement
-                  </Label>
-                  <Input
-                    id="ad"
-                    value={ad}
-                    onChange={(e) => setAd(e.target.value)}
-                    placeholder="What are you advertising?"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="stake" className="text-white">
+                      Stake Amount (WARP)
+                    </Label>
+                    <Input
+                      id="stake"
+                      type="number"
+                      value={stakeAmount}
+                      onChange={(e) => setStakeAmount(e.target.value)}
+                      placeholder="Tokens will be used as a priority fee"
+                      className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="deadline" className="text-white">
+                      Campaign Timeline
+                    </Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className="w-full bg-slate-800/40 border-slate-700/50 text-white hover:bg-slate-700/50 ring-1 ring-slate-700/50"
+                        >
+                          {deadline
+                            ? deadline.toLocaleDateString()
+                            : "Select end date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 bg-slate-900 border-slate-700/50">
+                        <Calendar
+                          mode="single"
+                          selected={deadline}
+                          onSelect={(date) => {
+                            setDeadline(date);
+                            calculateDaysRemaining(date);
+                          }}
+                          fromDate={new Date()}
+                          className="text-white"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {daysRemaining > 0 && (
+                      <p className="text-sm text-cyan-400">
+                        {daysRemaining} days remaining
+                      </p>
+                    )}
+                    {daysRemaining === 0 && deadline && (
+                      <p className="text-sm text-yellow-500">
+                        Deadline is today!
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="text-white">
-                    Detailed Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe your product or service in detail..."
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30 min-h-[100px]"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="stake" className="text-white">
-                    Stake Amount (WARP)
-                  </Label>
-                  <Input
-                    id="stake"
-                    type="number"
-                    value={stakeAmount}
-                    onChange={(e) => setStakeAmount(e.target.value)}
-                    placeholder="Enter amount to prioritize your ad"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
-                  <p className="text-sm text-slate-400">
-                    Staking WARP tokens will prioritize your ad in our platform
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="deadline" className="text-white">
-                    Campaign Deadline
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="w-full bg-slate-800/40 border-slate-700/50 text-white hover:bg-slate-700/50 ring-1 ring-slate-700/50"
-                      >
-                        {deadline
-                          ? deadline.toLocaleDateString()
-                          : "Select end date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 bg-slate-900 border-slate-700/50">
-                      <Calendar
-                        mode="single"
-                        selected={deadline}
-                        onSelect={(date) => {
-                          setDeadline(date);
-                          calculateDaysRemaining(date);
-                        }}
-                        fromDate={new Date()}
-                        className="text-white"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {daysRemaining > 0 && (
-                    <p className="text-sm text-cyan-400">
-                      {daysRemaining} days remaining
-                    </p>
-                  )}
-                  {daysRemaining === 0 && deadline && (
-                    <p className="text-sm text-yellow-500">
-                      Deadline is today!
-                    </p>
-                  )}
-                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="image" className="text-white">
                     Campaign Image
                   </Label>
                   <div className="flex flex-col items-center justify-center gap-4">
-                    <div className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40">
+                    <div
+                      className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                    >
                       {imagePreview ? (
                         <Image
                           src={imagePreview}
@@ -372,7 +398,7 @@ export default function AdCampaignForm() {
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       />
                     </div>
                   </div>

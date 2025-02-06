@@ -1,25 +1,26 @@
 "use client";
 
-import PrivyConnectButton from "@/components/PrivyConnectButton";
+import FaucetModal from "@/components/FaucetModal";
 import Image from "next/image";
 import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import SwitchNetwork from '@/components/SwitchNetwork';
+import { UserPill } from '@privy-io/react-auth/ui';
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { ready, authenticated } = usePrivy();
+  const { ready, user, authenticated, login, connectWallet, logout, linkWallet } = usePrivy();
   const pathname = usePathname();
 
   const navItems = [
     { name: "Post an Ad", href: "/campaign/create" },
-    { name: "Register Agent", href: "/agent/create" },
+    { name: "Register Agent", href: "/agent/register" },
   ];
-
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -35,37 +36,46 @@ export default function Layout({
                 height={50}
                 priority
               />
-              <div>
-                <h1 className="text-2xl font-bold">WarpAds</h1>
-                <p className="text-sm text-muted-foreground">
-                  AI-powered ads for your website
+              <div className="hidden md:block">
+                <h1 className="text-3xl md:text-lg font-bold">WarpAds</h1>
+                <p className="text-xs text-muted-foreground">
+                  Ads for AI Agents
                 </p>
               </div>
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-1">
+          <div className="flex items-center space-x-4">
+            <FaucetModal />
+            {ready && <div className='flex justify-end items-center gap-2 mr-2'>
+              <SwitchNetwork />
+              <UserPill ui={{ background: "secondary" }} />
+            </div>}
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <div className="w-full bg-gradient-to-r from-gray-900 via-black to-gray-900 border-b border-gray-800 relative">
+        <div className="container mx-auto px-4">
+          <nav className="flex items-center">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                  "px-6 py-3 text-sm font-medium transition-colors border-b-2 relative z-10 hover:bg-white/5",
                   pathname === item.href
-                    ? "bg-cyan-500/10 text-cyan-500"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    ? "border-cyan-500 text-cyan-500"
+                    : "border-transparent text-slate-400 hover:text-white hover:border-slate-600"
                 )}
               >
                 {item.name}
               </Link>
             ))}
           </nav>
-
-          <div className="flex items-start justify-end">
-            <PrivyConnectButton />
-          </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
       {ready ? (
