@@ -1,3 +1,5 @@
+import { baseSepolia, arbitrumSepolia } from "viem/chains";
+
 export const contractsConfig: {
   [key: number]: {
     warpTokenAddress: `0x${string}`;
@@ -5,6 +7,7 @@ export const contractsConfig: {
     adcampaignAddress: `0x${string}`;
     warpadsAddress: `0x${string}`;
     warpTokenDecimals: number;
+    blockExplorerUrl: string;
   };
 } = {
   // Base Sepolia
@@ -14,6 +17,7 @@ export const contractsConfig: {
     adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92",
     warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
     warpTokenDecimals: 18,
+    blockExplorerUrl: baseSepolia.blockExplorers.default.url,
   },
   // Arbitrum Sepolia
   421614: {
@@ -22,5 +26,6 @@ export const contractsConfig: {
     adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92",
     warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
     warpTokenDecimals: 18,
+    blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
   },
 };

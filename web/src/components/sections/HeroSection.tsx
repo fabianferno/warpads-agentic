@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Sparkles } from "lucide-react";
 import Tweets from "./Tweets";
+import Link from "next/link";
 
 export default function HeroSection() {
     return <HeroWrapper>
@@ -39,7 +40,7 @@ export default function HeroSection() {
                             <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/10 px-5 py-2 ring-1 ring-inset ring-cyan-500/20">
                                 <Sparkles className="h-4 w-4 text-cyan-400" />
                                 <span className="text-sm font-medium text-cyan-400">
-                                    Revolutionizing AI Advertising
+                                    We're participating in the <Link target="_blank" href="https://ethglobal.com/showcase/warp-ads-4nuyj" className="text-cyan-400 font-bold hover:text-cyan-300">EthGlobal Agentic Hackathon</Link>
                                 </span>
                             </div>
                         </motion.div>
