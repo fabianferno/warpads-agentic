@@ -6,203 +6,145 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Droplets, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import { publicClient, walletClient } from "@/lib/config";
+import { isAddress } from "viem";
 import { contractsConfig } from "@/lib/const";
 import { WARP_TOKEN_ABI } from "@/lib/abi/WarpToken";
-import { useAccount } from "wagmi";
-import { useChainId } from "wagmi";
-import { isAddress } from "viem";
+import { useAccount, useChainId, useWriteContract, useWatchContractEvent } from "wagmi";
 import MainLayout from "@/components/layouts/MainLayout";
+import { addTokenToWallet } from "@/lib/addTokenToWallet";
 
 // Configuration constants
 const MINT_AMOUNT = BigInt(10e18); // 10 tokens
-const BLOCK_EXPLORER_URL = "https://sepolia.etherscan.io/tx/";
 
 export default function FaucetForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isApproving, setIsApproving] = useState(false);
-  const [needsApproval, setNeedsApproval] = useState(true);
-  const { address: accountAddress, isConnected } = useAccount();
   const chainId = useChainId();
+  const { address } = useAccount();
+  const { writeContract, isPending: isMinting, error: mintError } = useWriteContract();
 
-  // Check if approval is needed
+  // Handle mint errors
   useEffect(() => {
-    const checkAllowance = async () => {
-      if (!accountAddress) return;
+    if (mintError) {
+      console.error(mintError);
+      toast.error(mintError?.message || "Failed to process transaction. Please try again.");
+      setIsLoading(false);
+    }
+  }, [mintError]);
 
-      try {
-        const allowance = (await publicClient.readContract({
-          address: contractsConfig[chainId].warpTokenAddress,
-          abi: WARP_TOKEN_ABI,
-          functionName: "allowance",
-          args: [accountAddress, contractsConfig[chainId].warpadsAddress],
-        })) as bigint;
-
-        setNeedsApproval(allowance < MINT_AMOUNT);
-      } catch (error) {
-        console.error("Error checking allowance:", error);
+  // Watch for Transfer events
+  useWatchContractEvent({
+    address: contractsConfig[chainId]?.warpTokenAddress,
+    abi: WARP_TOKEN_ABI,
+    eventName: 'Transfer',
+    onLogs(logs) {
+      const event = logs[0];
+      if (event && event.transactionHash) {
+        toast.success(
+          <div className="space-y-2">
+            <div>Tokens minted successfully!</div>
+            <div className="flex flex-col gap-2">
+              <a
+                href={`${contractsConfig[chainId]?.blockExplorerUrl}/tx/${event.transactionHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-primary hover:underline"
+              >
+                View transaction <ExternalLink className="h-4 w-4" />
+              </a>
+              <button
+                onClick={() => addTokenToWallet(chainId)}
+                className="flex items-center gap-1 text-primary hover:underline"
+              >
+                Add WARP to wallet <ExternalLink className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        );
+        setIsLoading(false);
       }
-    };
-
-    checkAllowance();
-  }, [accountAddress]);
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isConnected) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    if (!accountAddress || !isAddress(accountAddress)) {
-      toast.error("Invalid wallet address");
+    const contractConfig = contractsConfig[chainId];
+    if (!contractConfig?.warpTokenAddress || !isAddress(contractConfig.warpTokenAddress)) {
+      toast.info("Contract not deployed on this network");
       return;
     }
 
     setIsLoading(true);
-    try {
-      // Mint tokens
-      const tx = await walletClient.writeContract({
-        address: contractsConfig[chainId].warpTokenAddress,
-        abi: WARP_TOKEN_ABI,
-        functionName: "mint",
-        args: [accountAddress, MINT_AMOUNT],
-        account: accountAddress,
-      });
+    writeContract({
+      address: contractConfig.warpTokenAddress,
+      abi: WARP_TOKEN_ABI,
+      functionName: "mint",
+      args: [address, MINT_AMOUNT],
+    });
 
-      toast.promise(publicClient.waitForTransactionReceipt({ hash: tx }), {
-        loading: "Minting tokens...",
-        success: (
-          <div>
-            Tokens minted successfully!
-            <a
-              href={`${BLOCK_EXPLORER_URL}${tx}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-primary hover:underline"
-            >
-              View transaction <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
-        ),
-        error: "Failed to mint tokens",
-      });
-
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
-      setIsLoading(false);
-
-      // Only proceed with approval if needed
-      if (needsApproval) {
-        setIsApproving(true);
-        const approveTx = await walletClient.writeContract({
-          address: contractsConfig[chainId].warpTokenAddress,
-          abi: WARP_TOKEN_ABI,
-          functionName: "approve",
-          args: [contractsConfig[chainId].warpadsAddress, MINT_AMOUNT],
-          account: accountAddress,
-        });
-
-        toast.promise(
-          publicClient.waitForTransactionReceipt({ hash: approveTx }),
-          {
-            loading: "Approving WarpAds contract...",
-            success: (
-              <div>
-                Approval successful!
-                <a
-                  href={`${BLOCK_EXPLORER_URL}${approveTx}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-primary hover:underline"
-                >
-                  View transaction <ExternalLink className="h-4 w-4" />
-                </a>
-              </div>
-            ),
-            error: "Failed to approve WarpAds contract",
-          }
-        );
-
-        await publicClient.waitForTransactionReceipt({ hash: approveTx });
-        setNeedsApproval(false);
-      }
-    } catch (error: any) {
-      console.error(error);
-      toast.error(
-        error?.message || "Failed to process transaction. Please try again."
-      );
-    } finally {
-      setIsLoading(false);
-      setIsApproving(false);
-    }
   };
-
-  console.log(isConnected);
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8 flex items-center justify-center">
-        <div className="w-full max-w-md space-y-4">
-          <Card className="backdrop-blur-xl bg-white/10">
-            <CardContent className="p-6">
-              <div className="flex flex-col items-center mb-8">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Droplets className="w-8 h-8 text-primary" />
+      <div className="relative isolate min-h-[calc(100vh-4rem)] bg-slate-950 px-4 py-6 md:p-8 flex items-center justify-center">
+        <div
+          className="absolute inset-x-0 -top-20 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-20"
+          aria-hidden="true"
+        >
+          <div
+            style={{
+              clipPath:
+                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+            }}
+            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-cyan-500 to-cyan-300 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+          />
+        </div>
+
+        <div className="w-full max-w-[min(90vw,24rem)] space-y-4">
+          <Card className="backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center mb-6 sm:mb-8">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-3 sm:mb-4 ring-1 ring-cyan-500/20">
+                  <Droplets className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-400" />
                 </div>
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  Token Faucet
+                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">
+                  WARP Token Faucet
                 </h1>
-                <p className="text-gray-300 text-center">
-                  Get test tokens sent to your connected wallet
+                <p className="text-sm sm:text-base text-slate-400 text-center">
+                  Get testnet tokens to use WarpAds
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
                   <Input
-                    value={accountAddress || ""}
-                    disabled={!isConnected}
+                    value={address || ""}
+                    disabled={true}
                     placeholder="Connect your wallet to continue"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-400"
+                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 text-sm sm:text-base h-10 sm:h-12 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-white h-12 text-lg"
-                  disabled={isLoading || isApproving || !isConnected}
+                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white h-10 sm:h-12 text-base sm:text-lg font-semibold transition-all duration-300"
+                  disabled={isLoading || isMinting}
                 >
-                  {!isConnected ? (
-                    "Connect Wallet"
-                  ) : isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Minting Tokens...
-                    </>
-                  ) : isApproving ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Approving WarpAds...
-                    </>
+                  {isMinting ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                      Confirm in Wallet...
+                    </div>
                   ) : (
                     "Request Tokens"
                   )}
                 </Button>
 
-                <div className="mt-4 text-center text-sm text-gray-400">
+                <div className="mt-4 text-center text-xs sm:text-sm text-slate-400">
                   <p>Maximum request: 10 Warp per day</p>
                   <p className="mt-1">
-                    Please allow a few moments for the transactions to process
+                    Please allow a few moments for the transaction to process
                   </p>
-                  {needsApproval && (
-                    <p className="mt-1 text-yellow-400">
-                      Note: This will require two transactions - mint and
-                      approve
-                    </p>
-                  )}
                 </div>
               </form>
             </CardContent>
