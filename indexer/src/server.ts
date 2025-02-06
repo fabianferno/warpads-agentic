@@ -93,7 +93,7 @@ const contractListener = async () => {
 
     BaseContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, metadataURI, warpStake, ...args) => {
+      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -131,7 +131,7 @@ const contractListener = async () => {
     // Listen for events on the Arbitrum contract
     ArbitrumContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, metadataURI, warpStake, ...args) => {
+      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -170,7 +170,7 @@ const contractListener = async () => {
     // SEI Listener
     SeiContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, metadataURI, warpStake, ...args) => {
+      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
