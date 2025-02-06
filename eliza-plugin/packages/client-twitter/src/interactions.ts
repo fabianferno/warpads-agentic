@@ -494,7 +494,6 @@ export class TwitterInteractionClient {
                         } else {
                             responseMessage.content.action = "CONTINUE";
                         }
-                        console.log("Creating Memory called in interactions");
                         await this.runtime.messageManager.createMemory(
                             responseMessage
                         );
@@ -563,7 +562,6 @@ export class TwitterInteractionClient {
                     "twitter"
                 );
 
-                console.log("Creating Memory called in buildConversationThread");
                 this.runtime.messageManager.createMemory({
                     id: stringToUuid(
                         currentTweet.id + "-" + this.runtime.agentId

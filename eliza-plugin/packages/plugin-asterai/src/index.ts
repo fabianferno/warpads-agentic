@@ -1,10 +1,10 @@
 import {asteraiProvider} from "./providers/asterai.provider.ts";
 import type { Plugin } from "@elizaos/core";
-import { queryAction } from "./actions/query.ts";
+import { queryAction } from "./actions/query";
 import { AsteraiClient } from "@asterai/client";
 
-export * from "./environment.ts";
-export * from "./providers/asterai.provider.ts";
+export * from "./environment";
+export * from "./providers/asterai.provider";
 
 let asteraiClient: AsteraiClient | null = null;
 

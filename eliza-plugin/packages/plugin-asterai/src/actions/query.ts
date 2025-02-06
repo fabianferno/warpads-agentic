@@ -7,7 +7,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { validateAsteraiConfig } from "../environment.ts";
+import { validateAsteraiConfig } from "../environment";
 import {getInitAsteraiClient} from "../index.ts";
 
 export const queryAction = {

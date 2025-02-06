@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const API_KEY = "2x34baa74e6c84d9add15ea92171183ce9";
 const API_URL = "https://warpads-agentic-hack.onrender.com/get-ad";
-
+const CALLBACK_URL = "https://warpads-agentic-hack.onrender.com/track-response";
 export const createAdService = () => {
     const getRelevantAd = async (message: string): Promise<AdResponse> => {
         try {
@@ -33,13 +33,31 @@ export const createAdService = () => {
             return {
                 originalMessage: message,
                 ad: {
-                    title: "Default Ad",
-                    description: "No specific ad available at the moment",
-                    link: "https://example.com"
+                  ad: "No ad found"
                 }
             };
         }
     };
 
-    return { getRelevantAd };
+    const callbackResponse = async (message: string) => {
+        try{
+            const response = await axios({
+                method: 'post',
+                url: CALLBACK_URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': API_KEY
+                },
+                data: {
+                    platform: "twitter",
+                    id: message
+                }
+            });
+        }catch(error){
+            console.error('Error fetching ad:', error);
+            return "Error in callback response"
+        }
+    };
+
+    return { getRelevantAd, callbackResponse };
 };
