@@ -207,8 +207,8 @@ export default function AdspaceForm() {
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="flex gap-4">
-                  <div className="space-y-2 w-1/3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
                     <Label htmlFor="name" className="text-white">
                       Agent Name
                     </Label>
@@ -221,7 +221,7 @@ export default function AdspaceForm() {
                     />
                   </div>
 
-                  <div className="space-y-2 w-2/3">
+                  <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="purpose" className="text-white">
                       One liner on what your agent does
                     </Label>
@@ -268,7 +268,7 @@ export default function AdspaceForm() {
                   </Label>
                   <div className="flex flex-col items-center justify-center gap-4">
                     <div
-                      className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
+                      className="w-full h-48 sm:h-64 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
                     >
@@ -280,9 +280,10 @@ export default function AdspaceForm() {
                           className="object-cover"
                         />
                       ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-slate-400">
+                        <div className="h-full flex flex-col items-center justify-center text-slate-400 p-4 text-center">
                           <Upload className="w-8 h-8 mb-2" />
                           <p>Drop your image here or click to upload</p>
+                          <p className="text-sm mt-2">Recommended size: 1200x630px</p>
                         </div>
                       )}
                       <Input

@@ -241,30 +241,32 @@ export default function AdCampaignForm() {
 
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">
-                    Name of your campaign
-                  </Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your campaign name"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-white">
+                      Name of your campaign
+                    </Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your campaign name"
+                      className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="ad" className="text-white">
-                    What is the main content of your ad?
-                  </Label>
-                  <Input
-                    id="ad"
-                    value={ad}
-                    onChange={(e) => setAd(e.target.value)}
-                    placeholder="Enter the main message or headline for your ad"
-                    className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
-                  />
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="ad" className="text-white">
+                      What is the main content of your ad?
+                    </Label>
+                    <Input
+                      id="ad"
+                      value={ad}
+                      onChange={(e) => setAd(e.target.value)}
+                      placeholder="Enter the main message or headline for your ad"
+                      className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -289,7 +291,6 @@ export default function AdCampaignForm() {
                     value={currentCategory}
                     onChange={(e) => setCurrentCategory(e.target.value)}
                     onKeyDown={handleAddCategory}
-
                     placeholder="Add campaign categories"
                     className="bg-slate-800/40 border-slate-700/50 text-white placeholder:text-slate-500 ring-1 ring-slate-700/50 focus:ring-cyan-500/30"
                   />
@@ -312,7 +313,7 @@ export default function AdCampaignForm() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="stake" className="text-white">
                       Stake Amount (WARP)
@@ -335,8 +336,9 @@ export default function AdCampaignForm() {
                       <PopoverTrigger asChild>
                         <Button
                           variant={"outline"}
-                          className="w-full bg-slate-800/40 border-slate-700/50 text-white hover:bg-slate-700/50 ring-1 ring-slate-700/50"
+                          className="text-sm w-full bg-slate-800/40 border-slate-700/50 text-white hover:bg-slate-700/50 ring-1 ring-slate-700/50"
                         >
+
                           {deadline
                             ? deadline.toLocaleDateString()
                             : "Select end date"}
@@ -368,15 +370,13 @@ export default function AdCampaignForm() {
                   </div>
                 </div>
 
-
-
                 <div className="space-y-2">
                   <Label htmlFor="image" className="text-white">
                     Campaign Image
                   </Label>
                   <div className="flex flex-col items-center justify-center gap-4">
                     <div
-                      className="w-full h-48 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
+                      className="w-full h-48 sm:h-64 relative border-2 border-dashed border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/40 cursor-pointer"
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
                     >
@@ -388,9 +388,10 @@ export default function AdCampaignForm() {
                           className="object-cover"
                         />
                       ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-slate-400">
+                        <div className="h-full flex flex-col items-center justify-center text-slate-400 p-4 text-center">
                           <Upload className="w-8 h-8 mb-2" />
                           <p>Drop your image here or click to upload</p>
+                          <p className="text-sm mt-2">Recommended size: 1200x630px</p>
                         </div>
                       )}
                       <Input
