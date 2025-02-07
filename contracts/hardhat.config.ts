@@ -53,6 +53,9 @@ module.exports = {
     apiKey: {
       optimism_sepolia: process.env.ETHERSCAN_API_KEY || "",
       base_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      arbitrum_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      mode_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      sei_devnet: process.env.ETHERSCAN_API_KEY || "",
     },
     customChains: [
       {

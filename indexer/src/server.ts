@@ -68,15 +68,17 @@ connectWithRetry();
 const BASE_PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
 const ARBITRUM_PROVIDER_URL = `https://arb-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
 const SEI_PROVIDER_URL = `https://evm-rpc-arctic-1.sei-apis.com`;
+const MODE_PROVIDER_URL = `https://sepolia.mode.network`;
 
 const BASE_CONTRACT_ADDRESS = "0x070C0B63AbC6604f84E062E1C648b85a5ae4A4Ad";
 const ARBITRUM_CONTRACT_ADDRESS = "0x00fF72F211f714CaF9C3E7C68f03E706f9AbD3d2";
 const SEI_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
+const MODE_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
 
 const BaseProvider = new JsonRpcProvider(BASE_PROVIDER_URL);
 const ArbitrumProvider = new JsonRpcProvider(ARBITRUM_PROVIDER_URL);
 const SeiProvider = new JsonRpcProvider(SEI_PROVIDER_URL);
-
+const ModeProvider = new JsonRpcProvider(MODE_PROVIDER_URL);
 const BaseContract = new Contract(
   BASE_CONTRACT_ADDRESS,
   WarpAdsABI,
@@ -88,6 +90,11 @@ const ArbitrumContract = new Contract(
   ArbitrumProvider
 );
 const SeiContract = new Contract(SEI_CONTRACT_ADDRESS, WarpAdsABI, SeiProvider);
+const ModeContract = new Contract(
+  MODE_CONTRACT_ADDRESS,
+  WarpAdsABI,
+  ModeProvider
+);
 
 const contractListener = async () => {
   try {
@@ -202,7 +209,46 @@ const contractListener = async () => {
           adContent,
           priorityStake,
           expiry,
-          713715
+          919
+        );
+        console.log("Listening for AdCampaignCreated events...");
+      }
+    );
+
+    // Mode Listener
+    ModeContract.on(
+      "AdSpaceRegistered",
+      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
+        console.log("AdSpace Registered:");
+        console.log("ID:", adSpaceId);
+        console.log("Owner:", owner);
+        console.log("Metadata URI:", metadataURI);
+        console.log("Warp Stake:", warpStake);
+        console.log("Additional args:", args);
+
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
+        console.log("Listening for AdSpaceRegistered events...");
+      }
+    );
+
+    ModeContract.on(
+      "CampaignRegistered",
+      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+        console.log("AdCampaign Created:");
+        console.log("ID:", campaignId);
+        console.log("Owner:", owner);
+        console.log("Ad Content:", adContent);
+        console.log("Priority Stake:", priorityStake);
+        console.log("Expiry:", expiry);
+        console.log("Additional args:", args);
+
+        AdCampaignCreated(
+          campaignId,
+          owner,
+          adContent,
+          priorityStake,
+          expiry,
+          919
         );
         console.log("Listening for AdCampaignCreated events...");
       }
