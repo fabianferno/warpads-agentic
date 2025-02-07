@@ -10,24 +10,18 @@ import Image from "next/image";
 const navigation = [
     { name: "For Advertisers", href: "/campaign/create" },
     { name: "For Developers", href: "/agent/register" },
-    { name: "About", href: "/about" },
-    { name: "Faucet", href: "/faucet" },
-
-
 ];
-
-
-
 
 export default function NavSection() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
         <header className="fixed inset-x-0 top-0 z-50">
-            <nav className="flex items-center justify-between p-6 lg:px-8 backdrop-blur-md bg-slate-950/80">
+            <nav className="flex items-center justify-between w-full p-6 lg:px-8 backdrop-blur-md bg-slate-950/80">
                 <div className="flex lg:flex-1">
                     <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
                         <span className="sr-only">WarpAds</span>
+
                         <Image className='-my-4' src="/android-chrome-192x192.png" alt="WarpAds" width={80} height={80} />
                         <h1 className='text-2xl font-bold text-white font-mono'>WarpAds</h1>
                     </Link>

@@ -108,7 +108,7 @@ export default function CallToValue() {
                                     variant={activeTab === index ? "ghost" : "outline"}
                                     key={plugin.name}
                                     onClick={() => setActiveTab(index)}
-                                    className={`text-xl font-semibold transition-colors duration-200 cursor-pointer ${activeTab === index ? 'text-cyan-500' : 'text-white/70 hover:text-white'}`}
+                                    className={`text-xl font-semibold transition-colors duration-200 cursor-pointer ${activeTab === index ? 'text-cyan-500' : 'text-white/70 bg-transparent hover:text-white'}`}
                                 >
                                     {plugin.name}
                                 </Button>
