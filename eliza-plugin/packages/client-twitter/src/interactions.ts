@@ -277,7 +277,7 @@ export class TwitterInteractionClient {
                     );
 
                     const message = {
-                        content: { text: tweet.text },
+                        content: { text: tweet.text , url: tweet.permanentUrl},
                         agentId: this.runtime.agentId,
                         userId: userIdUUID,
                         roomId,

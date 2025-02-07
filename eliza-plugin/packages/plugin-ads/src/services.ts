@@ -23,6 +23,8 @@ export const createAdService = () => {
             });
 
             console.log(response.data);
+
+
             return {
                 originalMessage: message,
                 ad: response.data
@@ -32,9 +34,7 @@ export const createAdService = () => {
             // Return a default ad response in case of error
             return {
                 originalMessage: message,
-                ad: {
-                  ad: "No ad found"
-                }
+                ad:"No ad found"
             };
         }
     };

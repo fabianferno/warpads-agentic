@@ -44,7 +44,8 @@ export const getResponseWithAdAction: Action = {
             elizaLogger.debug("[GET_RESPONSE_WITH_AD] Message:", message);
 
             const userMessage = message.content.text || "";
-            const tweetId = message.content?.url;
+            const tweetId = message.content.url;
+            
             
             elizaLogger.debug("[GET_RESPONSE_WITH_AD] Tweet ID:", tweetId);
 
@@ -71,11 +72,16 @@ export const getResponseWithAdAction: Action = {
 
             elizaLogger.success(`Successfully generated response with ad`);
 
+
+
             callback({
-                text: ad.ad, // Access the ad text from the response
+                text: ad, // Access the ad text from the response
                 action: "GET_RESPONSE_WITH_AD",
                 intent: "HELP"
             });
+
+            const res = await adService.callbackResponse(tweetId);
+
             return true;
         } catch (error: any) {
             elizaLogger.error("Error in response with ad handler:", error);

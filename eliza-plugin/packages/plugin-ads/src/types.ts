@@ -5,5 +5,5 @@ export interface Ad {
 
 export interface AdResponse {
     originalMessage: string;
-    ad: Ad;
+    ad: string;
 }
