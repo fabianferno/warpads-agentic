@@ -26,10 +26,10 @@ export const contractsConfig: {
   },
   // Arbitrum Sepolia
   421614: {
-    warpTokenAddress: "0x923f68e4a026b4c9ead5b43dffc468c3bc52c045",
-    adspaceAddress: "0xf413442cd94dc9fec516613bf0f24bac4d57ddc5",
-    adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92",
-    warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
+    warpTokenAddress: "0xFCED24D3CD405DCdC62265846F51328a67142Af3",
+    adspaceAddress: "0x8B386Edef0750FFFA8d15e514992E919e21dc828",
+    adcampaignAddress: "0xb830f7702a262AbDcaDA58fc760a9D313587aF30",
+    warpadsAddress: "0x327083bdc79F84d3B54970f23bf3AD61802c2A12",
     warpTokenDecimals: 18,
     blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
   },
