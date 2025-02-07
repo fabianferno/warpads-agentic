@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/86833bb7-2433-4ac0-a266-a0ef799ca982)
+
 # WarpAds CookieDAO Application
 
 ##### Project Name
@@ -50,10 +52,10 @@ Sei Devnet
 - warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
 
 Arbitrum Sepolia
- - warpTokenAddress: "0x923f68e4a026b4c9ead5b43dffc468c3bc52c045"
- - adspaceAddress: "0xf413442cd94dc9fec516613bf0f24bac4d57ddc5"
- - adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92"
- - warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
+- warpTokenAddress: "0x923f68e4a026b4c9ead5b43dffc468c3bc52c045"
+- adspaceAddress: "0xf413442cd94dc9fec516613bf0f24bac4d57ddc5"
+- adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92"
+- warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
 
 Mode Testnet
 - warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90"
