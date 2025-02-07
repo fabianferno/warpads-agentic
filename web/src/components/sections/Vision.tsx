@@ -5,23 +5,23 @@ import { Target, Zap, Diamond, ArrowRight } from "lucide-react";
 
 const benefits = [
     {
-        feature: "Model Context Protocol (MACP)",
-        benefit: "Ads adapt to user intent—no more guessing.",
-        details: "Our AI understands conversation context in real-time, ensuring ads feel natural and relevant.",
+        feature: "Agent Integration",
+        benefit: "Get started with WarpAds in three simple steps",
+        details: "Register for an API key, install our plugin, and stake WARP tokens to start earning.",
         icon: Target,
         color: "from-blue-500/20 to-cyan-500/20"
     },
     {
-        feature: "Permissionless Ad Auctions",
-        benefit: "Anyone can bid for ad space, creating fair competition and higher payouts.",
-        details: "Decentralized marketplace ensures transparency and maximizes value for all participants.",
+        feature: "Ad Campaign Management",
+        benefit: "Create and manage campaigns as tradeable NFTs",
+        details: "Set campaign parameters, pay fees based on duration and priority, and track engagement metrics.",
         icon: Zap,
         color: "from-purple-500/20 to-pink-500/20"
     },
     {
-        feature: "Incentive-Aligned Metrics",
-        benefit: "Earn more when users engage—we profit only when you do.",
-        details: "Revolutionary reward system that perfectly aligns advertiser, publisher, and user interests.",
+        feature: "Validation & Operations",
+        benefit: "Decentralized validation with LLM compute",
+        details: "Operators validate engagement and calculate incentives, with upcoming EigenLayer integration.",
         icon: Diamond,
         color: "from-emerald-500/20 to-teal-500/20"
     }
@@ -45,28 +45,23 @@ export default function Vision() {
                         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent" />
                         <div className="relative">
                             <span className="inline-block px-4 py-1 rounded-full bg-red-500/10 text-red-400 text-sm font-medium mb-4">
-                                The Challenge
+                                For Agents
                             </span>
                             <h3 className="text-2xl font-bold text-white mb-4">
-                                Current State of AI Advertising
+                                Getting Started
                             </h3>
-                            <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                                AI agents struggle to monetize without disrupting user trust or experience.
-                                Generic ads ruin AI interactions, users hate irrelevance, advertisers waste
-                                budgets, and developers lose revenue.
-                            </p>
                             <ul className="space-y-3">
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="h-2 w-2 rounded-full bg-red-500"></span>
-                                    Disrupted user experiences
+                                    Register as agent adspace to receive ERC721 token and API key
                                 </li>
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="h-2 w-2 rounded-full bg-red-500"></span>
-                                    Ineffective ad targeting
+                                    Install WarpAds plugin and configure WARPAD_API_KEY
                                 </li>
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="h-2 w-2 rounded-full bg-red-500"></span>
-                                    Lost revenue opportunities
+                                    Stake WARP tokens to become eligible for incentives
                                 </li>
                             </ul>
                         </div>
@@ -82,33 +77,29 @@ export default function Vision() {
                         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent" />
                         <div className="relative">
                             <span className="inline-block px-4 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-sm font-medium mb-4">
-                                Our Solution
+                                For Advertisers
                             </span>
                             <h3 className="text-2xl font-bold text-white mb-4">
-                                Context-Aware AI Advertising
+                                Campaign Creation
                             </h3>
-                            <p className="text-gray-400 text-lg mb-6">
-                                WarpAds uses LLM-powered context to serve ads that feel like helpful
-                                suggestions, not interruptions.
-                            </p>
                             <ul className="space-y-4">
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/10">
                                         <span className="h-2.5 w-2.5 rounded-full bg-cyan-500"></span>
                                     </span>
-                                    For Users: Ads match their real-time needs
+                                    Create campaigns as tradeable ERC721 NFTs
                                 </li>
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/10">
                                         <span className="h-2.5 w-2.5 rounded-full bg-cyan-500"></span>
                                     </span>
-                                    For Agents: Earn rewards via the open-auction protocol
+                                    Pay fees based on duration and priority
                                 </li>
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
                                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/10">
                                         <span className="h-2.5 w-2.5 rounded-full bg-cyan-500"></span>
                                     </span>
-                                    For Advertisers: Target high-intent moments
+                                    Track engagement through WarpAds Ad engine
                                 </li>
                             </ul>
                         </div>

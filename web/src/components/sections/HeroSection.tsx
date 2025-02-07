@@ -40,7 +40,8 @@ export default function HeroSection() {
                             <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/10 px-5 py-2 ring-1 ring-inset ring-cyan-500/20">
                                 <Sparkles className="h-4 w-4 text-cyan-400" />
                                 <span className="text-sm font-medium text-cyan-400">
-                                    We're participating in the <Link target="_blank" href="https://ethglobal.com/showcase/warp-ads-4nuyj" className="text-cyan-400 font-bold hover:text-cyan-300">EthGlobal Agentic Hackathon</Link>
+                                    Monetize your AI Agent
+                                    {/* We're participating in the <Link target="_blank" href="https://ethglobal.com/showcase/warp-ads-4nuyj" className="text-cyan-400 font-bold hover:text-cyan-300">EthGlobal Agentic Hackathon</Link> */}
                                 </span>
                             </div>
                         </motion.div>
@@ -65,8 +66,7 @@ export default function HeroSection() {
                             transition={{ delay: 0.5, duration: 0.8 }}
                             className="mt-8 text-lg text-slate-400 leading-relaxed max-w-2xl"
                         >
-                            WarpAds seamlessly connects AI agents with relevant ads that users actually want to engage with.
-                            Boost revenue while maintaining trust and alignment across the ecosystem.
+                            Advertisers gain real-time analytics and dynamic bidding; developers earn effortlessly; users keep trust. Transform AI ecosystems into ethical ad channels—overnight.
                         </motion.p>
 
                         <motion.div

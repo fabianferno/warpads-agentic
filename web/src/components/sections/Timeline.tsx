@@ -13,12 +13,12 @@ const timelineData = [
         icon: Beaker,
         gradient: "from-emerald-500/20 to-cyan-500/20",
         content: {
-            description: "Establishing the groundwork for WarpAds ecosystem",
+            description: "Evolution from Farcaster Frames display ads to an open standard for agentic ecosystems",
             achievements: [
-                "Market research completion",
+                "Won Global dAGI Hackathon Grant (10K USDC)",
+                "Ranked #1 in GG22 Hack Alumni Grant (10K USDC)",
+                "Expanded protocol scope to Agentic UX",
                 "Technical architecture design",
-                "Team formation",
-                "Initial funding secured",
                 "Community building initiated"
             ]
         }
@@ -158,17 +158,17 @@ const Timeline = () => {
                                 <motion.div
                                     whileHover={{ scale: 1.1 }}
                                     className={`h-14 w-14 rounded-full border-2 ${item.status === "Completed"
-                                            ? "border-cyan-500 bg-cyan-500/10"
-                                            : item.status === "In Progress"
-                                                ? "border-yellow-500 bg-yellow-500/10"
-                                                : "border-gray-700 bg-gray-700/10"
+                                        ? "border-cyan-500 bg-cyan-500/10"
+                                        : item.status === "In Progress"
+                                            ? "border-yellow-500 bg-yellow-500/10"
+                                            : "border-gray-700 bg-gray-700/10"
                                         } flex items-center justify-center transition-colors duration-200`}
                                 >
                                     <item.icon className={`h-6 w-6 ${item.status === "Completed"
-                                            ? "text-cyan-500"
-                                            : item.status === "In Progress"
-                                                ? "text-yellow-500"
-                                                : "text-gray-700"
+                                        ? "text-cyan-500"
+                                        : item.status === "In Progress"
+                                            ? "text-yellow-500"
+                                            : "text-gray-700"
                                         }`} />
                                 </motion.div>
                             </div>
@@ -183,10 +183,10 @@ const Timeline = () => {
                                         <div>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${item.status === "Completed"
-                                                        ? "bg-cyan-500/10 text-cyan-400"
-                                                        : item.status === "In Progress"
-                                                            ? "bg-yellow-500/10 text-yellow-400"
-                                                            : "bg-gray-700/10 text-gray-400"
+                                                    ? "bg-cyan-500/10 text-cyan-400"
+                                                    : item.status === "In Progress"
+                                                        ? "bg-yellow-500/10 text-yellow-400"
+                                                        : "bg-gray-700/10 text-gray-400"
                                                     }`}>
                                                     {item.status}
                                                 </span>

@@ -21,19 +21,19 @@ const features = [
     {
         name: "For Developers",
         description:
-            "Integrate WarpAds in 3 lines of code—start earning from day one.",
+            "Monetize agents instantly with 3 lines of code. Seamless integration with top frameworks (Eliza, CrewAI, LangGraph)—no UX compromises, just passive revenue.",
         icon: UploadIcon,
     },
     {
         name: "For Advertisers",
         description:
-            "Target users where they're most engaged: inside AI conversations.",
+            "Unlock 1,500+ AI \"influencers\" (10k+ daily users) with hyper-targeted, conversational ads. Reach niche audiences—coding assistants, travel planners, shopping agents—using AI-native intent signals for unmatched relevance.",
         icon: LockIcon,
     },
     {
-        name: "Smart Adaptation",
+        name: "For Users",
         description:
-            "Our AI-powered system automatically optimizes ad placement and targeting for maximum engagement.",
+            "Ads that add value, not clutter. Contextual recommendations blend naturally into agent interactions.",
         icon: ServerIcon,
     },
 ];
@@ -89,7 +89,7 @@ export default function CallToValue() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl"
                     >
-                        Earn More with Ads That Adapt to Your Users&apos; Needs
+                        Get started in 3 lines of code; Yes, it's that easy
                     </motion.h2>
                 </motion.div>
                 <motion.div
