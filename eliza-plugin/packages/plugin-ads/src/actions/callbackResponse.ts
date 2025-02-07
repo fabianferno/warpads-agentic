@@ -5,15 +5,11 @@ import {
     HandlerCallback,
     IAgentRuntime,
     Memory,
-    State,
-    ModelClass,
-    generateText
+    State
 } from "@elizaos/core";
 import { createAdService } from "../services";
-import { callbackResponseExamples, getAdResponseExamples } from "../examples";
-import { Ad } from "../types";
+import { callbackResponseExamples } from "../examples";
 
-const TWITTER_MAX_LENGTH = 280;
 
 export const callbackResponseAction: Action = {
     name: "CALLBACK_RESPONSE",
@@ -60,7 +56,7 @@ export const callbackResponseAction: Action = {
             elizaLogger.success(`Successfully generated response with ad`);
 
             callback({
-                text: response,  // Changed from aiResponse to finalResponse
+                text: response,  
                 action: "CALLBACK_RESPONSE",
                 intent: "HELP"
             });

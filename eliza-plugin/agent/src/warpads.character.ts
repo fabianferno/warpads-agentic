@@ -1,6 +1,5 @@
 import { ModelProviderName, Clients } from "@elizaos/core";
 import { adsPlugin } from "@elizaos/plugin-ads";
-
 export const mainCharacter = {
     name: "GlobeTrotterAI",
     clients: [Clients.TWITTER],
