@@ -166,6 +166,31 @@ export const WarpAdsABI = [
         type: "uint256",
       },
       {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "RewardsClaimed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "adSpaceId",
+        type: "uint256",
+      },
+      {
         indexed: false,
         internalType: "uint256",
         name: "amount",

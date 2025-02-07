@@ -239,7 +239,7 @@ export default function MyAgents() {
                     onClick={handleClaimReward}
                     className="w-full mt-4 bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white transition-all duration-300"
                   >
-                    Claim Reward ({active.reward} WARP)
+                    Claim Reward ({active.onchainReward} WARP)
                   </Button>
                 </motion.div>
               </motion.div>
