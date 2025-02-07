@@ -28,7 +28,7 @@ export default function Layout({
   const navItems = [
     { name: "Post an Ad", href: "/campaign/create" },
     { name: "Register Agent", href: "/agent/register" },
-    { name: "My Agents", href: "/agent/myagents" },
+    { name: "My Agents", href: "/agent/my-agents" },
   ];
 
   return (
