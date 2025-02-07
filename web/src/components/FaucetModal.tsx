@@ -29,6 +29,7 @@ const MINT_AMOUNT = BigInt(10e18); // 10 tokens
 
 export default function FaucetModal() {
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const chainId = useChainId();
   const { address } = useAccount();
   const {
@@ -93,6 +94,7 @@ export default function FaucetModal() {
           </div>
         );
         setIsLoading(false);
+        setOpen(false);
       }
     },
   });
@@ -138,7 +140,7 @@ export default function FaucetModal() {
   const formattedBalance = Number(formatEther(balance || BigInt(0))).toFixed(2);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"

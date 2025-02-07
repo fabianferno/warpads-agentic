@@ -4,23 +4,28 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import { Copy, Check, X } from "lucide-react";
+import { Copy, Check, X, Loader2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import MainLayout from "../layouts/MainLayout";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId, useWriteContract } from "wagmi";
 import axios from "axios";
 import { PinataSDK } from "pinata-web3";
 import { chainLogos } from "@/lib/chainLogos";
+import { WarpadsABI } from "@/lib/abi/Warpads";
+import { contractsConfig } from "@/lib/const";
 
 export default function MyAgents() {
   const [active, setActive] = useState<any>(null);
   const [copied, setCopied] = useState(false);
   const [agents, setAgents] = useState<any[]>([]);
   const [agentsWithImages, setAgentsWithImages] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const ref = useRef(null);
   const { address } = useAccount();
+  const chainId = useChainId();
+  const { writeContract, isPending: isClaimPending } = useWriteContract();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -42,6 +47,7 @@ export default function MyAgents() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
+        setIsLoading(true);
         const API_BASE_URL =
           process.env.NEXT_PUBLIC_API_BASE_URL ||
           "https://warpads-cookie-hack.onrender.com";
@@ -54,6 +60,8 @@ export default function MyAgents() {
       } catch (error) {
         console.error("Error fetching agents:", error);
         toast.error("Failed to fetch agents");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -109,8 +117,29 @@ export default function MyAgents() {
     toast.success("API Key copied to clipboard");
   };
 
-  const handleClaimReward = () => {
-    toast.success(`Reward of ${active.reward} WARP claimed!`);
+  const handleClaimReward = async () => {
+    if (!active || !active.id) {
+      toast.error("No agent selected");
+      return;
+    }
+
+    const contractConfig = contractsConfig[chainId];
+    if (!contractConfig?.warpadsAddress) {
+      toast.error("Contract not deployed on this network");
+      return;
+    }
+
+    try {
+      writeContract({
+        address: contractConfig.warpadsAddress,
+        abi: WarpadsABI,
+        functionName: "claimRewards",
+        args: [BigInt(active.id)],
+      });
+    } catch (error) {
+      console.error("Error claiming rewards:", error);
+      toast.error("Failed to claim rewards");
+    }
   };
 
   return (
@@ -137,10 +166,24 @@ export default function MyAgents() {
             <p className="text-slate-400">View your agents and manage them</p>
           </div>
 
-          {agents.length === 0 ? (
-            <p className="text-white">Loading agents...</p>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-4" />
+              <p className="text-slate-400">Loading your agents...</p>
+            </div>
+          ) : agents.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-slate-800 rounded-lg bg-slate-900/50">
+              <Users className="w-12 h-12 text-slate-600 mb-4" />
+              <h3 className="text-lg font-medium text-slate-300 mb-2">No Agents Found</h3>
+              <p className="text-slate-400 text-center max-w-md">
+                You don't have any agents yet. Create your first agent to get started with automated trading.
+              </p>
+            </div>
           ) : agentsWithImages.length === 0 ? (
-            <p className="text-white">Fetching images...</p>
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-4" />
+              <p className="text-slate-400">Loading agent images...</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {agentsWithImages.map((agent) => (
@@ -237,9 +280,17 @@ export default function MyAgents() {
                   </div>
                   <Button
                     onClick={handleClaimReward}
+                    disabled={isClaimPending}
                     className="w-full mt-4 bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white transition-all duration-300"
                   >
-                    Claim Reward ({active.reward} WARP)
+                    {isClaimPending ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Claiming...
+                      </div>
+                    ) : (
+                      `Claim Reward (${active.rewardsAccumulated || 0} WARP)`
+                    )}
                   </Button>
                 </motion.div>
               </motion.div>

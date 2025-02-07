@@ -38,6 +38,19 @@ export default function AdCampaignForm() {
   const chainId = useChainId();
   const { writeContract, isPending: isSubmitting, error: submitError } = useWriteContract();
 
+  const clearForm = () => {
+    setCategories([]);
+    setCurrentCategory("");
+    setName("");
+    setDescription("");
+    setStakeAmount("");
+    setDeadline(undefined);
+    setDaysRemaining(0);
+    setImagePreview(null);
+    setAd("");
+    setImageFile(null);
+  };
+
   useEffect(() => {
     const initPinata = async () => {
       try {
@@ -72,6 +85,7 @@ export default function AdCampaignForm() {
     onLogs(logs) {
       const event = logs[0];
       if (event && event.transactionHash) {
+        clearForm();
         toast.success(
           <div className="space-y-2">
             <div>Campaign registered successfully!</div>

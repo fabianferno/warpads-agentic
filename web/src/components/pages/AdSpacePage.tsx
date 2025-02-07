@@ -28,6 +28,15 @@ export default function AdspaceForm() {
   const chainId = useChainId();
   const { writeContract, isPending: isSubmitting, error: submitError } = useWriteContract();
 
+  const clearForm = () => {
+    setAgentName("");
+    setPurpose("");
+    setDescription("");
+    setStakeAmount("");
+    setImagePreview(null);
+    setImageFile(null);
+  };
+
   useEffect(() => {
     const initPinata = async () => {
       try {
@@ -62,6 +71,7 @@ export default function AdspaceForm() {
     onLogs(logs) {
       const event = logs[0];
       if (event && event.transactionHash) {
+        clearForm();
         toast.success(
           <div className="space-y-2">
             <div>AdSpace registered successfully!</div>
