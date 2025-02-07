@@ -1,4 +1,9 @@
-import { baseSepolia, arbitrumSepolia } from "viem/chains";
+import {
+  baseSepolia,
+  arbitrumSepolia,
+  modeTestnet,
+  seiDevnet,
+} from "viem/chains";
 
 export const contractsConfig: {
   [key: number]: {
@@ -27,5 +32,23 @@ export const contractsConfig: {
     warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
     warpTokenDecimals: 18,
     blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
+  },
+  // Mode Testnet
+  919: {
+    warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90",
+    adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB",
+    adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16",
+    warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
+    warpTokenDecimals: 18,
+    blockExplorerUrl: modeTestnet.blockExplorers.default.url,
+  },
+  // Sei testnet
+  713715: {
+    warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90",
+    adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB",
+    adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16",
+    warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
+    warpTokenDecimals: 18,
+    blockExplorerUrl: seiDevnet.blockExplorers.default.url,
   },
 };

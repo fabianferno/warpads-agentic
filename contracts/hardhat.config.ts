@@ -43,11 +43,19 @@ module.exports = {
       url: `https://arb-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
+    mode_sepolia: {
+      url: `https://sepolia.mode.network`,
+      chainId: 919,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
   },
   etherscan: {
     apiKey: {
       optimism_sepolia: process.env.ETHERSCAN_API_KEY || "",
       base_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      arbitrum_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      mode_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      sei_devnet: process.env.ETHERSCAN_API_KEY || "",
     },
     customChains: [
       {

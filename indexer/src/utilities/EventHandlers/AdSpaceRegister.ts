@@ -1,7 +1,7 @@
 import { client } from "../../config/db";
 import { PinataSDK } from "pinata-web3";
 import { env } from "../../config/env";
-import { generateAPIKey } from "../apikey/generateAPIkey";
+import crypto from "crypto";
 
 export const AdSpaceRegister = async (
   id: number,
@@ -29,18 +29,21 @@ export const AdSpaceRegister = async (
   }
 
   // Else generate a new API key for the ad space
-  const apiKey = await generateAPIKey(id);
+  const idHex = id.toString(16);
+  const randomPart = crypto.randomBytes(16).toString("hex");
+  const apiKey = `${idHex}-${randomPart}`;
 
   // Create the ad space
   await db.collection("adSpaces").insertOne({
     id: id,
     owner: owner,
     metadata: metadataJson.data,
-    stakedValue: stakedValue,
+    stakedValue: Number(BigInt(stakedValue) / BigInt(10 ** 18)),
     active: true,
     createdAt: new Date(),
     updatedAt: new Date(),
     apiKey: apiKey,
+    chainId: chainId,
   });
 
   console.log("Ad space created with id: ", id);

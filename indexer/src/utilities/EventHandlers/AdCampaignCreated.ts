@@ -58,6 +58,7 @@ export const AdCampaignCreated = async (
     priorityStake: priorityStake,
     expiry: expiry,
     active: true,
+    chainId: chainId,
     embedding: embedding,
     createdAt: new Date(),
     updatedAt: new Date(),

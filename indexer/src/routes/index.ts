@@ -4,6 +4,7 @@ import { generateAPIKey } from "../utilities/apikey/generateAPIkey";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { trackUsage } from "../utilities/adEngine/trackUsage";
 import { trackResponse } from "../utilities/adEngine/trackResponse";
+import { getAllAgents } from "../utilities/GetAllAgents";
 
 const router = Router();
 
@@ -20,6 +21,12 @@ router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   } else {
     res.status(200).send(ad);
   }
+});
+
+router.get("/get-my-agents", async (req: Request, res: Response) => {
+  const { address } = req.query;
+  const agents = await getAllAgents(address as `0x${string}`);
+  res.status(200).send(agents);
 });
 
 router.get("/generate-api-key", async (req: Request, res: Response) => {
