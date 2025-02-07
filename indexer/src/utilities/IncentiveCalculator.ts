@@ -1,3 +1,4 @@
+import axios from "axios";
 import connectDB, { client } from "../config/db";
 import { env } from "../config/env";
 
@@ -33,6 +34,7 @@ export const calculateIncentive = async (id: number) => {
   console.log(ad);
   // Todo : script to calculate the impressions and clicks from platform
   let reward = 0;
+  let taskId = "";
   ad.forEach(async (ad) => {
     console.log(ad.platformId);
 
@@ -40,12 +42,31 @@ export const calculateIncentive = async (id: number) => {
 
     // Call Cookie API to gain insights about the user
     // reward Calculation here
-    reward = 0;
+    // call the Skyvern API to get insights about the tweet.
 
+    const response = await axios.post(
+      "https://api.skyvern.com/api/v2/tasks/",
+      {
+        user_prompt:
+          "Just navigate the twitter url and collect the impressions like No of Likes , NO of views , no of reposts , etc whatever you can . I want the output in json format {views: number, likes: number, retweets: number, replies: number}",
+        url: ad.platformId,
+        webhook_callback_url: `https://0b65-2409-40f4-100b-a43c-69fd-f3ea-cfe9-acd4.ngrok-free.app/webhooks`,
+      },
+      {
+        headers: {
+          "x-api-key": env.SKYVERN_API_KEY as string,
+        },
+      }
+    );
+
+    console.log(response.data.task_id);
+    taskId = response.data.task_id;
     // Once the reward is calculated, store it in the response to validated
     await db.collection("validatedLogs").insertOne({
+      adSpaceId: id,
       refResponseID: ad._id,
       validatedAt: new Date(),
+      taskId: taskId,
     });
   });
 
@@ -89,3 +110,5 @@ export const calculateIncentive = async (id: number) => {
 
   return reward + ad.length * 1;
 };
+
+// calculateIncentive(2);

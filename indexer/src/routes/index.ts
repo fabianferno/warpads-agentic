@@ -5,6 +5,9 @@ import { authMiddleware } from "../middleware/authMiddleware";
 import { trackUsage } from "../utilities/adEngine/trackUsage";
 import { trackResponse } from "../utilities/adEngine/trackResponse";
 import { getAllAgents } from "../utilities/GetAllAgents";
+import { validateTwitterAnalytics } from "../utilities/operator/TwitterAnalytics";
+import { operator } from "../utilities/operator/operator";
+import { calculateIncentive } from "../utilities/IncentiveCalculator";
 
 const router = Router();
 
@@ -48,9 +51,43 @@ router.post(
   }
 );
 
-router.post("skyvern-webhook", async (req: Request, res: Response) => {
-  console.log(req.body);
-  res.send("Webhook received");
+router.post("/webhooks", async (req: Request, res: Response) => {
+  try {
+    // Log the full request details for debugging
+    console.log("Webhook Headers:", req.headers);
+    console.log("Webhook Body:", req.body);
+
+    // Verify the request has a body
+    if (!req.body) {
+      return res.status(400).json({ error: "Missing request body" });
+    }
+
+    // TODO: Add any specific webhook processing logic here
+    await validateTwitterAnalytics(req.body.task_id, req.body.output);
+
+    // Send a more detailed success response
+    return res.status(200).json({
+      status: "success",
+      message: "Webhook received and processed successfully",
+    });
+  } catch (error) {
+    console.error("Webhook processing error:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to process webhook",
+    });
+  }
+});
+
+router.get("/operator", async (req: Request, res: Response) => {
+  await operator();
+  res.send("Operator started");
+});
+
+router.post("/incentive", async (req: Request, res: Response) => {
+  const { id } = req.body;
+  await calculateIncentive(id);
+  res.send("Incentive calculated");
 });
 
 export default router;
