@@ -283,21 +283,24 @@ export default function MyAgents() {
                     disabled={isClaimPending}
                     className="w-full mt-4 bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white transition-all duration-300"
                   >
-                    {isClaimPending ? (
-                      <div className="flex items-center justify-center">
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Claiming...
-                      </div>
-                    ) : (
-                      `Claim Reward (${active.rewardsAccumulated || 0} WARP)`
-                    )}
-                  </Button>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </MainLayout>
+                    {
+                      isClaimPending ? (
+                        <div className="flex items-center justify-center">
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Claiming...
+                        </div>
+                      ) : (
+                        `Claim Reward (${active.rewardsAccumulated || 0} WARP)`
+                      )
+                    }
+                  </Button >
+                </motion.div >
+              </motion.div >
+            )
+            }
+          </AnimatePresence >
+        </div >
+      </div >
+    </MainLayout >
   );
 }

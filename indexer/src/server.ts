@@ -102,7 +102,7 @@ const contractListener = async () => {
 
     BaseContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
+      async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -110,14 +110,14 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 84532);
+        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 84532);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
     BaseContract.on(
       "CampaignRegistered",
-      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+      async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
         console.log("ID:", campaignId);
         console.log("Owner:", owner);
@@ -126,7 +126,7 @@ const contractListener = async () => {
         console.log("Expiry:", expiry);
         console.log("Additional args:", args);
 
-        AdCampaignCreated(
+        await AdCampaignCreated(
           campaignId,
           owner,
           adContent,
@@ -137,19 +137,22 @@ const contractListener = async () => {
       }
     );
 
-    // BaseContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
-    //   console.log("Rewards Claimed:");
-    //   console.log("Ad Space ID:", adSpaceId);
-    //   console.log("User:", user);
-    //   console.log("Amount:", amount);
-    //   console.log("Additional args:", args);
-    //   RewardClaimed(adSpaceId, user, amount);
-    // });
+    BaseContract.on(
+      "RewardsClaimed",
+      async (adSpaceId, user, amount, ...args) => {
+        console.log("Rewards Claimed:");
+        console.log("Ad Space ID:", adSpaceId);
+        console.log("User:", user);
+        console.log("Amount:", amount);
+        console.log("Additional args:", args);
+        await RewardClaimed(adSpaceId, user, amount);
+      }
+    );
 
     // Listen for events on the Arbitrum contract
     ArbitrumContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
+      async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -157,14 +160,14 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 421614);
+        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 421614);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
     ArbitrumContract.on(
       "CampaignRegistered",
-      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+      async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
         console.log("ID:", campaignId);
         console.log("Owner:", owner);
@@ -173,7 +176,7 @@ const contractListener = async () => {
         console.log("Expiry:", expiry);
         console.log("Additional args:", args);
 
-        AdCampaignCreated(
+        await AdCampaignCreated(
           campaignId,
           owner,
           adContent,
@@ -185,22 +188,21 @@ const contractListener = async () => {
       }
     );
 
-    // ArbitrumContract.on(
-    //   "RewardsClaimed",
-    //   (adSpaceId, user, amount, ...args) => {
-    //     console.log("Rewards Claimed:");
-    //     console.log("Ad Space ID:", adSpaceId);
-    //     console.log("User:", user);
-    //     console.log("Amount:", amount);
-    //     console.log("Additional args:", args);
-    //     RewardClaimed(adSpaceId, user, amount);
-    //   }
-    // );
+    ArbitrumContract.on(
+      "RewardsClaimed",
+      async (adSpaceId, user, amount, ...args) => {
+        console.log("Rewards Claimed:");
+        console.log("Ad Space ID:", adSpaceId);
+        console.log("User:", user);
+        console.log("Amount:", amount);
+        console.log("Additional args:", args);
+        await RewardClaimed(adSpaceId, user, amount);
+      }
+    );
 
-    // SEI Listener
     SeiContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
+      async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -208,14 +210,14 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
+        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
     SeiContract.on(
       "CampaignRegistered",
-      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+      async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
         console.log("ID:", campaignId);
         console.log("Owner:", owner);
@@ -224,7 +226,7 @@ const contractListener = async () => {
         console.log("Expiry:", expiry);
         console.log("Additional args:", args);
 
-        AdCampaignCreated(
+        await AdCampaignCreated(
           campaignId,
           owner,
           adContent,
@@ -236,19 +238,22 @@ const contractListener = async () => {
       }
     );
 
-    // SeiContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
-    //   console.log("Rewards Claimed:");
-    //   console.log("Ad Space ID:", adSpaceId);
-    //   console.log("User:", user);
-    //   console.log("Amount:", amount);
-    //   console.log("Additional args:", args);
-    //   RewardClaimed(adSpaceId, user, amount);
-    // });
+    SeiContract.on(
+      "RewardsClaimed",
+      async (adSpaceId, user, amount, ...args) => {
+        console.log("Rewards Claimed:");
+        console.log("Ad Space ID:", adSpaceId);
+        console.log("User:", user);
+        console.log("Amount:", amount);
+        console.log("Additional args:", args);
+        await RewardClaimed(adSpaceId, user, amount);
+      }
+    );
 
     // Mode Listener
     ModeContract.on(
       "AdSpaceRegistered",
-      (adSpaceId, owner, warpStake, metadataURI, ...args) => {
+      async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
         console.log("ID:", adSpaceId);
         console.log("Owner:", owner);
@@ -256,14 +261,14 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 919);
+        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 919);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
     ModeContract.on(
       "CampaignRegistered",
-      (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
+      async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
         console.log("ID:", campaignId);
         console.log("Owner:", owner);
@@ -272,7 +277,7 @@ const contractListener = async () => {
         console.log("Expiry:", expiry);
         console.log("Additional args:", args);
 
-        AdCampaignCreated(
+        await AdCampaignCreated(
           campaignId,
           owner,
           adContent,
@@ -284,14 +289,17 @@ const contractListener = async () => {
       }
     );
 
-    // ModeContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
-    //   console.log("Rewards Claimed:");
-    //   console.log("Ad Space ID:", adSpaceId);
-    //   console.log("User:", user);
-    //   console.log("Amount:", amount);
-    //   console.log("Additional args:", args);
-    //   RewardClaimed(adSpaceId, user, amount);
-    // });
+    ModeContract.on(
+      "RewardsClaimed",
+      async (adSpaceId, user, amount, ...args) => {
+        console.log("Rewards Claimed:");
+        console.log("Ad Space ID:", adSpaceId);
+        console.log("User:", user);
+        console.log("Amount:", amount);
+        console.log("Additional args:", args);
+        await RewardClaimed(adSpaceId, user, amount);
+      }
+    );
   } catch (error) {
     console.error("Error setting up event listener:", error);
   }
