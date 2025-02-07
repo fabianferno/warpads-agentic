@@ -16,6 +16,7 @@ const envSchema = z.object({
   COOKIE_API_KEY: z.string().min(1),
   OPERATOR_PRIVATE_KEY: z.string().min(1),
   SKYVERN_API_KEY: z.string().min(1),
+  OPERATOR_KEY: z.string().min(1),
 });
 
 const env = envSchema.parse(process.env);

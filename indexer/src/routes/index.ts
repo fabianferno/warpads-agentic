@@ -8,6 +8,7 @@ import { getAllAgents } from "../utilities/GetAllAgents";
 import { validateTwitterAnalytics } from "../utilities/operator/TwitterAnalytics";
 import { operator } from "../utilities/operator/operator";
 import { calculateIncentive } from "../utilities/IncentiveCalculator";
+import { env } from "../config/env";
 
 const router = Router();
 
@@ -79,15 +80,24 @@ router.post("/webhooks", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/operator", async (req: Request, res: Response) => {
-  await operator();
-  res.send("Operator started");
+router.post("/operator", async (req: Request, res: Response) => {
+  const { key } = req.body;
+  if (key === env.OPERATOR_KEY) {
+    await operator();
+    res.send("Operator started");
+  } else {
+    res.status(401).send("Unauthorized");
+  }
 });
 
 router.post("/incentive", async (req: Request, res: Response) => {
-  const { id } = req.body;
-  await calculateIncentive(id);
-  res.send("Incentive calculated");
+  const { id, key } = req.body;
+  if (key === env.OPERATOR_KEY) {
+    await calculateIncentive(id);
+    res.send("Incentive calculated");
+  } else {
+    res.status(401).send("Unauthorized");
+  }
 });
 
 export default router;
