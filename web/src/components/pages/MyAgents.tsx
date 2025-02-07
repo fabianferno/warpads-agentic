@@ -9,11 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import MainLayout from "../layouts/MainLayout";
+import { useAccount } from "wagmi";
+import axios from "axios";
+import { PinataSDK } from "pinata-web3";
 
 export default function MyAgents() {
   const [active, setActive] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [agentsWithImages, setAgentsWithImages] = useState<any[]>([]);
   const ref = useRef(null);
+  const { address } = useAccount();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -32,6 +38,66 @@ export default function MyAgents() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [active]);
 
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const API_BASE_URL =
+          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+        const response = await axios.get(`${API_BASE_URL}/get-my-agents`, {
+          params: { address: address },
+        });
+        const data = response.data;
+        console.log("Fetched Agents:", data);
+        setAgents(data);
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+        toast.error("Failed to fetch agents");
+      }
+    };
+
+    if (address) {
+      fetchAgents();
+    }
+  }, [address]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const updatedAgents = await Promise.all(
+        agents.map(async (agent) => {
+          try {
+            const pinata = new PinataSDK({
+              pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
+              pinataGateway:
+                process.env.NEXT_PUBLIC_PINATA_GATEWAY ||
+                "orange-select-opossum-767.mypinata.cloud",
+            });
+            const { data: imageURL, contentType } = await pinata.gateways.get(
+              agent.metadata.imageHash
+            );
+            console.log(imageURL);
+            const blobUrl = URL.createObjectURL(
+              new Blob([imageURL as Blob], { type: contentType || "image/png" })
+            );
+
+            return { ...agent, imageURL: blobUrl || "/placeholder.svg" };
+          } catch (error) {
+            console.error(
+              `Failed to fetch image for agent ${agent.id}:`,
+              error
+            );
+            return { ...agent, imageURL: "/placeholder.svg" };
+          }
+        })
+      );
+      console.log(updatedAgents);
+      setAgentsWithImages(updatedAgents);
+    };
+
+    if (agents.length > 0) {
+      fetchImages();
+    }
+  }, [agents]);
+
   useOutsideClick(ref, () => setActive(null));
 
   const handleCopy = () => {
@@ -44,39 +110,6 @@ export default function MyAgents() {
   const handleClaimReward = () => {
     toast.success(`Reward of ${active.reward} WARP claimed!`);
   };
-
-  const cards = [
-    {
-      id: 1,
-      owner: "0x1234567890abcdef1234567890abcdef12345678",
-      metadata: {
-        name: "AI Assistant",
-        description: "An AI-powered assistant for customer support.",
-        tags: ["AI", "customer support"],
-        image: "/assets/ai-assistant.png",
-      },
-      stakedValue: 5,
-      active: true,
-      createdAt: "2025-01-01T10:00:00.000Z",
-      apiKey: "apikey1234567890",
-      reward: 1.5,
-    },
-    {
-      id: 2,
-      owner: "0x4b4b30e2E7c6463b03CdFFD6c42329D357205334",
-      metadata: {
-        name: "Data Analyzer",
-        description: "Advanced data analysis and visualization tool.",
-        tags: ["data analysis", "visualization"],
-        image: "/assets/data-analyzer.png",
-      },
-      stakedValue: 10,
-      active: true,
-      createdAt: "2025-02-01T09:45:28.040Z",
-      apiKey: "2x34baa74e6c84d9add15ea92171183ce9",
-      reward: 3.18,
-    },
-  ];
 
   return (
     <MainLayout>
@@ -102,31 +135,37 @@ export default function MyAgents() {
             <p className="text-slate-400">View your agents and manage them</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map((card) => (
-              <Card
-                key={card.id}
-                className="cursor-pointer hover:shadow-lg backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10 transition-all duration-300 hover:ring-cyan-500/30"
-                onClick={() => setActive(card)}
-              >
-                <Image
-                  width={400}
-                  height={200}
-                  src={card.metadata.image || "/placeholder.svg"}
-                  alt={card.metadata.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <CardContent className="p-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    {card.metadata.name}
-                  </h3>
-                  <p className="text-sm text-slate-400 mt-1">
-                    {card.metadata.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {agents.length === 0 ? (
+            <p className="text-white">Loading agents...</p>
+          ) : agentsWithImages.length === 0 ? (
+            <p className="text-white">Fetching images...</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {agentsWithImages.map((agent) => (
+                <Card
+                  key={agent.id}
+                  className="cursor-pointer hover:shadow-lg backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10 transition-all duration-300 hover:ring-cyan-500/30"
+                  onClick={() => setActive(agent)}
+                >
+                  <Image
+                    width={400}
+                    height={200}
+                    src={agent.imageURL || "/placeholder.svg"}
+                    alt={agent.metadata.name}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                  <CardContent className="p-4">
+                    <h3 className="text-lg font-semibold text-white">
+                      {agent.metadata.name}
+                    </h3>
+                    <p className="text-sm text-slate-400 mt-1">
+                      {agent.metadata.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
 
           <AnimatePresence>
             {active && (
@@ -152,7 +191,7 @@ export default function MyAgents() {
                   <Image
                     width={400}
                     height={200}
-                    src={active.metadata.image || "/placeholder.svg"}
+                    src={active.imageURL || "/placeholder.svg"}
                     alt={active.metadata.name}
                     className="w-full h-48 object-cover rounded-lg"
                   />
@@ -166,7 +205,11 @@ export default function MyAgents() {
                     Owner: {active.owner}
                   </p>
                   <p className="text-sm text-slate-500">
-                    Staked Value: {active.stakedValue} WARP
+                    Staked Value:{" "}
+                    {typeof active.stakedValue === "object"
+                      ? active.stakedValue.low
+                      : active.stakedValue}{" "}
+                    WARP
                   </p>
                   <div className="mt-4 flex items-center gap-2 bg-slate-800 p-2 rounded-lg">
                     <input

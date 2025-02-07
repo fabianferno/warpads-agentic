@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import path from "path";
+import cors from "cors";
 import indexRouter from "./routes/index";
 import { JsonRpcProvider } from "ethers";
 import { Contract } from "ethers";
@@ -14,6 +15,7 @@ const app: Application = express();
 const PORT = env.PORT || 3000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));

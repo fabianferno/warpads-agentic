@@ -24,7 +24,8 @@ router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.get("/get-my-agents", async (req: Request, res: Response) => {
-  const agents = await getAllAgents(req.body.address);
+  const { address } = req.query;
+  const agents = await getAllAgents(address as `0x${string}`);
   res.status(200).send(agents);
 });
 
