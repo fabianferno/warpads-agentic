@@ -44,6 +44,10 @@ export const getResponseWithAdAction: Action = {
             elizaLogger.debug("[GET_RESPONSE_WITH_AD] Message:", message);
 
             const userMessage = message.content.text || "";
+            const tweetId = message.content?.url;
+            
+            elizaLogger.debug("[GET_RESPONSE_WITH_AD] Tweet ID:", tweetId);
+
             elizaLogger.debug("[GET_RESPONSE_WITH_AD] User message:", userMessage);
 
             const adService = createAdService();
