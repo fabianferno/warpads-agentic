@@ -39,6 +39,18 @@ async function connectDB(): Promise<MongoClient> {
       process.exit(0);
     });
 
+    client.on("error", (error) => {
+      console.error("MongoDB connection error:", error);
+    });
+
+    client.on("connected", () => {
+      console.log("MongoDB connected successfully");
+    });
+
+    client.on("disconnected", () => {
+      console.log("MongoDB disconnected");
+    });
+
     return client;
   } catch (err) {
     console.error("❌ Failed to connect to MongoDB:", err);
