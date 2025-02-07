@@ -77,7 +77,7 @@ export default function HeroSection() {
                         >
                             <Button
                                 onClick={() => {
-                                    window.location.href = "/adspace";
+                                    window.location.href = "/agent/register";
                                 }}
                                 size="lg"
                                 className="bg-cyan-500 text-slate-950 font-semibold hover:opacity-90 hover:bg-cyan-600 hover:text-white px-8 h-12 text-base w-full sm:w-auto transition-all duration-300"
@@ -88,7 +88,7 @@ export default function HeroSection() {
                             </Button>
                             <Button
                                 onClick={() => {
-                                    window.location.href = "/adcampaign";
+                                    window.location.href = "/campaign/create";
                                 }}
                                 variant="ghost"
                                 size="lg"
