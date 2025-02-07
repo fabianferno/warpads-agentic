@@ -50,7 +50,7 @@ export const calculateIncentive = async (id: number) => {
         user_prompt:
           "Just navigate the twitter url and collect the impressions like No of Likes , NO of views , no of reposts , etc whatever you can . I want the output in json format {views: number, likes: number, retweets: number, replies: number}",
         url: ad.platformId,
-        webhook_callback_url: `https://warpads-agentic-hack.onrender.com/webhooks`,
+        webhook_callback_url: `https://warpads-cookie-hack.onrender.com//webhooks`,
       },
       {
         headers: {
