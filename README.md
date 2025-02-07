@@ -69,13 +69,13 @@ Vercel.com - Front end
 Render.com - Backend, Indexers, Agent
 
 ##### GitHub Repository
-https://github.com/LeoFranklin015/warpads-agentic-hack
+https://github.com/fabianferno/warpads-cookie-hack
 
 ##### Live deployment / Access instructions
-https://www.warpads.xyz
+https://warpads-cookies.vercel.app/
 
 ##### Technical Documentation
-https://www.warpads.xyz/docs
+https://warpads-cookies.vercel.app/docs
 
 ##### Do you plan on developing this project after the hackathon
 Yes, we have plans to apply for grants and continue working on this project and try to get more agents to use the platform.
