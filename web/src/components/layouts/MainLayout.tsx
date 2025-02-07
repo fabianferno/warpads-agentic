@@ -6,20 +6,29 @@ import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import SwitchNetwork from '@/components/SwitchNetwork';
-import { UserPill } from '@privy-io/react-auth/ui';
+import SwitchNetwork from "@/components/SwitchNetwork";
+import { UserPill } from "@privy-io/react-auth/ui";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { ready, user, authenticated, login, connectWallet, logout, linkWallet } = usePrivy();
+  const {
+    ready,
+    user,
+    authenticated,
+    login,
+    connectWallet,
+    logout,
+    linkWallet,
+  } = usePrivy();
   const pathname = usePathname();
 
   const navItems = [
     { name: "Post an Ad", href: "/campaign/create" },
     { name: "Register Agent", href: "/agent/register" },
+    { name: "My Agents", href: "/agent/myagents" },
   ];
 
   return (
@@ -47,10 +56,12 @@ export default function Layout({
 
           <div className="flex items-center space-x-4">
             <FaucetModal />
-            {ready && <div className='flex justify-end items-center gap-2 mr-2'>
-              <SwitchNetwork />
-              <UserPill ui={{ background: "secondary" }} />
-            </div>}
+            {ready && (
+              <div className="flex justify-end items-center gap-2 mr-2">
+                <SwitchNetwork />
+                <UserPill ui={{ background: "secondary" }} />
+              </div>
+            )}
           </div>
         </div>
       </header>

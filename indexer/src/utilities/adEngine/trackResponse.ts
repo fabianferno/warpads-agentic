@@ -23,4 +23,6 @@ export const trackResponse = async (
     platformId: response.id,
     respondedAt: new Date(),
   });
+
+  return adSpace.id;
 };

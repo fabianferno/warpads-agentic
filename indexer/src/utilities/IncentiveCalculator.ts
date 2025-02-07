@@ -52,7 +52,7 @@ export const calculateIncentive = async (id: number) => {
   // Make Cookie API as a booster .
 
   const adSpace = await db.collection("adSpaces").findOne({
-    id: ad[0].id,
+    id: id,
   });
   console.log(adSpace);
   console.log(adSpace?.metadata.name);
@@ -82,10 +82,10 @@ export const calculateIncentive = async (id: number) => {
   // store the reward in the database
   await db.collection("adSpaces").updateOne(
     {
-      id: ad[0].id,
+      id: id,
     },
-    { $set: { reward: reward + ad.length * 1 } }
+    { $set: { reward: reward + ad.length * 1 + (adSpace?.reward || 0) } }
   );
-};
 
-calculateIncentive(2);
+  return reward + ad.length * 1;
+};
