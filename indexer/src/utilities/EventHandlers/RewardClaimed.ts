@@ -9,7 +9,7 @@ export const RewardClaimed = async (
 
   const db = client.db();
 
-  await db.collection("adSpaces").updateOne(
+  const result = await db.collection("adSpaces").updateOne(
     { adSpaceId },
     {
       $inc: {
@@ -18,4 +18,6 @@ export const RewardClaimed = async (
       },
     }
   );
+
+  console.log("Result:", result);
 };

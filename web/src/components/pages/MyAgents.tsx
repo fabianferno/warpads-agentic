@@ -174,9 +174,12 @@ export default function MyAgents() {
           ) : agents.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-slate-800 rounded-lg bg-slate-900/50">
               <Users className="w-12 h-12 text-slate-600 mb-4" />
-              <h3 className="text-lg font-medium text-slate-300 mb-2">No Agents Found</h3>
+              <h3 className="text-lg font-medium text-slate-300 mb-2">
+                No Agents Found
+              </h3>
               <p className="text-slate-400 text-center max-w-md">
-                You don't have any agents yet. Create your first agent to get started with automated trading.
+                You don't have any agents yet. Create your first agent to get
+                started with automated trading.
               </p>
             </div>
           ) : agentsWithImages.length === 0 ? (
@@ -283,24 +286,21 @@ export default function MyAgents() {
                     disabled={isClaimPending}
                     className="w-full mt-4 bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white transition-all duration-300"
                   >
-                    {
-                      isClaimPending ? (
-                        <div className="flex items-center justify-center">
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Claiming...
-                        </div>
-                      ) : (
-                        `Claim Reward (${active.rewardsAccumulated || 0} WARP)`
-                      )
-                    }
-                  </Button >
-                </motion.div >
-              </motion.div >
-            )
-            }
-          </AnimatePresence >
-        </div >
-      </div >
-    </MainLayout >
+                    {isClaimPending ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Claiming...
+                      </div>
+                    ) : (
+                      `Claim Reward (${active.onchainReward || 0} WARP)`
+                    )}
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </MainLayout>
   );
 }
