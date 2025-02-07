@@ -17,10 +17,10 @@ export const contractsConfig: {
 } = {
   // Base Sepolia
   84532: {
-    warpTokenAddress: "0x923f68e4a026b4c9ead5b43dffc468c3bc52c045",
-    adspaceAddress: "0xf413442cd94dc9fec516613bf0f24bac4d57ddc5",
-    adcampaignAddress: "0xa4134c57c8a3a1c1710cfaafed9dda063b534b92",
-    warpadsAddress: "0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad",
+    warpTokenAddress: "0xC76162e6e38D57086c0D03d5949D893fBDf9C03E",
+    adspaceAddress: "0x99E06E450F71bb54Fa5410393A361cDcb7789978",
+    adcampaignAddress: "0x79A124D200eDefba9836d988350c354387A7CD89",
+    warpadsAddress: "0x1EBD3946E37519B2b60809c0621F56212121DfC7",
     warpTokenDecimals: 18,
     blockExplorerUrl: baseSepolia.blockExplorers.default.url,
   },
