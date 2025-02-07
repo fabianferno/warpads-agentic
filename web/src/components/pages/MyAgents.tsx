@@ -12,6 +12,7 @@ import MainLayout from "../layouts/MainLayout";
 import { useAccount } from "wagmi";
 import axios from "axios";
 import { PinataSDK } from "pinata-web3";
+import { chainLogos } from "@/lib/chainLogos";
 
 export default function MyAgents() {
   const [active, setActive] = useState<any>(null);
@@ -42,7 +43,8 @@ export default function MyAgents() {
     const fetchAgents = async () => {
       try {
         const API_BASE_URL =
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+          process.env.NEXT_PUBLIC_API_BASE_URL ||
+          "https://warpads-cookie-hack.onrender.com";
         const response = await axios.get(`${API_BASE_URL}/get-my-agents`, {
           params: { address: address },
         });
@@ -155,9 +157,17 @@ export default function MyAgents() {
                     className="w-full h-48 object-cover rounded-t-lg"
                   />
                   <CardContent className="p-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      {agent.metadata.name}
-                    </h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-white">
+                        {agent.metadata.name}
+                      </h3>
+                      <Image
+                        width={20}
+                        height={20}
+                        src={chainLogos[agent.chainId]}
+                        alt="chain"
+                      />
+                    </div>
                     <p className="text-sm text-slate-400 mt-1">
                       {agent.metadata.description}
                     </p>
