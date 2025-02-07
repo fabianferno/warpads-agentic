@@ -33,6 +33,38 @@ export default function Vision() {
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
+            {/* Problem-Agitation-Solution Section */}
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 mb-16">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="grid gap-6 md:grid-cols-3"
+                >
+                    <div className="text-gray-300 text-4xl">
+                        Traditional ads <span className=" text-cyan-300">disrupt the seamless flow</span> of AI experiences, making monetization <span className="text-cyan-300">clunky for developers</span> and <span className="text-cyan-300">ineffective for advertisers</span>.
+                    </div>
+
+                    {/* Agitation */}
+                    <div className="relative overflow-hidden rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent" />
+                        <div className="relative">
+                            <span className="inline-block px-4 py-1 rounded-full bg-amber-500/10 text-amber-400 text-sm font-medium mb-4">
+                                The Challenge
+                            </span>
+                            <p className="text-gray-300">
+                                Outdated ad systems interrupt user engagement and waste advertising dollars—hindering innovation and diluting user trust in modern AI platforms.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Solution */}
+                    <div className="text-gray-300 text-4xl text-end">
+                        Integrate in 3 lines of code, deliver hyper-targeted conversational ads, and benefit from a transparent, decentralized ecosystem.
+                    </div>
+                </motion.div>
+            </div>
+
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-2">
                     {/* Problem Section */}
@@ -154,8 +186,6 @@ export default function Vision() {
                         ))}
                     </div>
                 </motion.div>
-
-
             </div>
         </div>
     );
