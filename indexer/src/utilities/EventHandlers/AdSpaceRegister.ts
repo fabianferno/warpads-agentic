@@ -44,6 +44,7 @@ export const AdSpaceRegister = async (
     updatedAt: new Date(),
     apiKey: apiKey,
     chainId: chainId,
+    onchainReward: 0,
   });
 
   console.log("Ad space created with id: ", id);
