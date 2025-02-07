@@ -6,25 +6,28 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import {
-  baseSepolia, arbitrumSepolia, seiDevnet
+  baseSepolia,
+  arbitrumSepolia,
+  seiDevnet,
+  modeTestnet,
 } from "viem/chains";
-import { WagmiProvider, createConfig } from '@privy-io/wagmi';
+import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
-import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { initMixpanel } from '../lib/mixpanelClient';
-
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { initMixpanel } from "../lib/mixpanelClient";
 
 const queryClient = new QueryClient();
 
 // Create wagmi config with all supported chains
 export const config = createConfig({
-  chains: [baseSepolia, arbitrumSepolia, seiDevnet],
+  chains: [baseSepolia, arbitrumSepolia, seiDevnet, modeTestnet],
   transports: {
     [baseSepolia.id]: http(),
     [arbitrumSepolia.id]: http(),
     [seiDevnet.id]: http(),
+    [modeTestnet.id]: http(),
   },
 });
 
@@ -32,8 +35,13 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
 
-export default function Providers({ children, appId }: { children: React.ReactNode, appId: string }) {
-
+export default function Providers({
+  children,
+  appId,
+}: {
+  children: React.ReactNode;
+  appId: string;
+}) {
   useEffect(() => {
     initMixpanel(); // Initialize Mixpanel
   }, []);
@@ -44,18 +52,19 @@ export default function Providers({ children, appId }: { children: React.ReactNo
       config={{
         appearance: {
           logo: "/android-chrome-512x512.png",
-          landingHeader: 'Warp Ads is the world\'s first ads network for ai agents',
-          loginMessage: 'Welcome to Warp Ads',
+          landingHeader:
+            "Warp Ads is the world's first ads network for ai agents",
+          loginMessage: "Welcome to Warp Ads",
           theme: "dark",
           showWalletLoginFirst: true,
           walletChainType: "ethereum-only",
-          walletList: ['metamask', 'rainbow', 'wallet_connect'],
+          walletList: ["metamask", "rainbow", "wallet_connect"],
         },
         embeddedWallets: {
-          createOnLogin: 'users-without-wallets',
+          createOnLogin: "users-without-wallets",
           requireUserPasswordOnCreate: true,
         },
-        loginMethods: ["email", "wallet", "google", 'twitter'],
+        loginMethods: ["email", "wallet", "google", "twitter"],
         defaultChain: baseSepolia,
         supportedChains: [baseSepolia, arbitrumSepolia, seiDevnet],
       }}
@@ -69,13 +78,16 @@ export default function Providers({ children, appId }: { children: React.ReactNo
             disableTransitionOnChange
           >
             {children}
-            <Toaster theme="dark" richColors className="bg-zinc-900 rounded-lg shadow-inner text-cyan-500" closeButton position="bottom-right" />
+            <Toaster
+              theme="dark"
+              richColors
+              className="bg-zinc-900 rounded-lg shadow-inner text-cyan-500"
+              closeButton
+              position="bottom-right"
+            />
           </ThemeProvider>
         </WagmiProvider>
       </QueryClientProvider>
-
-
-
     </PrivyProvider>
   );
 }
