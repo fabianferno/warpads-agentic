@@ -28,20 +28,8 @@ export const getResponseWithAdAction: Action = {
         return true;
     },
     shouldHandle: async (_runtime: IAgentRuntime, message: Memory) => {
-        elizaLogger.debug("[GET_RESPONSE_WITH_AD] Checking if should handle message:", message.content.text);
-
-        // Check if message contains any of our simile topics
-        const messageText = message.content.text?.toLowerCase() || "";
-        const matchingSimiles = getResponseWithAdAction.similes.filter(simile =>
-            messageText.includes(simile.toLowerCase())
-        );
-
-        elizaLogger.debug("[GET_RESPONSE_WITH_AD] Matching similes:", matchingSimiles);
-
-        // If we have any matching similes, we should handle this message
-        const shouldHandle = matchingSimiles.length > 0;
-        elizaLogger.debug("[GET_RESPONSE_WITH_AD] Should handle:", shouldHandle);
-
+        elizaLogger.debug("[GET_RESPONSE_WITH_AD] Checking message:", message.content.text);
+        // Always return true to handle every message
         return true;
     },
     handler: async (
@@ -80,7 +68,7 @@ export const getResponseWithAdAction: Action = {
             elizaLogger.success(`Successfully generated response with ad`);
 
             callback({
-                text: ad,  // Changed from aiResponse to finalResponse
+                text: ad.ad, // Access the ad text from the response
                 action: "GET_RESPONSE_WITH_AD",
                 intent: "HELP"
             });
