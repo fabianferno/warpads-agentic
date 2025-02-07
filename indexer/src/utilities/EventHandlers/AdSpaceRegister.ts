@@ -38,7 +38,7 @@ export const AdSpaceRegister = async (
     id: id,
     owner: owner,
     metadata: metadataJson.data,
-    stakedValue: stakedValue,
+    stakedValue: stakedValue / 10 ** 18,
     active: true,
     createdAt: new Date(),
     updatedAt: new Date(),
