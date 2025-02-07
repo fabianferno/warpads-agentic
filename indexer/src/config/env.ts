@@ -14,6 +14,9 @@ const envSchema = z.object({
   PINATA_GATEWAY: z.string().min(1),
   OPENAI_API_KEY: z.string().min(1),
   COOKIE_API_KEY: z.string().min(1),
+  OPERATOR_PRIVATE_KEY: z.string().min(1),
+  SKYVERN_API_KEY: z.string().min(1),
+  OPERATOR_KEY: z.string().min(1),
 });
 
 const env = envSchema.parse(process.env);

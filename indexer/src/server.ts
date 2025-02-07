@@ -10,6 +10,7 @@ import connectDB, { client } from "./config/db";
 import { env } from "./config/env";
 import { AdSpaceRegister } from "./utilities/EventHandlers/AdSpaceRegister";
 import { AdCampaignCreated } from "./utilities/EventHandlers/AdCampaignCreated";
+import { RewardClaimed } from "./utilities/EventHandlers/RewardClaimed";
 
 const app: Application = express();
 const PORT = env.PORT || 3000;
@@ -137,6 +138,15 @@ const contractListener = async () => {
       }
     );
 
+    // BaseContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
+    //   console.log("Rewards Claimed:");
+    //   console.log("Ad Space ID:", adSpaceId);
+    //   console.log("User:", user);
+    //   console.log("Amount:", amount);
+    //   console.log("Additional args:", args);
+    //   RewardClaimed(adSpaceId, user, amount);
+    // });
+
     // Listen for events on the Arbitrum contract
     ArbitrumContract.on(
       "AdSpaceRegistered",
@@ -176,6 +186,18 @@ const contractListener = async () => {
       }
     );
 
+    // ArbitrumContract.on(
+    //   "RewardsClaimed",
+    //   (adSpaceId, user, amount, ...args) => {
+    //     console.log("Rewards Claimed:");
+    //     console.log("Ad Space ID:", adSpaceId);
+    //     console.log("User:", user);
+    //     console.log("Amount:", amount);
+    //     console.log("Additional args:", args);
+    //     RewardClaimed(adSpaceId, user, amount);
+    //   }
+    // );
+
     // SEI Listener
     SeiContract.on(
       "AdSpaceRegistered",
@@ -209,11 +231,20 @@ const contractListener = async () => {
           adContent,
           priorityStake,
           expiry,
-          919
+          713715
         );
         console.log("Listening for AdCampaignCreated events...");
       }
     );
+
+    // SeiContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
+    //   console.log("Rewards Claimed:");
+    //   console.log("Ad Space ID:", adSpaceId);
+    //   console.log("User:", user);
+    //   console.log("Amount:", amount);
+    //   console.log("Additional args:", args);
+    //   RewardClaimed(adSpaceId, user, amount);
+    // });
 
     // Mode Listener
     ModeContract.on(
@@ -226,7 +257,7 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
+        AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 919);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
@@ -253,6 +284,15 @@ const contractListener = async () => {
         console.log("Listening for AdCampaignCreated events...");
       }
     );
+
+    // ModeContract.on("RewardsClaimed", (adSpaceId, user, amount, ...args) => {
+    //   console.log("Rewards Claimed:");
+    //   console.log("Ad Space ID:", adSpaceId);
+    //   console.log("User:", user);
+    //   console.log("Amount:", amount);
+    //   console.log("Additional args:", args);
+    //   RewardClaimed(adSpaceId, user, amount);
+    // });
   } catch (error) {
     console.error("Error setting up event listener:", error);
   }
