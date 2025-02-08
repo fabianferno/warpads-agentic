@@ -138,7 +138,7 @@
     "name": "createNewTask",
     "inputs": [
       {
-        "name": "name",
+        "name": "agentId",
         "type": "string",
         "internalType": "string"
       }
@@ -147,7 +147,7 @@
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct IHelloWorldServiceManager.Task",
+        "internalType": "struct IWarpAdsServiceManager.Task",
         "components": [
           {
             "name": "name",
@@ -371,7 +371,7 @@
       {
         "name": "task",
         "type": "tuple",
-        "internalType": "struct IHelloWorldServiceManager.Task",
+        "internalType": "struct IWarpAdsServiceManager.Task",
         "components": [
           {
             "name": "name",
@@ -504,7 +504,7 @@
         "name": "task",
         "type": "tuple",
         "indexed": false,
-        "internalType": "struct IHelloWorldServiceManager.Task",
+        "internalType": "struct IWarpAdsServiceManager.Task",
         "components": [
           {
             "name": "name",
@@ -573,7 +573,7 @@
         "name": "task",
         "type": "tuple",
         "indexed": false,
-        "internalType": "struct IHelloWorldServiceManager.Task",
+        "internalType": "struct IWarpAdsServiceManager.Task",
         "components": [
           {
             "name": "name",

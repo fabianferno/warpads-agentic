@@ -1,8 +1,13 @@
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
-const fs = require('fs');
-const path = require('path');
+const { db } = require("../utils/mongo");
+const fs = require("fs");
+const path = require("path");
 dotenv.config();
+
+if (!process.env.MONGO_URI) {
+  throw new Error("MONGO_URI environment variable is required");
+}
 
 // Setup env variables
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
@@ -10,44 +15,67 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
 /// TODO: Hack
 let chainId = 31337;
 
-const avsDeploymentData = JSON.parse(fs.readFileSync(path.resolve(__dirname, `../contracts/deployments/hello-world/${chainId}.json`), 'utf8'));
-const helloWorldServiceManagerAddress = avsDeploymentData.addresses.helloWorldServiceManager;
-const helloWorldServiceManagerABI = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../abis/HelloWorldServiceManager.json'), 'utf8'));
+const avsDeploymentData = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, `../contracts/deployments/warpads/${chainId}.json`),
+    "utf8"
+  )
+);
+const warpAdsServiceManagerAddress =
+  avsDeploymentData.addresses.warpAdsServiceManager;
+const warpAdsServiceManagerABI = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, "../abis/WarpAdsServiceManager.json"),
+    "utf8"
+  )
+);
 // Initialize contract objects from ABIs
-const helloWorldServiceManager = new ethers.Contract(helloWorldServiceManagerAddress, helloWorldServiceManagerABI, wallet);
+const warpAdsServiceManager = new ethers.Contract(
+  warpAdsServiceManagerAddress,
+  warpAdsServiceManagerABI,
+  wallet
+);
 
+async function getAgentIdsToBeProcessed() {
+  // TODO Review: Get the agentIds from the database
+  const agentIds = await db
+    .collection("requestLogs")
+    .aggregate([
+      {
+        $group: {
+          _id: "$agentId",
+          count: { $sum: 1 },
+        },
+      },
+    ])
+    .toArray();
+  return agentIds.map((agentId: any) => agentId.agentId);
+}
 
-// Function to generate random names
-function generateRandomName(): string {
-    const adjectives = ['Quick', 'Lazy', 'Sleepy', 'Noisy', 'Hungry'];
-    const nouns = ['Fox', 'Dog', 'Cat', 'Mouse', 'Bear'];
-    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const randomName = `${adjective}${noun}${Math.floor(Math.random() * 1000)}`;
-    return randomName;
-  }
-
-async function createNewTask(taskName: string) {
+async function createNewTask(agentId: string) {
   try {
     // Send a transaction to the createNewTask function
-    const tx = await helloWorldServiceManager.createNewTask(taskName);
-    
+    const tx = await warpAdsServiceManager.createNewTask(agentId);
+
     // Wait for the transaction to be mined
     const receipt = await tx.wait();
-    
+
     console.log(`Transaction successful with hash: ${receipt.hash}`);
   } catch (error) {
-    console.error('Error sending transaction:', error);
+    console.error("Error sending transaction:", error);
   }
 }
 
 // Function to create a new task with a random name every 15 seconds
 function startCreatingTasks() {
   setInterval(() => {
-    const randomName = generateRandomName();
-    console.log(`Creating new task with name: ${randomName}`);
-    createNewTask(randomName);
-  }, 24000);
+    getAgentIdsToBeProcessed().then((agentIdsToBeProcessed) => {
+      for (const agentId of agentIdsToBeProcessed) {
+        console.log(`Creating new task with name: ${agentId}`);
+        createNewTask(agentId);
+      }
+    });
+  }, 90 * 60 * 1000); // 90 minutes
 }
 
 // Start the process

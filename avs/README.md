@@ -9,9 +9,9 @@ Welcome to the Hello World AVS. This project shows you the simplest functionalit
 ### AVS User Flow
 
 1) AVS consumer requests a "Hello World" message to be generated and signed.
-2) HelloWorld contract receives the request and emits a NewTaskCreated event for the request.
+2) WarpAds contract receives the request and emits a NewTaskCreated event for the request.
 3) All Operators who are registered to the AVS and has staked, delegated assets takes this request. Operator generates the requested message, hashes it, and signs the hash with their private key.
-4) Each Operator submits their signed hash back to the HelloWorld AVS contract.
+4) Each Operator submits their signed hash back to the WarpAds AVS contract.
 5) If the Operator is registered to the AVS and has the minimum needed stake, the submission is accepted.
 
 That's it. This simple flow highlights some of the core mechanics of how AVSs work.
@@ -71,8 +71,8 @@ npm run build
 # Deploy the EigenLayer contracts
 npm run deploy:core
 
-# Deploy the Hello World AVS contracts
-npm run deploy:hello-world
+# Deploy the WarpAds AVS contracts
+npm run deploy:warpads
 
 # (Optional) Update ABIs
 npm run extract:abis
@@ -91,8 +91,8 @@ npm run start:anvil-quick
 # Deploy the EigenLayer contracts
 npm run deploy:core
 
-# Deploy the Hello World AVS contracts
-npm run deploy:hello-world
+# Deploy the WarpAds AVS contracts
+npm run deploy:warpads
 
 ```
 
@@ -153,7 +153,7 @@ If you're planning to build an AVS and would like to speak with a member of the 
 ### Disclaimers
 
 - This repo is meant currently intended for _local anvil development testing_. Holesky deployment support will be added shortly.
-- Users who wish to build an AVS for Production purposes will want to migrate from the `ECDSAServiceManagerBase` implementation in `HelloWorldServiceManager.sol` to a BLS style architecture using [RegistryCoordinator](https://github.com/Layr-Labs/eigenlayer-middleware/blob/dev/docs/RegistryCoordinator.md).
+- Users who wish to build an AVS for Production purposes will want to migrate from the `ECDSAServiceManagerBase` implementation in `WarpAdsServiceManager.sol` to a BLS style architecture using [RegistryCoordinator](https://github.com/Layr-Labs/eigenlayer-middleware/blob/dev/docs/RegistryCoordinator.md).
 
 # Appendix (Future Capabilities In Progress)
 
@@ -186,7 +186,7 @@ Open a separate terminal window #2, execute the following commands
 ```
 make deploy-eigenlayer-contracts
 
-make deploy-helloworld-contracts
+make deploy-warpads-contracts
 ```
 
 3. Start Operator
@@ -216,7 +216,7 @@ Open a separate terminal window #2, execute the following commands
 ```
 make deploy-eigenlayer-contracts
 
-make deploy-helloworld-contracts
+make deploy-warpads-contracts
 ```
 
 3. Run this command

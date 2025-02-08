@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Script} from "forge-std/Script.sol";
-import {HelloWorldDeploymentLib} from "./utils/HelloWorldDeploymentLib.sol";
+import {WarpAdsDeploymentLib} from "./utils/WarpAdsDeploymentLib.sol";
 import {CoreDeploymentLib} from "./utils/CoreDeploymentLib.sol";
 import {SetupPaymentsLib} from "./utils/SetupPaymentsLib.sol";
 import {IRewardsCoordinator} from "@eigenlayer/contracts/interfaces/IRewardsCoordinator.sol";
@@ -13,7 +13,7 @@ import {ERC20Mock} from "../test/ERC20Mock.sol";
 import "forge-std/Test.sol";
 
 contract SetupPayments is Script, Test {
-    struct PaymentInfo { 
+    struct PaymentInfo {
         address recipient;
         uint32 numPayments;
         uint32 amountPerPayment;
@@ -27,15 +27,14 @@ contract SetupPayments is Script, Test {
     CoreDeploymentLib.DeploymentData coreDeployment;
     CoreDeploymentLib.DeploymentConfigData coreConfig;
 
-    HelloWorldDeploymentLib.DeploymentData helloWorldDeployment;
-    HelloWorldDeploymentLib.DeploymentConfigData helloWorldConfig;
+    WarpAdsDeploymentLib.DeploymentData warpAdsDeployment;
+    WarpAdsDeploymentLib.DeploymentConfigData warpAdsConfig;
 
     RewardsCoordinator rewardsCoordinator;
-    string internal constant paymentInfofilePath = "test/mockData/scratch/payment_info.json";
+    string internal constant paymentInfofilePath =
+        "test/mockData/scratch/payment_info.json";
     string internal constant filePath = "test/mockData/scratch/payments.json";
 
-
-    
     uint32 constant CALCULATION_INTERVAL_SECONDS = 1 days;
     uint256 constant NUM_TOKEN_EARNINGS = 1;
     uint32 constant DURATION = 1;
@@ -56,42 +55,65 @@ contract SetupPayments is Script, Test {
     address operator1 = address(1);
     address operator2 = address(2);
 
-
     function setUp() public {
         deployer = vm.rememberKey(vm.envUint("PRIVATE_KEY"));
         vm.label(deployer, "Deployer");
 
-        coreDeployment = CoreDeploymentLib.readDeploymentJson("deployments/core/", block.chainid);
-        coreConfig = CoreDeploymentLib.readDeploymentConfigValues("config/core/", block.chainid);
-        helloWorldDeployment = HelloWorldDeploymentLib.readDeploymentJson("deployments/hello-world/", block.chainid);
-        helloWorldConfig = HelloWorldDeploymentLib.readDeploymentConfigValues("config/hello-world/", block.chainid);
+        coreDeployment = CoreDeploymentLib.readDeploymentJson(
+            "deployments/core/",
+            block.chainid
+        );
+        coreConfig = CoreDeploymentLib.readDeploymentConfigValues(
+            "config/core/",
+            block.chainid
+        );
+        warpAdsDeployment = WarpAdsDeploymentLib.readDeploymentJson(
+            "deployments/warpads/",
+            block.chainid
+        );
+        warpAdsConfig = WarpAdsDeploymentLib.readDeploymentConfigValues(
+            "config/warpads/",
+            block.chainid
+        );
 
-        rewardsCoordinator = RewardsCoordinator(coreDeployment.rewardsCoordinator);
+        rewardsCoordinator = RewardsCoordinator(
+            coreDeployment.rewardsCoordinator
+        );
 
         // TODO: Get the filePath from config
     }
 
     function run() external {
-        vm.startBroadcast(helloWorldConfig.rewardsInitiatorKey);
-    
-        if(rewardsCoordinator.currRewardsCalculationEndTimestamp() == 0) {
-             startTimestamp = uint32(block.timestamp) - (uint32(block.timestamp) % CALCULATION_INTERVAL_SECONDS);
+        vm.startBroadcast(warpAdsConfig.rewardsInitiatorKey);
+
+        if (rewardsCoordinator.currRewardsCalculationEndTimestamp() == 0) {
+            startTimestamp =
+                uint32(block.timestamp) -
+                (uint32(block.timestamp) % CALCULATION_INTERVAL_SECONDS);
         } else {
-            startTimestamp = rewardsCoordinator.currRewardsCalculationEndTimestamp() - DURATION + CALCULATION_INTERVAL_SECONDS;
+            startTimestamp =
+                rewardsCoordinator.currRewardsCalculationEndTimestamp() -
+                DURATION +
+                CALCULATION_INTERVAL_SECONDS;
         }
 
         endTimestamp = startTimestamp + 1;
 
-
         if (endTimestamp > block.timestamp) {
-            revert("End timestamp must be in the future.  Please wait to generate new payments.");
+            revert(
+                "End timestamp must be in the future.  Please wait to generate new payments."
+            );
         }
 
         // sets a multiplier based on block number such that cumulativeEarnings increase accordingly for multiple runs of this script in the same session
         uint256 nonce = rewardsCoordinator.getDistributionRootsLength();
         amountPerPayment = uint32(amountPerPayment * (nonce + 1));
-        
-        createAVSRewardsSubmissions(numPayments, amountPerPayment, startTimestamp);
+
+        createAVSRewardsSubmissions(
+            numPayments,
+            amountPerPayment,
+            startTimestamp
+        );
         vm.stopBroadcast();
         vm.startBroadcast(deployer);
         earners = _getEarners(deployer);
@@ -100,50 +122,79 @@ contract SetupPayments is Script, Test {
     }
 
     function runOperatorDirected() external {
-        vm.startBroadcast(helloWorldConfig.rewardsInitiatorKey);
-        if(rewardsCoordinator.currRewardsCalculationEndTimestamp() == 0) {
-             startTimestamp = uint32(block.timestamp) - (uint32(block.timestamp) % CALCULATION_INTERVAL_SECONDS);
+        vm.startBroadcast(warpAdsConfig.rewardsInitiatorKey);
+        if (rewardsCoordinator.currRewardsCalculationEndTimestamp() == 0) {
+            startTimestamp =
+                uint32(block.timestamp) -
+                (uint32(block.timestamp) % CALCULATION_INTERVAL_SECONDS);
         } else {
-            startTimestamp = rewardsCoordinator.currRewardsCalculationEndTimestamp() - DURATION + CALCULATION_INTERVAL_SECONDS;
+            startTimestamp =
+                rewardsCoordinator.currRewardsCalculationEndTimestamp() -
+                DURATION +
+                CALCULATION_INTERVAL_SECONDS;
         }
 
         endTimestamp = startTimestamp + 1;
 
-
         if (endTimestamp > block.timestamp) {
-            revert("End timestamp must be in the future.  Please wait to generate new payments.");
+            revert(
+                "End timestamp must be in the future.  Please wait to generate new payments."
+            );
         }
 
         // sets a multiplier based on block number such that cumulativeEarnings increase accordingly for multiple runs of this script in the same session
         uint256 nonce = rewardsCoordinator.getDistributionRootsLength();
         amountPerPayment = uint32(amountPerPayment * (nonce + 1));
 
-        createOperatorDirectedAVSRewardsSubmissions(numPayments, amountPerPayment, startTimestamp);
+        createOperatorDirectedAVSRewardsSubmissions(
+            numPayments,
+            amountPerPayment,
+            startTimestamp
+        );
         vm.stopBroadcast();
         vm.startBroadcast(deployer);
         earners = _getEarners(deployer);
         submitPaymentRoot(earners, endTimestamp, numPayments, amountPerPayment);
         vm.stopBroadcast();
     }
-        
 
     function executeProcessClaim() public {
         uint256 nonce = rewardsCoordinator.getDistributionRootsLength();
         amountPerPayment = uint32(amountPerPayment * nonce);
 
         vm.startBroadcast(deployer);
-        earnerLeaves = _getEarnerLeaves(_getEarners(deployer), amountPerPayment, helloWorldDeployment.strategy);
-        processClaim(filePath, indexToProve, recipient, earnerLeaves[indexToProve], amountPerPayment);
+        earnerLeaves = _getEarnerLeaves(
+            _getEarners(deployer),
+            amountPerPayment,
+            warpAdsDeployment.strategy
+        );
+        processClaim(
+            filePath,
+            indexToProve,
+            recipient,
+            earnerLeaves[indexToProve],
+            amountPerPayment
+        );
         vm.stopBroadcast();
     }
 
-    function createAVSRewardsSubmissions(uint256 numPayments, uint256 amountPerPayment, uint32 startTimestamp) public {
-        ERC20Mock(helloWorldDeployment.token).mint(helloWorldConfig.rewardsInitiator, amountPerPayment * numPayments);
-        ERC20Mock(helloWorldDeployment.token).increaseAllowance(helloWorldDeployment.helloWorldServiceManager, amountPerPayment * numPayments);
+    function createAVSRewardsSubmissions(
+        uint256 numPayments,
+        uint256 amountPerPayment,
+        uint32 startTimestamp
+    ) public {
+        ERC20Mock(warpAdsDeployment.token).mint(
+            warpAdsConfig.rewardsInitiator,
+            amountPerPayment * numPayments
+        );
+        ERC20Mock(warpAdsDeployment.token).increaseAllowance(
+            warpAdsDeployment.warpAdsServiceManager,
+            amountPerPayment * numPayments
+        );
         uint32 duration = rewardsCoordinator.MAX_REWARDS_DURATION();
         SetupPaymentsLib.createAVSRewardsSubmissions(
-            helloWorldDeployment.helloWorldServiceManager,
-            helloWorldDeployment.strategy,
+            warpAdsDeployment.warpAdsServiceManager,
+            warpAdsDeployment.strategy,
             numPayments,
             amountPerPayment,
             duration,
@@ -151,10 +202,19 @@ contract SetupPayments is Script, Test {
         );
     }
 
-
-    function createOperatorDirectedAVSRewardsSubmissions(uint256 numPayments, uint256 amountPerPayment, uint32 startTimestamp) public {
-        ERC20Mock(helloWorldDeployment.token).mint(helloWorldConfig.rewardsInitiator, amountPerPayment * numPayments);
-        ERC20Mock(helloWorldDeployment.token).increaseAllowance(helloWorldDeployment.helloWorldServiceManager, amountPerPayment * numPayments);
+    function createOperatorDirectedAVSRewardsSubmissions(
+        uint256 numPayments,
+        uint256 amountPerPayment,
+        uint32 startTimestamp
+    ) public {
+        ERC20Mock(warpAdsDeployment.token).mint(
+            warpAdsConfig.rewardsInitiator,
+            amountPerPayment * numPayments
+        );
+        ERC20Mock(warpAdsDeployment.token).increaseAllowance(
+            warpAdsDeployment.warpAdsServiceManager,
+            amountPerPayment * numPayments
+        );
         uint32 duration = 0;
         address[] memory operators = new address[](2);
         operators[0] = operator1;
@@ -163,10 +223,10 @@ contract SetupPayments is Script, Test {
         uint256 numOperators = operators.length;
 
         SetupPaymentsLib.createOperatorDirectedAVSRewardsSubmissions(
-            helloWorldDeployment.helloWorldServiceManager,
+            warpAdsDeployment.warpAdsServiceManager,
             operators,
             numOperators,
-            helloWorldDeployment.strategy,
+            warpAdsDeployment.strategy,
             numPayments,
             amountPerPayment,
             duration,
@@ -174,7 +234,13 @@ contract SetupPayments is Script, Test {
         );
     }
 
-    function processClaim(string memory filePath, uint256 indexToProve, address recipient, IRewardsCoordinator.EarnerTreeMerkleLeaf memory earnerLeaf, uint32 amountPerPayment) public {
+    function processClaim(
+        string memory filePath,
+        uint256 indexToProve,
+        address recipient,
+        IRewardsCoordinator.EarnerTreeMerkleLeaf memory earnerLeaf,
+        uint32 amountPerPayment
+    ) public {
         SetupPaymentsLib.processClaim(
             IRewardsCoordinator(coreDeployment.rewardsCoordinator),
             filePath,
@@ -182,49 +248,75 @@ contract SetupPayments is Script, Test {
             recipient,
             earnerLeaf,
             NUM_TOKEN_EARNINGS,
-            helloWorldDeployment.strategy,
+            warpAdsDeployment.strategy,
             amountPerPayment
         );
     }
 
-    function submitPaymentRoot(address[] memory earners, uint32 endTimestamp, uint32 numPayments, uint32 amountPerPayment) public {
-        emit log_named_uint("cumumlativePaymentMultiplier", cumumlativePaymentMultiplier);
-        bytes32[] memory tokenLeaves = SetupPaymentsLib.createTokenLeaves(
-            IRewardsCoordinator(coreDeployment.rewardsCoordinator), 
-            NUM_TOKEN_EARNINGS, 
-            amountPerPayment, 
-            helloWorldDeployment.strategy
+    function submitPaymentRoot(
+        address[] memory earners,
+        uint32 endTimestamp,
+        uint32 numPayments,
+        uint32 amountPerPayment
+    ) public {
+        emit log_named_uint(
+            "cumumlativePaymentMultiplier",
+            cumumlativePaymentMultiplier
         );
-        IRewardsCoordinator.EarnerTreeMerkleLeaf[] memory earnerLeaves = SetupPaymentsLib.createEarnerLeaves(earners, tokenLeaves);
+        bytes32[] memory tokenLeaves = SetupPaymentsLib.createTokenLeaves(
+            IRewardsCoordinator(coreDeployment.rewardsCoordinator),
+            NUM_TOKEN_EARNINGS,
+            amountPerPayment,
+            warpAdsDeployment.strategy
+        );
+        IRewardsCoordinator.EarnerTreeMerkleLeaf[]
+            memory earnerLeaves = SetupPaymentsLib.createEarnerLeaves(
+                earners,
+                tokenLeaves
+            );
         emit log_named_uint("Earner Leaves Length", earnerLeaves.length);
-        emit log_named_uint("numPayments", numPayments);    
+        emit log_named_uint("numPayments", numPayments);
 
         SetupPaymentsLib.submitRoot(
             IRewardsCoordinator(coreDeployment.rewardsCoordinator),
             tokenLeaves,
             earnerLeaves,
-            helloWorldDeployment.strategy,
+            warpAdsDeployment.strategy,
             endTimestamp,
-            numPayments, 
+            numPayments,
             NUM_TOKEN_EARNINGS,
             filePath
         );
     }
 
-    function _getEarnerLeaves(address[] memory earners, uint32 amountPerPayment, address strategy) internal view returns (IRewardsCoordinator.EarnerTreeMerkleLeaf[] memory) {
+    function _getEarnerLeaves(
+        address[] memory earners,
+        uint32 amountPerPayment,
+        address strategy
+    )
+        internal
+        view
+        returns (IRewardsCoordinator.EarnerTreeMerkleLeaf[] memory)
+    {
         bytes32[] memory tokenLeaves = SetupPaymentsLib.createTokenLeaves(
-            IRewardsCoordinator(coreDeployment.rewardsCoordinator), 
-            NUM_TOKEN_EARNINGS, 
-            amountPerPayment, 
+            IRewardsCoordinator(coreDeployment.rewardsCoordinator),
+            NUM_TOKEN_EARNINGS,
+            amountPerPayment,
             strategy
         );
 
-        IRewardsCoordinator.EarnerTreeMerkleLeaf[] memory earnerLeaves = SetupPaymentsLib.createEarnerLeaves(earners, tokenLeaves);
+        IRewardsCoordinator.EarnerTreeMerkleLeaf[]
+            memory earnerLeaves = SetupPaymentsLib.createEarnerLeaves(
+                earners,
+                tokenLeaves
+            );
 
         return earnerLeaves;
     }
 
-    function _getEarners(address deployer) internal pure returns (address[] memory) {
+    function _getEarners(
+        address deployer
+    ) internal pure returns (address[] memory) {
         address[] memory earners = new address[](NUM_EARNERS);
         for (uint256 i = 0; i < earners.length; i++) {
             earners[i] = deployer;
