@@ -2,18 +2,75 @@
 
 import { motion } from "framer-motion";
 import { UploadIcon, LockIcon, ServerIcon } from "lucide-react";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Highlight, themes } from "prism-react-renderer";
+
+const CodeBlock = ({ code }: { code: string }) => (
+    <Highlight
+        theme={themes.vsDark}
+        code={code.trim()}
+        language="typescript"
+    >
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre
+                className={`${className} text-sm p-4 overflow-auto whitespace-pre`}
+                style={{ ...style, background: 'transparent', margin: 0 }}
+            >
+                {tokens.map((line, i) => (
+                    <div key={i} {...getLineProps({ line })}>
+                        {line.map((token, key) => (
+                            <span key={key} {...getTokenProps({ token })} />
+                        ))}
+                    </div>
+                ))}
+            </pre>
+        )}
+    </Highlight>
+);
 
 const plugins = [
     {
         name: "ElizaOS",
         image: "/assets/Plugin1.png",
+        code: `
+        import { warpAdsPlugin } from "@elizaos/plugin-warpads";
+
+        // Add WARPADS_AGENT_KEY to .env
+
+        return new AgentRunTime({
+            databaseAdapter: db,
+            token,
+            modelProvider: character.modelProvider,
+            evaluator: character.evaluator,
+            plugins: [
+                warpAdsPlugin
+            ],
+        })
+        `
     },
+
     {
         name: "LangChain",
         image: "/assets/Plugin2.jpg",
+        code: `
+        const { WarpAdsToolkit } = require("@warpads-toolkit/langchain");
+
+        // Add WARPADS_AGENT_KEY to .env
+
+        const warpads = new WarpAdsToolkit({
+            apiKey: process.env.WARPADS_AGENT_KEY
+        })
+
+        const warpAdsTool = warpads.getTool();
+        const agentTools = [warpAdsTool];
+
+        const agent = createReactAgent({
+            llm: agentModel,
+            tools: agentTools,
+            checkpointSaver: agentCheckpoint,
+        })   
+        `
     },
 ]
 
@@ -129,15 +186,9 @@ export default function CallToValue() {
                                         height: '100%',
                                         visibility: activeTab === index ? 'visible' : 'hidden'
                                     }}
-                                    className="text-center"
+                                    className="text-left overflow-auto"
                                 >
-                                    <Image
-                                        src={plugin.image}
-                                        className="rounded-xl object-cover"
-                                        alt={plugin.name}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
+                                    <CodeBlock code={plugin.code} />
                                 </motion.div>
                             ))}
                         </div>
