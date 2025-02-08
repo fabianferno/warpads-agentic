@@ -1,10 +1,11 @@
 import { client } from "../config/db";
+import { env } from "../config/env";
 
 export const getAllAdCampaigns = async (owner: string) => {
   try {
     const db = client.db();
     const adCampaigns = await db
-      .collection("adCampaigns")
+      .collection(`${env.NODE_ENV}-adCampaigns`)
       .aggregate([
         {
           $match: {

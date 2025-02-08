@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { env } from "../config/env";
 
 export interface IAdCampaign {
   _id?: ObjectId;
@@ -13,4 +14,4 @@ export interface IAdCampaign {
   updatedAt: Date;
 }
 
-export const COLLECTION_NAME = "adCampaigns";
+export const COLLECTION_NAME = `${env.NODE_ENV}-adCampaigns`;

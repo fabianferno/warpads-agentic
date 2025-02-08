@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import { Copy, Check, X, Loader2, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { X, Loader2, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import MainLayout from "../layouts/MainLayout";
@@ -13,15 +12,12 @@ import { useAccount, useChainId, useWriteContract } from "wagmi";
 import axios from "axios";
 import { PinataSDK } from "pinata-web3";
 import { chainLogos } from "@/lib/chainLogos";
-import { WarpadsABI } from "@/lib/abi/Warpads";
-import { contractsConfig } from "@/lib/const";
 import TimeSeriesGraph from "../TimeGraph";
 
 export default function MyAds() {
   const [active, setActive] = useState<any>(null);
-  const [copied, setCopied] = useState(false);
-  const [agents, setAgents] = useState<any[]>([]);
-  const [agentsWithImages, setAgentsWithImages] = useState<any[]>([]);
+  const [ads, setads] = useState<any[]>([]);
+  const [adsWithImages, setadsWithImages] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const ref = useRef(null);
   const { address } = useAccount();
@@ -46,7 +42,7 @@ export default function MyAds() {
   }, [active]);
 
   useEffect(() => {
-    const fetchAgents = async () => {
+    const fetchads = async () => {
       try {
         setIsLoading(true);
         const API_BASE_URL =
@@ -55,18 +51,18 @@ export default function MyAds() {
           params: { address: address },
         });
         const data = response.data;
-        console.log("Fetched Agents:", data);
-        setAgents(data);
+        console.log("Fetched ads:", data);
+        setads(data);
       } catch (error) {
-        console.error("Error fetching agents:", error);
-        toast.error("Failed to fetch agents");
+        console.error("Error fetching ads:", error);
+        toast.error("Failed to fetch ads");
       } finally {
         setIsLoading(false);
       }
     };
 
     if (address) {
-      fetchAgents();
+      fetchads();
     }
   }, [address]);
   function combineLowHigh(
@@ -83,8 +79,8 @@ export default function MyAds() {
 
   useEffect(() => {
     const fetchImages = async () => {
-      const updatedAgents = await Promise.all(
-        agents.map(async (agent) => {
+      const updatedads = await Promise.all(
+        ads.map(async (agent) => {
           try {
             const pinata = new PinataSDK({
               pinataJwt: process.env.NEXT_PUBLIC_PINATA_JWT!,
@@ -110,48 +106,16 @@ export default function MyAds() {
           }
         })
       );
-      console.log(updatedAgents);
-      setAgentsWithImages(updatedAgents);
+      console.log(updatedads);
+      setadsWithImages(updatedads);
     };
 
-    if (agents.length > 0) {
+    if (ads.length > 0) {
       fetchImages();
     }
-  }, [agents]);
+  }, [ads]);
 
   useOutsideClick(ref, () => setActive(null));
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(active?.apiKey || "");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-    toast.success("API Key copied to clipboard");
-  };
-
-  const handleClaimReward = async () => {
-    if (!active || !active.id) {
-      toast.error("No agent selected");
-      return;
-    }
-
-    const contractConfig = contractsConfig[chainId];
-    if (!contractConfig?.warpadsAddress) {
-      toast.error("Contract not deployed on this network");
-      return;
-    }
-
-    try {
-      writeContract({
-        address: contractConfig.warpadsAddress,
-        abi: WarpadsABI,
-        functionName: "claimRewards",
-        args: [BigInt(active.id)],
-      });
-    } catch (error) {
-      console.error("Error claiming rewards:", error);
-      toast.error("Failed to claim rewards");
-    }
-  };
 
   return (
     <MainLayout>
@@ -172,35 +136,35 @@ export default function MyAds() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-8 text-start border-b border-cyan-500/50 pb-4">
             <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">
-              My Agents
+              My ads
             </h1>
-            <p className="text-slate-400">View your agents and manage them</p>
+            <p className="text-slate-400">View your ads and manage them</p>
           </div>
 
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-4" />
-              <p className="text-slate-400">Loading your agents...</p>
+              <p className="text-slate-400">Loading your ads...</p>
             </div>
-          ) : agents.length === 0 ? (
+          ) : ads.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-slate-800 rounded-lg bg-slate-900/50">
               <Users className="w-12 h-12 text-slate-600 mb-4" />
               <h3 className="text-lg font-medium text-slate-300 mb-2">
-                No Agents Found
+                No ads Found
               </h3>
               <p className="text-slate-400 text-center max-w-md">
-                You don't have any agents yet. Create your first agent to get
+                You don't have any ads yet. Create your first agent to get
                 started with automated trading.
               </p>
             </div>
-          ) : agentsWithImages.length === 0 ? (
+          ) : adsWithImages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-4" />
               <p className="text-slate-400">Loading agent images...</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {agentsWithImages.map((agent) => (
+              {adsWithImages.map((agent) => (
                 <Card
                   key={agent.id}
                   className="cursor-pointer hover:shadow-lg backdrop-blur-xl bg-slate-900/50 border-slate-800/50 ring-1 ring-white/10 transition-all duration-300 hover:ring-cyan-500/30"

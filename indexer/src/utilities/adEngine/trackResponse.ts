@@ -1,4 +1,5 @@
 import { client } from "../../config/db";
+import { env } from "../../config/env";
 
 export const trackResponse = async (
   apiKey: string,
@@ -8,7 +9,7 @@ export const trackResponse = async (
   }
 ) => {
   const db = client.db();
-  const adSpace = await db.collection("adSpaces").findOne({
+  const adSpace = await db.collection(`${env.NODE_ENV}-adSpaces`).findOne({
     apiKey,
   });
 
@@ -16,7 +17,7 @@ export const trackResponse = async (
     throw new Error("Ad space not found");
   }
 
-  await db.collection("responseLogs").insertOne({
+  await db.collection(`${env.NODE_ENV}-responseLogs`).insertOne({
     id: adSpace.id,
     apiKey,
     platform: response.platform,

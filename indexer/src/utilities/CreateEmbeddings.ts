@@ -28,5 +28,3 @@ export const createEmbedding = async (metadata: string): Promise<number[]> => {
     );
   }
 };
-
-createEmbedding("Hello, world!");

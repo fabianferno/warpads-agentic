@@ -1,4 +1,5 @@
 import connectDB, { client } from "../../config/db";
+import { env } from "../../config/env";
 
 export const validateTwitterAnalytics = async (
   taskId: string,
@@ -11,7 +12,9 @@ export const validateTwitterAnalytics = async (
   console.log(analytics.replies);
   await connectDB();
   const db = client.db();
-  const task = await db.collection("validatedLogs").findOne({ taskId });
+  const task = await db.collection(`${env.NODE_ENV}-validatedLogs`).findOne({
+    taskId,
+  });
 
   if (!task) {
     throw new Error("Task not found");
@@ -26,10 +29,10 @@ export const validateTwitterAnalytics = async (
   console.log(twitterRewards);
 
   await db
-    .collection("adSpaces")
+    .collection(`${env.NODE_ENV}-adSpaces`)
     .updateOne({ _id: task.adSpaceId }, { $inc: { reward: twitterRewards } });
 
-  await db.collection("validatedLogs").updateOne(
+  await db.collection(`${env.NODE_ENV}-validatedLogs`).updateOne(
     { taskId },
     {
       $set: {

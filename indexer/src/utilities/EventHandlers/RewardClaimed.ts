@@ -1,4 +1,5 @@
 import { client } from "../../config/db";
+import { env } from "../../config/env";
 
 export const RewardClaimed = async (
   adSpaceId: number,
@@ -9,7 +10,7 @@ export const RewardClaimed = async (
 
   const db = client.db();
 
-  const result = await db.collection("adSpaces").updateOne(
+  const result = await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
     { adSpaceId },
     {
       $inc: {

@@ -1,9 +1,12 @@
 import { client } from "../config/db";
 import { Request, Response, NextFunction } from "express";
+import { env } from "../config/env";
 
 const validateAPIKey = async (apiKey: string) => {
   const db = client.db();
-  const adSpace = await db.collection("adSpaces").findOne({ apiKey });
+  const adSpace = await db
+    .collection(`${env.NODE_ENV}-adSpaces`)
+    .findOne({ apiKey });
   if (!adSpace) {
     return false;
   }

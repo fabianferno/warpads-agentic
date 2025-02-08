@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { client } from "../../config/db";
+import { env } from "../../config/env";
 
 // Generate random 32-character API key
 export const generateAPIKey = async (id: number) => {
@@ -10,7 +11,9 @@ export const generateAPIKey = async (id: number) => {
     const db = client.db();
 
     // Check if the id exists in the database
-    const agent = await db.collection("adSpaces").findOne({ id });
+    const agent = await db
+      .collection(`${env.NODE_ENV}-adSpaces`)
+      .findOne({ id });
     console.log(agent);
     if (!agent) {
       return "Invalid Agent";
@@ -18,7 +21,7 @@ export const generateAPIKey = async (id: number) => {
 
     // append the api key in the document
     const result = await db
-      .collection("adSpaces")
+      .collection(`${env.NODE_ENV}-adSpaces`)
       .updateOne({ id }, { $set: { apiKey: `${idHex}x${randomPart}` } });
 
     if (result.modifiedCount === 0) {

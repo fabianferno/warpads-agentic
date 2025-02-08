@@ -6,7 +6,7 @@ export const calculateIncentive = async (id: number) => {
   await connectDB();
   const db = client.db();
   const ad = await db
-    .collection("responseLogs")
+    .collection(`${env.NODE_ENV}-responseLogs`)
     .aggregate([
       {
         $match: {
@@ -62,7 +62,7 @@ export const calculateIncentive = async (id: number) => {
     console.log(response.data.task_id);
     taskId = response.data.task_id;
     // Once the reward is calculated, store it in the response to validated
-    await db.collection("validatedLogs").insertOne({
+    await db.collection(`${env.NODE_ENV}-validatedLogs`).insertOne({
       adSpaceId: id,
       refResponseID: ad._id,
       validatedAt: new Date(),
@@ -72,7 +72,7 @@ export const calculateIncentive = async (id: number) => {
 
   // Make Cookie API as a booster .
 
-  const adSpace = await db.collection("adSpaces").findOne({
+  const adSpace = await db.collection(`${env.NODE_ENV}-adSpaces`).findOne({
     id: id,
   });
   console.log(adSpace);
@@ -101,7 +101,7 @@ export const calculateIncentive = async (id: number) => {
     averageImpressionsCount * 0.8 * 0.0001 +
     averageEngagementsCount * 0.2 * 0.0001;
   // store the reward in the database
-  await db.collection("adSpaces").updateOne(
+  await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
     {
       id: id,
     },
