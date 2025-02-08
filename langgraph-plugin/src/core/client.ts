@@ -1,13 +1,8 @@
 import { warpadsTool } from "../tools";
+import { createCDPTools } from "../tools/CDPTools";
 
 type WarpadsConfig = {
   apiKey: string;
-};
-
-type WeatherData = {
-  temp: number;
-  humidity: number;
-  condition: string;
 };
 
 export class Warpads {
@@ -15,6 +10,10 @@ export class Warpads {
 
   async getTools() {
     return warpadsTool;
+  }
+
+  getCDPTools() {
+    return createCDPTools(this.config.apiKey);
   }
 }
 

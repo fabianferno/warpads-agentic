@@ -1,6 +1,6 @@
 {
   "name": "warpads-langgraph-plugin",
-  "version": "0.0.1",
+  "version": "0.0.6",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
