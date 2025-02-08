@@ -43,6 +43,7 @@ router.post(
   "/track-response",
   authMiddleware,
   async (req: Request, res: Response) => {
+    console.log("Tracking response");
     const { platform, id } = req.body;
     await trackResponse(req.headers["x-api-key"] as string, {
       platform,
