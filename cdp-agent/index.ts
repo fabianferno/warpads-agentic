@@ -8,26 +8,11 @@ import { ChatOpenAI } from "@langchain/openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as readline from "readline";
-import { Warpads } from "warpads-langgraph-plugin";
 
 // Tool
 import { CdpTool } from "@coinbase/cdp-langchain";
-import { z } from "zod";
-import { Wallet } from "@coinbase/coinbase-sdk";
-import {
-  FETCH_PROMPT,
-  FETCH_PROMPT_Input,
-  fetchMarkets,
-} from "./tools/fetchTool";
-import { BET_PROMPT_Input } from "./tools/placeBetTool";
-import { placeBet } from "./tools/placeBetTool";
-import { BET_PROMPT } from "./tools/placeBetTool";
-import { GET_AD_PROMPT, GET_AD_PROMPT_INPUT, getAd } from "./tools/WarpAdsTool";
 import { TwitterToolkit } from "@coinbase/twitter-langchain";
-import { tool } from "@langchain/core/tools";
-import { TRACK_AD_PROMPT_INPUT } from "./tools/AdTrackerTool";
-import { trackAd } from "./tools/AdTrackerTool";
-import { TRACK_AD_PROMPT } from "./tools/AdTrackerTool";
+import { Warpads } from "warpads-langgraph-plugin";
 
 dotenv.config();
 
