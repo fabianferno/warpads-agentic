@@ -6,64 +6,56 @@ import { Rocket, Code2, Beaker, Globe2 } from "lucide-react";
 
 const timelineData = [
     {
-        phase: "Phase 1",
-        title: "Foundation & Research",
-        date: "Q3 2024",
+        phase: "Genesis",
+        title: "WarpAds - open-ads protocol for Farcaster Frames",
+        date: "Q2 2024",
         status: "Completed",
         icon: Beaker,
         gradient: "from-emerald-500/20 to-cyan-500/20",
         content: {
-            description: "Evolution from Farcaster Frames display ads to an open standard for agentic ecosystems",
+            description: "An open display ads protocol for Farcaster, analogous to the prominence of Facebook ads. This innovative platform allows users to convert any existing Farcaster frames into a WarpAds Frame (an ad-embedded frame) and relay the frame requests to the original server without requiring any changes on the server. ",
             achievements: [
                 "Won Global dAGI Hackathon Grant (10K USDC)",
-                "Ranked #1 in GG22 Hack Alumni Grant (10K USDC)",
-                "Expanded protocol scope to Agentic UX",
-                "Technical architecture design",
-                "Community building initiated"
             ]
         }
     },
     {
-        phase: "Phase 2",
-        title: "Core Development & Testing",
+        phase: "Good news",
+        title: "Winning the Gitcoin GG22 Grant",
         date: "Q4 2024",
         status: "Completed",
         icon: Code2,
         gradient: "from-blue-500/20 to-indigo-500/20",
         content: {
-            description: "Development of core platform features and infrastructure",
+            description: "Recieved grants and recognition to continue development",
             achievements: [
-                "Model Context Protocol (MACP) v1",
-                "Ad auction smart contracts",
-                "Developer SDK alpha",
-                "Initial AI model training",
-                "Technical whitepaper release"
+                "Won the Gitcoin GG22 Grant (Hack Alumni), voted #1 in the by community",
             ]
         }
     },
     {
-        phase: "Phase 3",
-        title: "Beta Launch & Market Validation",
+        phase: "Pivot",
+        title: "WarpAds (Agentic)",
         date: "Q1 2025",
         status: "In Progress",
         icon: Rocket,
         gradient: "from-purple-500/20 to-pink-500/20",
         content: {
-            description: "Beta launch with early adopters and strategic partnerships",
+            description: "Pivoting to a new vision of AI-powered influencers, WarpAds (Agentic) is a new protocol that allows users to allow agent devs to monetize their AI agents and earn WADS tokens",
             achievements: [
-                "Open beta for advertisers",
-                "Integration with major AI platforms",
-                "Smart contract audit completion",
-                "Performance metrics tracking",
-                "Community governance launch"
+                "Build an ad engine for agentic/LLM apps",
+                "Participate in the Ethglobal Agentic Hackathon",
+                "Develop SDKs and plugins",
+                "Incentivized testnet version for agents",
+                "Eigen layer AVS enabled incentive validation",
             ]
         }
     },
     {
         phase: "Phase 4",
-        title: "Global Scale & Enterprise Adoption",
+        title: "Above and beyond",
         date: "Q2 2025",
-        status: "Upcoming",
+        status: "In Progress",
         icon: Globe2,
         gradient: "from-orange-500/20 to-red-500/20",
         content: {
@@ -72,7 +64,7 @@ const timelineData = [
                 "Multi-chain payment support",
                 "Enterprise-grade analytics dashboard",
                 "AI model optimization v2.0",
-                "Global partnership network",
+                "Partner with existing ad networks like Monetag, Facebook Ads, Google Ads to aggregate ad revenue for agents",
                 "24/7 support infrastructure"
             ]
         }
@@ -121,14 +113,11 @@ const Timeline = () => {
                     className="text-center mb-16"
                 >
                     <span className="inline-block px-4 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-sm font-medium mb-4">
-                        Development Timeline
+                        Looking back, and looking forward
                     </span>
                     <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-4">
-                        Roadmap to Revolution
+                        Here's our Roadmap
                     </h2>
-                    <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                        Our strategic journey to transform AI advertising, from concept to global adoption
-                    </p>
                 </motion.div>
 
                 <div ref={ref} className="relative">
@@ -207,7 +196,7 @@ const Timeline = () => {
                                         {item.content.description}
                                     </p>
 
-                                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                    <div className="flex flex-col gap-2">
                                         {item.content.achievements.map((achievement, i) => (
                                             <motion.div
                                                 key={i}

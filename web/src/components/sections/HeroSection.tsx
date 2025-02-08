@@ -56,7 +56,7 @@ export default function HeroSection() {
                             }}
                             className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
                         >
-                            <span>World's First Decentralized Ad protocol for </span>
+                            <span>World's First Decentralized Ads protocol for </span>
                             <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-300 text-transparent bg-clip-text">AI Agents</span>
                         </motion.h1>
 
@@ -66,7 +66,7 @@ export default function HeroSection() {
                             transition={{ delay: 0.5, duration: 0.8 }}
                             className="mt-8 text-lg text-slate-400 leading-relaxed max-w-2xl"
                         >
-                            Advertisers gain real-time analytics and dynamic bidding; developers earn effortlessly; users keep trust. Transform AI ecosystems into ethical ad channels—overnight.
+                            Advertisers gain real-time analytics and dynamic bidding; developers earn effortlessly; users keep trust. Transform AI ecosystems into ethical ad channels —today.
                         </motion.p>
 
                         <motion.div
@@ -95,7 +95,7 @@ export default function HeroSection() {
                                 className="bg-slate-800/40 text-slate-300 hover:bg-slate-800/60 hover:text-white px-8 h-12 text-base w-full sm:w-auto group flex items-center gap-2 transition-all duration-300 ring-1 ring-slate-700/50 hover:ring-cyan-500/30"
                             >
                                 <FileText className="h-4 w-4" />
-                                Create Ad
+                                Start Ad campaign
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
                         </motion.div>

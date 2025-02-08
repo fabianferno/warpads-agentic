@@ -89,7 +89,7 @@ export default function CallToValue() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl"
                     >
-                        Get started in 3 lines of code; Yes, it's that easy
+                        Get started in <span className="text-cyan-500">3 lines of code</span>; Yes —it's that easy
                     </motion.h2>
                 </motion.div>
                 <motion.div
