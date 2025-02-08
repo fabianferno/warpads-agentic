@@ -12,7 +12,7 @@ export const validateTwitterAnalytics = async (
   console.log(analytics.replies);
   await connectDB();
   const db = client.db();
-  const task = await db.collection(`${env.NODE_ENV}-validatedLogs`).findOne({
+  const task = await db.collection(`${env.NODE_ENV}_validatedLogs`).findOne({
     taskId,
   });
 
@@ -29,10 +29,10 @@ export const validateTwitterAnalytics = async (
   console.log(twitterRewards);
 
   await db
-    .collection(`${env.NODE_ENV}-adSpaces`)
+    .collection(`${env.NODE_ENV}_adSpaces`)
     .updateOne({ _id: task.adSpaceId }, { $inc: { reward: twitterRewards } });
 
-  await db.collection(`${env.NODE_ENV}-validatedLogs`).updateOne(
+  await db.collection(`${env.NODE_ENV}_validatedLogs`).updateOne(
     { taskId },
     {
       $set: {

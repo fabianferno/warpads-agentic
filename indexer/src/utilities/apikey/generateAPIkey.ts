@@ -12,7 +12,7 @@ export const generateAPIKey = async (id: number) => {
 
     // Check if the id exists in the database
     const agent = await db
-      .collection(`${env.NODE_ENV}-adSpaces`)
+      .collection(`${env.NODE_ENV}_adSpaces`)
       .findOne({ id });
     console.log(agent);
     if (!agent) {
@@ -21,7 +21,7 @@ export const generateAPIKey = async (id: number) => {
 
     // append the api key in the document
     const result = await db
-      .collection(`${env.NODE_ENV}-adSpaces`)
+      .collection(`${env.NODE_ENV}_adSpaces`)
       .updateOne({ id }, { $set: { apiKey: `${idHex}x${randomPart}` } });
 
     if (result.modifiedCount === 0) {

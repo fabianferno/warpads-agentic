@@ -9,7 +9,7 @@ export const trackResponse = async (
   }
 ) => {
   const db = client.db();
-  const adSpace = await db.collection(`${env.NODE_ENV}-adSpaces`).findOne({
+  const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
     apiKey,
   });
 
@@ -17,7 +17,7 @@ export const trackResponse = async (
     throw new Error("Ad space not found");
   }
 
-  await db.collection(`${env.NODE_ENV}-responseLogs`).insertOne({
+  await db.collection(`${env.NODE_ENV}_responseLogs`).insertOne({
     id: adSpace.id,
     apiKey,
     platform: response.platform,

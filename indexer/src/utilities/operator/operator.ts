@@ -52,7 +52,7 @@ export const operator = async () => {
   });
 
   const adSpaces = await db
-    .collection(`${env.NODE_ENV}-adSpaces`)
+    .collection(`${env.NODE_ENV}_adSpaces`)
     .find({
       $expr: {
         $and: [{ $gt: ["$reward", 0] }, { $lt: ["$onchainReward", "$reward"] }],
@@ -118,7 +118,7 @@ export const operator = async () => {
 
     // Update the onchainReward in the database
     for (let i = 0; i < rewardsByChain.baseSepolia.ids.length; i++) {
-      await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
+      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
         { id: rewardsByChain.baseSepolia.ids[i] },
         {
           $set: {
@@ -143,7 +143,7 @@ export const operator = async () => {
     });
 
     for (let i = 0; i < rewardsByChain.arbitrumSepolia.ids.length; i++) {
-      await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
+      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
         { id: rewardsByChain.arbitrumSepolia.ids[i] },
         {
           $set: {
@@ -165,7 +165,7 @@ export const operator = async () => {
     });
 
     for (let i = 0; i < rewardsByChain.seiDevnet.ids.length; i++) {
-      await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
+      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
         { id: rewardsByChain.seiDevnet.ids[i] },
         {
           $set: {
@@ -190,7 +190,7 @@ export const operator = async () => {
     });
 
     for (let i = 0; i < rewardsByChain.modeTestnet.ids.length; i++) {
-      await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
+      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
         { id: rewardsByChain.modeTestnet.ids[i] },
         {
           $set: {

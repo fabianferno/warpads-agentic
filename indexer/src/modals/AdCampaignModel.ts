@@ -14,4 +14,4 @@ export interface IAdCampaign {
   updatedAt: Date;
 }
 
-export const COLLECTION_NAME = `${env.NODE_ENV}-adCampaigns`;
+export const COLLECTION_NAME = `${env.NODE_ENV}_adCampaigns`;

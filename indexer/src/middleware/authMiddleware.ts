@@ -5,7 +5,7 @@ import { env } from "../config/env";
 const validateAPIKey = async (apiKey: string) => {
   const db = client.db();
   const adSpace = await db
-    .collection(`${env.NODE_ENV}-adSpaces`)
+    .collection(`${env.NODE_ENV}_adSpaces`)
     .findOne({ apiKey });
   if (!adSpace) {
     return false;

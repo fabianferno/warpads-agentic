@@ -5,7 +5,7 @@ export const getAllAgents = async (address: `0x${string}`) => {
   try {
     const db = client.db();
     const agents = await db
-      .collection(`${env.NODE_ENV}-adSpaces`)
+      .collection(`${env.NODE_ENV}_adSpaces`)
       .find({ owner: address })
       .toArray();
     return agents;

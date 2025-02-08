@@ -10,7 +10,7 @@ export const RewardClaimed = async (
 
   const db = client.db();
 
-  const result = await db.collection(`${env.NODE_ENV}-adSpaces`).updateOne(
+  const result = await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
     { adSpaceId },
     {
       $inc: {

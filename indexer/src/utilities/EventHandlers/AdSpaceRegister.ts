@@ -23,7 +23,7 @@ export const AdSpaceRegister = async (
 
   // Check if the ad space already exists
   const adSpace = await db
-    .collection(`${env.NODE_ENV}-adSpaces`)
+    .collection(`${env.NODE_ENV}_adSpaces`)
     .findOne({ id: id });
 
   if (adSpace) {
@@ -36,7 +36,7 @@ export const AdSpaceRegister = async (
   const apiKey = `${idHex}-${randomPart}`;
 
   // Create the ad space
-  await db.collection(`${env.NODE_ENV}-adSpaces`).insertOne({
+  await db.collection(`${env.NODE_ENV}_adSpaces`).insertOne({
     id: id,
     owner: owner,
     metadata: metadataJson.data,

@@ -7,7 +7,7 @@ export const trackUsage = async (
   chainId: string
 ) => {
   const db = client.db();
-  const adSpace = await db.collection(`${env.NODE_ENV}-adSpaces`).findOne({
+  const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
     apiKey,
   });
 
@@ -15,7 +15,7 @@ export const trackUsage = async (
     throw new Error("Ad space not found");
   }
 
-  const ad = await db.collection(`${env.NODE_ENV}-adCampaigns`).findOne({
+  const ad = await db.collection(`${env.NODE_ENV}_adCampaigns`).findOne({
     id: parseInt(adId),
     chainId: parseInt(chainId),
   });
@@ -24,7 +24,7 @@ export const trackUsage = async (
     throw new Error("Ad not found");
   }
 
-  const log = await db.collection(`${env.NODE_ENV}-requestLogs`).insertOne({
+  const log = await db.collection(`${env.NODE_ENV}_requestLogs`).insertOne({
     id: adSpace.id,
     adId: parseInt(adId),
     chainId: parseInt(chainId),

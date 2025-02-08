@@ -5,7 +5,7 @@ export const getAllAdCampaigns = async (owner: string) => {
   try {
     const db = client.db();
     const adCampaigns = await db
-      .collection(`${env.NODE_ENV}-adCampaigns`)
+      .collection(`${env.NODE_ENV}_adCampaigns`)
       .aggregate([
         {
           $match: {

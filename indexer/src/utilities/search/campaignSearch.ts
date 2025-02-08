@@ -8,7 +8,7 @@ export const searchCampaigns = async (query: string) => {
   const nowInSeconds = Math.floor(Date.now() / 1000);
   const db = client.db();
   const campaigns = await db
-    .collection<IAdCampaign>(`${env.NODE_ENV}-adCampaigns`)
+    .collection<IAdCampaign>(`${env.NODE_ENV}_adCampaigns`)
     .aggregate([
       {
         $vectorSearch: {
