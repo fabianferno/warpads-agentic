@@ -9,6 +9,7 @@ import { validateTwitterAnalytics } from "../utilities/operator/TwitterAnalytics
 import { operator } from "../utilities/operator/operator";
 import { calculateIncentive } from "../utilities/IncentiveCalculator";
 import { env } from "../config/env";
+import { getAllAdCampaigns } from "../utilities/GetAllAdCampaigns";
 
 const router = Router();
 
@@ -19,8 +20,8 @@ router.get("/", (req: Request, res: Response) => {
 router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   const { query } = req.body;
   const ad = await adEngine(query);
-  await trackUsage(req.headers["x-api-key"] as string);
-  if (ad?.includes("No ad found")) {
+  await trackUsage(req.headers["x-api-key"] as string, ad.id, ad.chainId);
+  if (ad?.ad.includes("No ad found")) {
     res.status(404).send("No ad found");
   } else {
     res.status(200).send(ad);
@@ -37,6 +38,12 @@ router.get("/generate-api-key", async (req: Request, res: Response) => {
   const { id } = req.body;
   const apiKey = await generateAPIKey(id);
   res.send(apiKey);
+});
+
+router.get("/get-my-ads", async (req: Request, res: Response) => {
+  const { address } = req.query;
+  const ads = await getAllAdCampaigns(address as `0x${string}`);
+  res.status(200).send(ads);
 });
 
 router.post(

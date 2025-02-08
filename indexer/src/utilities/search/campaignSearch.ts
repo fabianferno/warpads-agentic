@@ -1,11 +1,10 @@
-import { client } from "../../config/db";
+import connectDB, { client } from "../../config/db";
 import { createEmbedding } from "../CreateEmbeddings";
 import { IAdCampaign, COLLECTION_NAME } from "../../modals/AdCampaignModel";
 
 export const searchCampaigns = async (query: string) => {
   const queryEmbeddings = await createEmbedding(query);
   const nowInSeconds = Math.floor(Date.now() / 1000);
-
   const db = client.db();
   const campaigns = await db
     .collection<IAdCampaign>(COLLECTION_NAME)

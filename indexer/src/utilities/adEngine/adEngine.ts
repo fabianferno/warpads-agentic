@@ -10,7 +10,8 @@ export const adEngine = async (query: string) => {
 
   const parsedCampaigns = campaigns.map((c) => ({
     text: parseMetadata(JSON.stringify(c.metadata)),
-    score: c.similarity,
+    chainId: c.chainId,
+    id: c.id,
   }));
 
   console.log(parsedCampaigns);
@@ -45,13 +46,22 @@ Example:
 3. Query: "@DeFiGuruBot Hey, I'm looking to stake some ETH. What's the best option right now?"
    Response: Oh, and since you're into DeFi, check out Ledger Nano X—it's on sale for 20% off this week. Secure your ETH while staking! 🔒
 
-Select the most appropriate ad campaign based on the above guidelines.`,
+Select the most appropriate ad campaign based on the above guidelines.
+
+The Output should be in the following format:
+{
+  "ad": "string",
+  "chainId": "string",
+  "id": "string"
+}
+
+`,
     },
     {
       role: "user",
       content: `Query: ${query}\nRelevant Campaigns:\n${parsedCampaigns
-        .map((c) => c.text)
-        .join("\n")}`,
+        .map((c) => `${c.text}\nChainId: ${c.chainId}\nId: ${c.id}`)
+        .join("\n\n")}`,
     },
   ];
 
@@ -81,9 +91,13 @@ Select the most appropriate ad campaign based on the above guidelines.`,
 
   const ad = data.choices[0].message.content.trim();
 
+  const adData = JSON.parse(ad);
+
   // Check if the OpenAI response indicates that no ad was found
-  if (ad.includes("No ad found")) {
+  if (adData.ad.includes("No ad found")) {
     return "No ad found";
   }
-  return ad;
+  return adData;
 };
+
+// adEngine("I want to travel to Europe");
