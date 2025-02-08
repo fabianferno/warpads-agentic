@@ -7,14 +7,27 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI } from "@langchain/openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
-import * as readline from "readline";
+
+import express from "express";
+import cors from "cors";
 
 // Tool
 import { CdpTool } from "@coinbase/cdp-langchain";
 import { TwitterToolkit } from "@coinbase/twitter-langchain";
 import { Warpads } from "warpads-langgraph-plugin";
+import {
+  CACHE_PROMPT,
+  CACHE_PROMPT_INPUT,
+  cacheData,
+  CHECK_CACHE_PROMPT,
+  CHECK_CACHE_PROMPT_INPUT,
+  checkCache,
+} from "./tools/CacheTool";
 
 dotenv.config();
+
+// Add this near the top of the file, after imports
+const mentionsCache = new Map();
 
 /**
  * Validates that required environment variables are set
@@ -69,7 +82,7 @@ async function initializeAgent() {
   try {
     // Initialize LLM
     const llm = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: "gpt-4",
     });
 
     let walletDataStr: string | null = null;
@@ -105,6 +118,26 @@ async function initializeAgent() {
     // Twitter (X) tools
     const twitterTools = twitterToolkit.getTools();
 
+    // Cache tool
+    const cacheTool = new CdpTool(
+      {
+        name: "cache",
+        description: CACHE_PROMPT,
+        argsSchema: CACHE_PROMPT_INPUT,
+        func: cacheData,
+      },
+      agentkit
+    );
+
+    const checkCacheTool = new CdpTool(
+      {
+        name: "checkCache",
+        description: CHECK_CACHE_PROMPT,
+        argsSchema: CHECK_CACHE_PROMPT_INPUT,
+        func: checkCache,
+      },
+      agentkit
+    );
     const warpads = new Warpads({
       apiKey: process.env.WARPADS_API_KEY || "",
     });
@@ -118,6 +151,8 @@ async function initializeAgent() {
 
     tools.push(getAdTools);
     tools.push(trackAdTools);
+    // tools.push(cacheTool);
+    // tools.push(checkCacheTool);
     tools.push(...twitterTools);
 
     // Store buffered conversation history in memory
@@ -171,149 +206,138 @@ Note : You should not interact with the user directly , Just always follow the a
 }
 
 /**
- * Run the agent autonomously with specified intervals
+ * Create and configure Express server
  *
  * @param agent - The agent executor
  * @param config - Agent configuration
- * @param interval - Time interval between actions in seconds
+ * @returns Express app
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function runAutonomousMode(agent: any, config: any, interval = 10) {
-  console.log("Starting autonomous mode...");
+function createServer(agent: any, config: any) {
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
 
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
+  // Health check endpoint
+  app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
+  });
+
+  // Chat endpoint
+  app.post("/chat", async (req: any, res: any) => {
     try {
-      const thought =
-        "I am a fan of MR.Beast , I love sports , I love betting , I love crypto , I love AI , I love the future." +
-        " If you can bet on the outcome of the market , please do so and post your thoughts on twitter.";
+      const { message } = req.body;
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
+      }
 
+      const responses: any[] = [];
       const stream = await agent.stream(
-        { messages: [new HumanMessage(thought)] },
+        { messages: [new HumanMessage(message)] },
         config
       );
 
       for await (const chunk of stream) {
         if ("agent" in chunk) {
-          console.log(chunk.agent.messages[0].content);
+          responses.push({
+            type: "agent",
+            content: chunk.agent.messages[0].content,
+          });
         } else if ("tools" in chunk) {
-          console.log(chunk.tools.messages[0].content);
+          responses.push({
+            type: "tools",
+            content: chunk.tools.messages[0].content,
+          });
         }
-        console.log("-------------------");
       }
 
-      await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+      res.json({ responses });
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error:", error.message);
-      }
-      process.exit(1);
+      console.error("Chat error:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
-  }
-}
-
-/**
- * Run the agent interactively based on user input
- *
- * @param agent - The agent executor
- * @param config - Agent configuration
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function runChatMode(agent: any, config: any) {
-  console.log("Starting chat mode... Type 'exit' to end.");
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
   });
 
-  const question = (prompt: string): Promise<string> =>
-    new Promise((resolve) => rl.question(prompt, resolve));
+  // Modified mentions endpoint
+  app.get("/mentions", async (req, res) => {
+    try {
+      const responses: any[] = [];
 
-  try {
-    while (true) {
-      // Here's where user input is collected
-      const userInput = await question("\nPrompt: ");
-
-      // Check if user wants to exit
-      if (userInput.toLowerCase() === "exit") {
-        break;
-      }
-
-      // Process the user input through the agent
+      // Use the agent's stream to handle the mentions flow
       const stream = await agent.stream(
-        { messages: [new HumanMessage(userInput)] },
+        {
+          messages: [
+            new HumanMessage(
+              "Check for new Twitter mentions and respond to them"
+            ),
+          ],
+        },
         config
       );
 
-      // Display the agent's response
       for await (const chunk of stream) {
         if ("agent" in chunk) {
-          console.log(chunk.agent.messages[0].content);
+          responses.push({
+            type: "agent",
+            content: chunk.agent.messages[0].content,
+          });
         } else if ("tools" in chunk) {
-          console.log(chunk.tools.messages[0].content);
+          responses.push({
+            type: "tools",
+            content: chunk.tools.messages[0].content,
+          });
         }
-        console.log("-------------------");
       }
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error:", error.message);
-    }
-    process.exit(1);
-  } finally {
-    rl.close();
-  }
-}
 
-/**
- * Choose whether to run in autonomous or chat mode based on user input
- *
- * @returns Selected mode
- */
-async function chooseMode(): Promise<"chat" | "auto"> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
+      res.json({ responses });
+    } catch (error) {
+      console.error("Mentions processing error:", error);
+      res.status(500).json({
+        error: "Internal server error",
+        details: (error as Error).message,
+      });
+    }
   });
 
-  const question = (prompt: string): Promise<string> =>
-    new Promise((resolve) => rl.question(prompt, resolve));
+  // Cache endpoint
+  app.get("/mentions/cache", (req, res) => {
+    const cachedMentions = Array.from(mentionsCache.entries()).map(
+      ([id, data]) => ({
+        id,
+        ...data,
+        age: new Date().getTime() - new Date(data.timestamp).getTime(),
+        cached_at: data.timestamp,
+      })
+    );
 
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    console.log("\nAvailable modes:");
-    console.log("1. chat    - Interactive chat mode");
-    console.log("2. auto    - Autonomous action mode");
+    res.json({
+      total_cached: cachedMentions.length,
+      cache_stats: {
+        max_size: 1,
+        current_size: mentionsCache.size,
+        ttl: 1,
+      },
+      mentions: cachedMentions.sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      ),
+    });
+  });
 
-    const choice = (await question("\nChoose a mode (enter number or name): "))
-      .toLowerCase()
-      .trim();
-
-    if (choice === "1" || choice === "chat") {
-      rl.close();
-      return "chat";
-    } else if (choice === "2" || choice === "auto") {
-      rl.close();
-      return "auto";
-    }
-    console.log("Invalid choice. Please try again.");
-  }
+  return app;
 }
 
 /**
- * Start the chatbot agent
+ * Start the HTTP server
  */
 async function main() {
   try {
     const { agent, config } = await initializeAgent();
-    const mode = await chooseMode();
+    const app = createServer(agent, config);
 
-    if (mode === "chat") {
-      await runChatMode(agent, config);
-    } else {
-      await runAutonomousMode(agent, config);
-    }
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error:", error.message);
