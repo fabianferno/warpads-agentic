@@ -8,6 +8,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as readline from "readline";
+import { Warpads } from "warpads-langgraph-plugin";
 
 // Tool
 import { CdpTool } from "@coinbase/cdp-langchain";
@@ -119,61 +120,19 @@ async function initializeAgent() {
     // Twitter (X) tools
     const twitterTools = twitterToolkit.getTools();
 
-    // Add the placeBet tool
-    // const placeBetTool = new CdpTool(
-    //   {
-    //     name: "placeBet",
-    //     description: BET_PROMPT,
-    //     func: placeBet,
-    //     argsSchema: BET_PROMPT_Input,
-    //   },
-    //   agentkit
-    // );
+    const warpads = new Warpads({
+      apiKey: process.env.WARPADS_API_KEY || "",
+    });
 
-    // Add the fetchTool
-    const fetchTool = new CdpTool(
-      {
-        name: "fetchTool",
-        description: FETCH_PROMPT,
-        func: fetchMarkets,
-        argsSchema: FETCH_PROMPT_Input,
-      },
-      agentkit
-    );
+    const cdpTools = warpads.getCDPTools();
+    const { getAdTool, trackAdTool } = cdpTools;
 
-    const placeBetTool = new CdpTool(
-      {
-        name: "placeBetTool",
-        description: BET_PROMPT,
-        func: placeBet,
-        argsSchema: BET_PROMPT_Input,
-      },
-      agentkit
-    );
+    const getAdTools = new CdpTool(getAdTool, agentkit);
 
-    const getAdTool = new CdpTool(
-      {
-        name: "getAdTool",
-        description: GET_AD_PROMPT,
-        func: getAd,
-        argsSchema: GET_AD_PROMPT_INPUT,
-      },
-      agentkit
-    );
+    const trackAdTools = new CdpTool(trackAdTool, agentkit);
 
-    const trackAdTool = new CdpTool(
-      {
-        name: "trackAdTool",
-        description: TRACK_AD_PROMPT,
-        func: trackAd,
-        argsSchema: TRACK_AD_PROMPT_INPUT,
-      },
-      agentkit
-    );
-    tools.push(fetchTool);
-    tools.push(placeBetTool);
-    tools.push(getAdTool);
-    tools.push(trackAdTool);
+    tools.push(getAdTools);
+    tools.push(trackAdTools);
     tools.push(...twitterTools);
 
     // Store buffered conversation history in memory
