@@ -16,11 +16,11 @@ fabian@warpads.xyz
 
 ##### Tracks that you're submitting for
 
-- Cookie.fun track
-- Dedicated chain tracks
-  - Arbitrum Track
-  - Mode Track
-  - SEI Track
+- Autonome
+- Base
+- Flow
+- Eigen Layer
+
 
 ##### Description
 
