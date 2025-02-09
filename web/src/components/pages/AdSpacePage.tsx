@@ -10,7 +10,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, Loader2, ExternalLink } from "lucide-react";
 import { contractsConfig } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
-import { useAccount, useChainId, useWriteContract, useWatchContractEvent } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useWriteContract,
+  useWatchContractEvent,
+} from "wagmi";
 import type { PinataSDK } from "pinata-web3";
 import { toast } from "sonner";
 import MainLayout from "../layouts/MainLayout";
@@ -23,10 +28,15 @@ export default function AdspaceForm() {
   const [stakeAmount, setStakeAmount] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const { address } = useAccount();
   const [pinata, setPinata] = useState<PinataSDK | null>(null);
   const chainId = useChainId();
-  const { writeContract, isPending: isSubmitting, error: submitError } = useWriteContract();
+  const {
+    writeContract,
+    isPending: isSubmitting,
+    error: submitError,
+  } = useWriteContract();
 
   const clearForm = () => {
     setAgentName("");
@@ -59,7 +69,10 @@ export default function AdspaceForm() {
   useEffect(() => {
     if (submitError) {
       console.error(submitError);
-      toast.error(submitError?.message || "Failed to process transaction. Please try again.");
+      toast.error(
+        submitError?.message ||
+          "Failed to process transaction. Please try again."
+      );
     }
   }, [submitError]);
 
@@ -67,7 +80,7 @@ export default function AdspaceForm() {
   useWatchContractEvent({
     address: contractsConfig[chainId]?.warpadsAddress,
     abi: WarpadsABI,
-    eventName: 'AdSpaceRegistered',
+    eventName: "AdSpaceRegistered",
     onLogs(logs) {
       const event = logs[0];
       if (event && event.transactionHash) {
@@ -113,7 +126,7 @@ export default function AdspaceForm() {
     e.preventDefault();
     e.stopPropagation();
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -163,7 +176,10 @@ export default function AdspaceForm() {
     }
 
     try {
+      setIsUploadingImage(true);
       const imageHash = await uploadImageToPinata();
+      setIsUploadingImage(false);
+
       const formData = {
         name: agentName,
         purpose,
@@ -183,6 +199,7 @@ export default function AdspaceForm() {
         ],
       });
     } catch (error) {
+      setIsUploadingImage(false);
       console.error("Error submitting adspace:", error);
       toast.error("Failed to submit adspace");
     }
@@ -212,7 +229,8 @@ export default function AdspaceForm() {
                   Register your Agent
                 </h1>
                 <p className="text-slate-400">
-                  Earn rewards by listing your agent and helping advertisers reach their target audience
+                  Earn rewards by listing your agent and helping advertisers
+                  reach their target audience
                 </p>
               </div>
 
@@ -293,7 +311,9 @@ export default function AdspaceForm() {
                         <div className="h-full flex flex-col items-center justify-center text-slate-400 p-4 text-center">
                           <Upload className="w-8 h-8 mb-2" />
                           <p>Drop your image here or click to upload</p>
-                          <p className="text-sm mt-2">Recommended size: 1200x630px</p>
+                          <p className="text-sm mt-2">
+                            Recommended size: 1200x630px
+                          </p>
                         </div>
                       )}
                       <Input
@@ -309,10 +329,15 @@ export default function AdspaceForm() {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isUploadingImage}
                   className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white h-12 text-lg font-semibold transition-all duration-300"
                 >
-                  {isSubmitting ? (
+                  {isUploadingImage ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Uploading to IPFS...
+                    </div>
+                  ) : isSubmitting ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                       Confirm in Wallet...
