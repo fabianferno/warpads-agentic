@@ -24,7 +24,7 @@ export const AdSpaceRegister = async (
   // Check if the ad space already exists
   const adSpace = await db
     .collection(`${env.NODE_ENV}_adSpaces`)
-    .findOne({ id: id });
+    .findOne({ id: id, chainId: chainId });
 
   if (adSpace) {
     return "Ad space already exists";

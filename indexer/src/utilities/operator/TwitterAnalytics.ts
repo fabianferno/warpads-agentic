@@ -30,7 +30,10 @@ export const validateTwitterAnalytics = async (
 
   await db
     .collection(`${env.NODE_ENV}_adSpaces`)
-    .updateOne({ _id: task.adSpaceId }, { $inc: { reward: twitterRewards } });
+    .updateOne(
+      { id: task.adSpaceId, chainId: task.chainId },
+      { $inc: { reward: twitterRewards } }
+    );
 
   await db.collection(`${env.NODE_ENV}_validatedLogs`).updateOne(
     { taskId },

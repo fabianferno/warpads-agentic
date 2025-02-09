@@ -2,7 +2,7 @@ import axios from "axios";
 import connectDB, { client } from "../config/db";
 import { env } from "../config/env";
 
-export const calculateIncentive = async (agentId: number) => {
+export const calculateIncentive = async (agentId: number, chainId: number) => {
   await connectDB();
   const db = client.db();
   const adEngineResponses = await db
@@ -11,6 +11,7 @@ export const calculateIncentive = async (agentId: number) => {
       {
         $match: {
           id: agentId,
+          chainId: chainId,
         },
       },
       {
@@ -63,6 +64,7 @@ export const calculateIncentive = async (agentId: number) => {
 
     await db.collection(`${env.NODE_ENV}_validatedLogs`).insertOne({
       adSpaceId: agentId,
+      chainId: chainId,
       refResponseID: adEngineResponse._id,
       validatedAt: new Date(),
       taskId: taskId,
@@ -71,12 +73,13 @@ export const calculateIncentive = async (agentId: number) => {
 
   const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
     id: agentId,
+    chainId: chainId,
   });
   console.log(`${adSpace?.metadata.name} has been validated`);
 
   // store the reward in the database
   await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-    { id: agentId },
+    { id: agentId, chainId: chainId },
     {
       $set: {
         reward: reward + adEngineResponses.length * 1 + (adSpace?.reward || 0),
