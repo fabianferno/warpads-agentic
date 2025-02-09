@@ -17,30 +17,15 @@ export const validateTwitterAnalytics = async (
   });
 
   if (!task) {
-    throw new Error("Task not found");
+    return "Task not found";
   }
-
-  const twitterRewards =
-    analytics.views * 0.01 +
-    analytics.likes * 0.01 +
-    analytics.retweets * 0.01 +
-    analytics.replies * 0.01;
-
-  console.log(twitterRewards);
-
-  await db
-    .collection(`${env.NODE_ENV}_adSpaces`)
-    .updateOne(
-      { id: task.adSpaceId, chainId: task.chainId },
-      { $inc: { reward: twitterRewards } }
-    );
 
   await db.collection(`${env.NODE_ENV}_validatedLogs`).updateOne(
     { taskId },
     {
       $set: {
         rewardsUpdatedAt: new Date(),
-        reward: twitterRewards,
+        verified: false,
         analytics: analytics,
       },
     }

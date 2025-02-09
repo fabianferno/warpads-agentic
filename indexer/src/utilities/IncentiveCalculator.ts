@@ -37,13 +37,14 @@ export const calculateIncentive = async () => {
     // Call Cookie API to gain insights about the user reward Calculation here
 
     // Skyvern API to get insights about the tweet
+
     const response = await axios.post(
       "https://api.skyvern.com/api/v2/tasks/",
       {
         user_prompt:
           "Just navigate the twitter url and collect the impressions like No of Likes , NO of views , no of reposts , etc whatever you can . I want the output in json format {views: number, likes: number, retweets: number, replies: number}",
         url: adEngineResponse.platformId,
-        webhook_callback_url: `https://warpads-cookie-hack.onrender.com//webhooks`,
+        webhook_callback_url: `https://1686-103-176-166-226.ngrok-free.app/webhooks`,
       },
       {
         headers: {

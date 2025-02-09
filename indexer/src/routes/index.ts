@@ -103,7 +103,7 @@ router.post("/operator", async (req: Request, res: Response) => {
 });
 
 router.post("/incentive", async (req: Request, res: Response) => {
-  const { id, key } = req.body;
+  const { key } = req.body;
   if (key === env.OPERATOR_KEY) {
     await calculateIncentive();
     res.send("Incentive calculated");
