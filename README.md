@@ -73,6 +73,11 @@ Flow
 Vercel.com - Front end
 Render.com - Backend, Indexers, Agent
 
+#### Plugins
+
+CDP: https://www.npmjs.com/package/warpads-cdp
+Eliza SDK : https://www.npmjs.com/package/warpads
+
 ##### GitHub Repository
 
 https://github.com/LeoFranklin015/warpads-agentic-hack
