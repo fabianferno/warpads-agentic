@@ -28,7 +28,7 @@ router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   if (ad?.ad.includes("No ad found")) {
     res.status(404).send("No ad found");
   } else {
-    res.status(200).send(ad);
+    res.status(200).send(ad.ad);
   }
 });
 
