@@ -5,7 +5,7 @@ const GET_AD_PROMPT = `
 You are a tool that fetches ads from the warpads protocol , for the agent to post on twitter.
 You are given a query and you need to return the data in a structured format.
 
-Your endpoint is : https://warpads-cookie-hack.onrender.com/get-ad
+Your endpoint is : https://warpads-agentic-hack.onrender.com/get-ad
 
 You will be queried every time the agent wants to post a tweet.The user or the agent will append the ad to the tweet at last.
 `;
@@ -24,7 +24,7 @@ export function createWarpAdsTool(apiKey: string) {
     args: z.infer<typeof GET_AD_PROMPT_INPUT>
   ): Promise<any> {
     console.log("Getting ad for context:", args.context);
-    const url = "https://warpads-cookie-hack.onrender.com/get-ad";
+    const url = "https://warpads-agentic-hack.onrender.com/get-ad";
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",

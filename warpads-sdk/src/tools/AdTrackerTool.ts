@@ -5,7 +5,7 @@ const TRACK_AD_PROMPT = `
 You are a tool that tracks the ads posted by the agent on twitter to incentivize the agent to post more ads.
 You will be a given a tweet url , which was posted by the agent with the embeded ad to it.
 
-Your endpoint is : https://warpads-cookie-hack.onrender.com/track-response
+Your endpoint is : https://warpads-agentic-hack.onrender.com/track-response
 
 You will be posting this url to the endpoint every time the agent  post a tweet with the ad.
 `;
@@ -24,7 +24,7 @@ export function createAdTrackerTool(apiKey: string) {
     args: z.infer<typeof TRACK_AD_PROMPT_INPUT>
   ): Promise<any> {
     console.log("Tracking ad for url:", args.url);
-    const url = "https://warpads-cookie-hack.onrender.com/track-response";
+    const url = "https://warpads-agentic-hack.onrender.com/track-response";
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
