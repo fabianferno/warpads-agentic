@@ -1,5 +1,9 @@
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
+import { ChainHandler } from "../utils/ChainHandler";
+import { chainConfigs } from "../utils/chainConfigs";
+import connectDB, { client } from "./db";
+
 const fs = require("fs");
 const path = require("path");
 dotenv.config();
@@ -83,10 +87,54 @@ const avsDirectory = new ethers.Contract(
 const signAndRespondToTask = async (
   taskIndex: number,
   taskCreatedBlock: number,
-  agentId: number
+  agentIds: string
 ) => {
   // TODO: Calculate the incentive here
-  const message = await calculateIncentive(agentId);
+  // const message = await getIncentiveMessage(agentId);
+
+  console.log("Operator started");
+  await connectDB();
+  const db = client.db();
+
+  const chainHandlers = chainConfigs.map(
+    (config) =>
+      new ChainHandler(config, process.env.VALIDATOR_KEY as string, db)
+  );
+
+  const adSpaces = JSON.parse(agentIds);
+
+  console.log("AdSpaces found:", adSpaces.length);
+
+  // Group rewards by chain
+  const rewardsByChain = chainConfigs.reduce((acc, config) => {
+    acc[config.chainId] = {
+      ids: [] as number[],
+      rewards: [] as number[],
+    };
+    return acc;
+  }, {} as Record<number, { ids: number[]; rewards: number[] }>);
+
+  // Distribute rewards to respective chains
+  for (const adSpace of adSpaces) {
+    const remainingReward = adSpace.reward - (adSpace.onchainReward || 0);
+    if (rewardsByChain[adSpace.chainId]) {
+      rewardsByChain[adSpace.chainId].ids.push(adSpace.id);
+      rewardsByChain[adSpace.chainId].rewards.push(remainingReward * 10 ** 18);
+    }
+  }
+
+  const rewards = [];
+  // Update rewards for each chain
+  for (let i = 0; i < chainConfigs.length; i++) {
+    const config = chainConfigs[i];
+    const chainData = rewardsByChain[config.chainId];
+    await chainHandlers[i].updateRewards(chainData.ids, chainData.rewards);
+
+    rewards.push(chainData);
+  }
+
+  // TODO: Write the incentive rewards to AVS
+  const message = `${JSON.stringify(rewards)}`; // Change this to agent specific message
 
   const messageHash = ethers.solidityPackedKeccak256(["string"], [message]);
   const messageBytes = ethers.getBytes(messageHash);
@@ -106,7 +154,7 @@ const signAndRespondToTask = async (
   );
 
   const tx = await warpAdsServiceManager.respondToTask(
-    { name: agentId, taskCreatedBlock: taskCreatedBlock },
+    { name: agentIds, taskCreatedBlock: taskCreatedBlock },
     taskIndex,
     signedTask
   );
@@ -180,7 +228,7 @@ const monitorNewTasks = async () => {
   warpAdsServiceManager.on(
     "NewTaskCreated",
     async (taskIndex: number, task: any) => {
-      console.log(`New task detected: Hello, ${task.name}`);
+      console.log(`New task detected: ${task.name}`);
       await signAndRespondToTask(taskIndex, task.taskCreatedBlock, task.name);
     }
   );

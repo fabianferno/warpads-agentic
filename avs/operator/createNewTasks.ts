@@ -1,8 +1,10 @@
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
+import "dotenv/config";
+import connectDB, { client } from "./db";
+
 const fs = require("fs");
 const path = require("path");
-import { AVSOperatorScript } from "./calculateIncentive.ts";
 dotenv.config();
 
 if (!process.env.MONGO_URI) {
@@ -43,10 +45,92 @@ const warpAdsServiceManager = new ethers.Contract(
   wallet
 );
 
-async function createNewTask(agentId: string) {
+async function createNewTasks() {
   try {
-    // Send a transaction to the createNewTask function
-    const tx = await warpAdsServiceManager.createNewTask(agentId);
+    await connectDB();
+    const db = client.db();
+
+    const validatingResponse = await db
+      .collection(`${process.env.NODE_ENV || "development"}_validatedLogs`)
+      .find({
+        verified: false,
+      })
+      .toArray();
+
+    console.log(`Found ${validatingResponse.length} unverified validations`);
+
+    for (const validation of validatingResponse) {
+      console.log(`Processing validation for taskId: ${validation.taskId}`);
+      let twitterRewards = 0;
+
+      // Calculate the twitter rewards
+      twitterRewards =
+        validation.analytics.views * 0.01 +
+        validation.analytics.likes * 0.01 +
+        validation.analytics.retweets * 0.01 +
+        validation.analytics.replies * 0.01;
+      console.log(`Calculated Twitter rewards: ${twitterRewards}`);
+
+      // get the adSpace
+      const adSpace = await db
+        .collection(`${process.env.NODE_ENV || "development"}_adSpaces`)
+        .findOne({
+          id: validation.adSpaceId,
+          chainId: validation.chainId,
+        });
+      console.log(`Found adSpace with id: ${validation.adSpaceId}`);
+
+      // Calculate the total rewards
+      const totalRewards = twitterRewards + adSpace?.reward;
+      console.log(`Calculated total rewards: ${totalRewards}`);
+
+      // Update the adSpace
+      await db
+        .collection(`${process.env.NODE_ENV || "development"}_adSpaces`)
+        .updateOne(
+          {
+            id: validation.adSpaceId,
+            chainId: validation.chainId,
+          },
+          {
+            $set: {
+              reward: totalRewards,
+            },
+          }
+        );
+      console.log(`Updated adSpace rewards for id: ${validation.adSpaceId}`);
+
+      // Mark the validation as verified
+      await db
+        .collection(`${process.env.NODE_ENV || "development"}_validatedLogs`)
+        .updateOne(
+          {
+            taskId: validation.taskId,
+          },
+          { $set: { verified: true } }
+        );
+      console.log(
+        `Marked validation as verified for taskId: ${validation.taskId}`
+      );
+    }
+    console.log("All validations have been verified");
+
+    const adSpaces = await db
+      .collection(`${process.env.NODE_ENV || "development"}_adSpaces`)
+      .find({
+        $expr: {
+          $and: [
+            { $gt: ["$reward", 0] },
+            { $lt: ["$onchainReward", "$reward"] },
+          ],
+        },
+      })
+      .toArray();
+
+    // TODO: Send a transaction to the createNewTask function
+    const tx = await warpAdsServiceManager.createNewTask(
+      JSON.stringify(adSpaces)
+    );
 
     // Wait for the transaction to be mined
     const receipt = await tx.wait();
@@ -59,9 +143,9 @@ async function createNewTask(agentId: string) {
 
 // Function to create a new task with a random name every 15 seconds
 function startCreatingTasks() {
-  setInterval(() => {
-    AVSOperatorScript();
-  }, 90 * 60 * 1000); // 90 minutes
+  console.log("Creating new tasks every 5 minutes");
+  // Push the validated logs to the onchain
+  createNewTasks();
 }
 
 // Start the process
