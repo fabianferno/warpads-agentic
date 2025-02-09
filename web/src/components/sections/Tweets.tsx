@@ -15,6 +15,13 @@ const items = [
         title: "A Tale of Two Cities",
     },
     {
+        image: "/assets/dis-in-marquee.webp",
+        quote:
+            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
+        name: "Charles Dickens",
+        title: "discord",
+    },
+    {
         image: "/assets/Tweet2.png",
         quote:
             "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
@@ -122,9 +129,9 @@ export const Tweets = ({
                                 <Image
                                     alt="Product screenshot"
                                     src={item.image}
-                                    width={2432}
-                                    height={1442}
-                                    className="p-3 w-[350px] max-w-full relative flex-shrink-0 mx-4 my-3 md:w-[550px] rounded-3xl shadow-2xl shadow-cyan-400"
+                                    width={1200}
+                                    height={675}
+                                    className="p-3 w-[350px] h-[200px] max-w-full relative flex-shrink-0 mx-4 my-3 md:w-[550px] md:h-[310px] rounded-3xl shadow-2xl shadow-cyan-400 object-cover"
                                     key={item.name}
                                 />
                             ))}
