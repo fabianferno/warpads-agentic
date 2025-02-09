@@ -10,7 +10,9 @@ import Image from "next/image";
 const navigation = [
     { name: "For Advertisers", href: "/campaign/create" },
     { name: "For Developers", href: "/agent/register" },
+    { name: "Docs", href: "/docs" },
 ];
+
 
 export default function NavSection() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

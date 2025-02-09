@@ -1,14 +1,14 @@
-# Hello World AVS
+# WarpAds AVS
 
-Welcome to the Hello World AVS. This project shows you the simplest functionality you can expect from an AVS. It will give you a concrete understanding of the basic components. For new users, please find [this video walkthrough](https://drive.google.com/file/d/1P6uA6kYWCbpeorTjADuoTlQ-q8uqwPZf/view?usp=sharing) of the hello world AVS repository.
+Welcome to the WarpAds AVS. This project shows you the simplest functionality you can expect from an AVS. It will give you a concrete understanding of the basic components. For new users, please find [this video walkthrough](https://drive.google.com/file/d/1P6uA6kYWCbpeorTjADuoTlQ-q8uqwPZf/view?usp=sharing) of the WarpAds AVS repository.
 
 ## Architecture
 
-![hello-world-png](./assets/hello-world-diagramv2.png)
+![warpads-png](./assets/hello-world-diagramv2.png)
 
 ### AVS User Flow
 
-1) AVS consumer requests a "Hello World" message to be generated and signed.
+1) AVS consumer requests a WarpAds message to be generated and signed.
 2) WarpAds contract receives the request and emits a NewTaskCreated event for the request.
 3) All Operators who are registered to the AVS and has staked, delegated assets takes this request. Operator generates the requested message, hashes it, and signs the hash with their private key.
 4) Each Operator submits their signed hash back to the WarpAds AVS contract.
@@ -35,7 +35,7 @@ Install dependencies:
 - [ethers](https://www.npmjs.com/package/ethers)
 
 ### Nix Environment 
-On [Nix](https://nixos.org/) platforms, if you already have the proper Nix configuration, you can build the project’s artifacts inside a `nix develop` shell
+On [Nix](https://nixos.org/) platforms, if you already have the proper Nix configuration, you can build the project's artifacts inside a `nix develop` shell
 ``` sh
 nix develop
 ```
@@ -120,7 +120,7 @@ In order to create and claim multiple payments (run the above two commands more 
 
 
 
-### Create Hello-World-AVS Tasks
+### Create WarpAds-AVS Tasks
 
 Open a separate terminal window #3, execute the following commands
 
@@ -136,7 +136,7 @@ For help and support deploying and modifying this repo for your AVS, please:
 1. Open a ticket via the intercom link at [support.eigenlayer.xyz](https://support.eigenlayer.xyz).
 2. Include the necessary troubleshooting information for your environment:
   * Local anvil testing:
-    * Redeploy your local test using `--revert-strings debug` flag via the following commands and retest: `npm run deploy:core-debug && npm run deploy:hello-world-debug`
+    * Redeploy your local test using `--revert-strings debug` flag via the following commands and retest: `npm run deploy:core-debug && npm run deploy:warpads-debug`
     * Include the full stacktrace from your error as a .txt file attachment.
     * Create a minimal repo that demonstrates the behavior (fork or otherwise)
     * Steps require to reproduce issue (compile and cause the error)
