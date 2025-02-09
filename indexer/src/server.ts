@@ -6,7 +6,7 @@ import { JsonRpcProvider } from "ethers";
 import { Contract } from "ethers";
 
 import { WarpAdsABI } from "./abi/WarpAds";
-import connectDB, { client } from "./config/db";
+import connectDB from "./config/db";
 import { env } from "./config/env";
 import { AdSpaceRegister } from "./utilities/EventHandlers/AdSpaceRegister";
 import { AdCampaignCreated } from "./utilities/EventHandlers/AdCampaignCreated";
@@ -68,17 +68,14 @@ connectWithRetry();
 
 const BASE_PROVIDER_URL = `https://base-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
 const ARBITRUM_PROVIDER_URL = `https://arb-sepolia.g.alchemy.com/v2/${env.ALCHEMY_API_KEY}`;
-const SEI_PROVIDER_URL = `https://evm-rpc-arctic-1.sei-apis.com`;
-const MODE_PROVIDER_URL = `https://sepolia.mode.network`;
-const BASE_CONTRACT_ADDRESS = "0x1ebd3946e37519b2b60809c0621f56212121dfc7";
-const ARBITRUM_CONTRACT_ADDRESS = "0x327083bdc79F84d3B54970f23bf3AD61802c2A12";
-const SEI_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
-const MODE_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
+const FLOW_PROVIDER_URL = `https://testnet.evm.nodes.onflow.org`;
 
+const BASE_CONTRACT_ADDRESS = "0xE13286840a109A412e67077eE70191740AAA4d18";
+const ARBITRUM_CONTRACT_ADDRESS = "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3";
+const FLOW_CONTRACT_ADDRESS = "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97";
 const BaseProvider = new JsonRpcProvider(BASE_PROVIDER_URL);
 const ArbitrumProvider = new JsonRpcProvider(ARBITRUM_PROVIDER_URL);
-const SeiProvider = new JsonRpcProvider(SEI_PROVIDER_URL);
-const ModeProvider = new JsonRpcProvider(MODE_PROVIDER_URL);
+const FlowProvider = new JsonRpcProvider(FLOW_PROVIDER_URL);
 const BaseContract = new Contract(
   BASE_CONTRACT_ADDRESS,
   WarpAdsABI,
@@ -89,11 +86,11 @@ const ArbitrumContract = new Contract(
   WarpAdsABI,
   ArbitrumProvider
 );
-const SeiContract = new Contract(SEI_CONTRACT_ADDRESS, WarpAdsABI, SeiProvider);
-const ModeContract = new Contract(
-  MODE_CONTRACT_ADDRESS,
+
+const FlowContract = new Contract(
+  FLOW_CONTRACT_ADDRESS,
   WarpAdsABI,
-  ModeProvider
+  FlowProvider
 );
 
 const contractListener = async () => {
@@ -200,7 +197,9 @@ const contractListener = async () => {
       }
     );
 
-    SeiContract.on(
+    // Listen for events on the Flow contract
+
+    FlowContract.on(
       "AdSpaceRegistered",
       async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
         console.log("AdSpace Registered:");
@@ -210,12 +209,12 @@ const contractListener = async () => {
         console.log("Warp Stake:", warpStake);
         console.log("Additional args:", args);
 
-        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 713715);
+        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 545);
         console.log("Listening for AdSpaceRegistered events...");
       }
     );
 
-    SeiContract.on(
+    FlowContract.on(
       "CampaignRegistered",
       async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
         console.log("AdCampaign Created:");
@@ -232,64 +231,13 @@ const contractListener = async () => {
           adContent,
           priorityStake,
           expiry,
-          713715
+          545
         );
         console.log("Listening for AdCampaignCreated events...");
       }
     );
 
-    SeiContract.on(
-      "RewardsClaimed",
-      async (adSpaceId, user, amount, ...args) => {
-        console.log("Rewards Claimed:");
-        console.log("Ad Space ID:", adSpaceId);
-        console.log("User:", user);
-        console.log("Amount:", amount);
-        console.log("Additional args:", args);
-        await RewardClaimed(adSpaceId, user, amount);
-      }
-    );
-
-    // Mode Listener
-    ModeContract.on(
-      "AdSpaceRegistered",
-      async (adSpaceId, owner, warpStake, metadataURI, ...args) => {
-        console.log("AdSpace Registered:");
-        console.log("ID:", adSpaceId);
-        console.log("Owner:", owner);
-        console.log("Metadata URI:", metadataURI);
-        console.log("Warp Stake:", warpStake);
-        console.log("Additional args:", args);
-
-        await AdSpaceRegister(adSpaceId, owner, metadataURI, warpStake, 919);
-        console.log("Listening for AdSpaceRegistered events...");
-      }
-    );
-
-    ModeContract.on(
-      "CampaignRegistered",
-      async (campaignId, owner, expiry, priorityStake, adContent, ...args) => {
-        console.log("AdCampaign Created:");
-        console.log("ID:", campaignId);
-        console.log("Owner:", owner);
-        console.log("Ad Content:", adContent);
-        console.log("Priority Stake:", priorityStake);
-        console.log("Expiry:", expiry);
-        console.log("Additional args:", args);
-
-        await AdCampaignCreated(
-          campaignId,
-          owner,
-          adContent,
-          priorityStake,
-          expiry,
-          919
-        );
-        console.log("Listening for AdCampaignCreated events...");
-      }
-    );
-
-    ModeContract.on(
+    FlowContract.on(
       "RewardsClaimed",
       async (adSpaceId, user, amount, ...args) => {
         console.log("Rewards Claimed:");
