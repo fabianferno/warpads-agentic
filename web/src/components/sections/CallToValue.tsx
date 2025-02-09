@@ -8,15 +8,17 @@ import { Highlight, themes } from "prism-react-renderer";
 
 const CodeBlock = ({ code }: { code: string }) => (
     <Highlight
-        theme={themes.vsDark}
+        theme={themes.nightOwl}
         code={code.trim()}
         language="typescript"
     >
+
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre
-                className={`${className} text-sm p-4 overflow-auto whitespace-pre`}
+                className={`${className} text-md p-4 h-full overflow-auto whitespace-pre`}
                 style={{ ...style, background: 'transparent', margin: 0 }}
             >
+
                 {tokens.map((line, i) => (
                     <div key={i} {...getLineProps({ line })}>
                         {line.map((token, key) => (
@@ -36,17 +38,16 @@ const plugins = [
         code: `
         import { warpAdsPlugin } from "@elizaos/plugin-warpads";
 
-        // Add WARPADS_AGENT_KEY to .env
-
-        return new AgentRunTime({
-            databaseAdapter: db,
-            token,
-            modelProvider: character.modelProvider,
-            evaluator: character.evaluator,
-            plugins: [
-                warpAdsPlugin
-            ],
-        })
+// Add WARPADS_AGENT_KEY to .env 
+return new AgentRunTime({
+    databaseAdapter: db,
+    token,
+    modelProvider: character.modelProvider,
+    evaluator: character.evaluator,
+    plugins: [
+        warpAdsPlugin
+    ],
+})
         `
     },
 
@@ -56,20 +57,19 @@ const plugins = [
         code: `
         const { WarpAdsToolkit } = require("@warpads-toolkit/langchain");
 
-        // Add WARPADS_AGENT_KEY to .env
+// Add WARPADS_AGENT_KEY to .env 
+const warpads = new WarpAdsToolkit({
+    apiKey: process.env.WARPADS_AGENT_KEY
+})
 
-        const warpads = new WarpAdsToolkit({
-            apiKey: process.env.WARPADS_AGENT_KEY
-        })
+const warpAdsTool = warpads.getTool();
+const agentTools = [warpAdsTool];
 
-        const warpAdsTool = warpads.getTool();
-        const agentTools = [warpAdsTool];
-
-        const agent = createReactAgent({
-            llm: agentModel,
-            tools: agentTools,
-            checkpointSaver: agentCheckpoint,
-        })   
+const agent = createReactAgent({
+    llm: agentModel,
+    tools: agentTools,
+    checkpointSaver: agentCheckpoint,
+})   
         `
     },
 ]
@@ -171,13 +171,14 @@ export default function CallToValue() {
                                 </Button>
                             ))}
                         </div>
-                        <div className="relative w-full h-[50vh]">
+                        <div className="w-full h-[50vh]">
                             {plugins.map((plugin, index) => (
                                 <motion.div
                                     key={plugin.name}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: activeTab === index ? 1 : 0 }}
                                     transition={{ duration: 0.5 }}
+
                                     style={{
                                         position: 'absolute',
                                         top: 0,
@@ -186,10 +187,11 @@ export default function CallToValue() {
                                         height: '100%',
                                         visibility: activeTab === index ? 'visible' : 'hidden'
                                     }}
-                                    className="text-left overflow-auto"
+                                    className="text-left overflow-auto h-full pt-10"
                                 >
                                     <CodeBlock code={plugin.code} />
                                 </motion.div>
+
                             ))}
                         </div>
                     </div>

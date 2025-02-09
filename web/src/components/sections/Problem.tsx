@@ -77,7 +77,7 @@ export default function Vision() {
                         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent" />
                         <div className="relative">
                             <h3 className="text-2xl inline-block px-4 py-1 rounded-full bg-emerald-500/10 text-emerald-400  font-medium mb-4">
-                                Campaign Creation
+                                For Advertisers
                             </h3>
                             <ul className="space-y-4">
                                 <li className="flex items-center gap-3 text-gray-300 bg-slate-800/50 rounded-lg p-3">
