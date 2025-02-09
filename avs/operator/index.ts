@@ -83,12 +83,10 @@ const avsDirectory = new ethers.Contract(
 const signAndRespondToTask = async (
   taskIndex: number,
   taskCreatedBlock: number,
-  taskName: string
+  agentId: number
 ) => {
-  const message = `Hello, ${taskName}`; // TODO: Change this to agentID
-
   // TODO: Calculate the incentive here
-  // const message = value of the calculated incentive
+  const message = await calculateIncentive(agentId);
 
   const messageHash = ethers.solidityPackedKeccak256(["string"], [message]);
   const messageBytes = ethers.getBytes(messageHash);
@@ -108,7 +106,7 @@ const signAndRespondToTask = async (
   );
 
   const tx = await warpAdsServiceManager.respondToTask(
-    { name: taskName, taskCreatedBlock: taskCreatedBlock },
+    { name: agentId, taskCreatedBlock: taskCreatedBlock },
     taskIndex,
     signedTask
   );
