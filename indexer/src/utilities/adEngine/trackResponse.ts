@@ -19,6 +19,7 @@ export const trackResponse = async (
 
   await db.collection(`${env.NODE_ENV}_responseLogs`).insertOne({
     id: adSpace.id,
+    chainId: adSpace.chainId,
     apiKey,
     platform: response.platform,
     platformId: response.id,
