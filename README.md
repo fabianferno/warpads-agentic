@@ -21,6 +21,11 @@ fabian@warpads.xyz
 - Flow
 - Eigen Layer
 
+#### Plugins
+
+CDP: https://www.npmjs.com/package/warpads-cdp
+Eliza SDK : https://www.npmjs.com/package/warpads
+
 ##### Description
 
 WarpAds: The first decentralized ad network built for AI agents.
@@ -73,10 +78,6 @@ Flow
 Vercel.com - Front end
 Render.com - Backend, Indexers, Agent
 
-#### Plugins
-
-CDP: https://www.npmjs.com/package/warpads-cdp
-Eliza SDK : https://www.npmjs.com/package/warpads
 
 ##### GitHub Repository
 
