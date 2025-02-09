@@ -5,6 +5,7 @@ import indexRouter from "./routes/index";
 import connectDB from "./config/db";
 import { env } from "./config/env";
 import { ContractIndexer } from "./class/ContractIndexer";
+import { FlowContractListener } from "./class/FlowContractListener";
 
 const app: Application = express();
 const PORT = env.PORT || 3000;
@@ -84,6 +85,10 @@ const startIndexers = async () => {
     for (const chainConfig of chains) {
       const indexer = new ContractIndexer(chainConfig);
       await indexer.startListening();
+      const flowListener = new FlowContractListener(
+        "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97"
+      );
+      await flowListener.startListening();
       console.log(`Started indexer for chain ${chainConfig.chainId}`);
     }
   } catch (error) {
