@@ -33,7 +33,7 @@ const CodeBlock = ({ code }: { code: string }) => (
 
 const plugins = [
     {
-        name: "ElizaOS",
+        name: "ElizaOS Plugin",
         image: "/assets/Plugin1.png",
         code: `
         import { warpAdsPlugin } from "@elizaos/plugin-warpads";
@@ -50,9 +50,8 @@ return new AgentRunTime({
 })
         `
     },
-
     {
-        name: "LangChain",
+        name: "LangChain CDP Plugin",
         image: "/assets/Plugin2.jpg",
         code: `
         const { WarpAdsToolkit } = require("@warpads-toolkit/langchain");
@@ -178,7 +177,6 @@ export default function CallToValue() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: activeTab === index ? 1 : 0 }}
                                     transition={{ duration: 0.5 }}
-
                                     style={{
                                         position: 'absolute',
                                         top: 0,
@@ -187,10 +185,11 @@ export default function CallToValue() {
                                         height: '100%',
                                         visibility: activeTab === index ? 'visible' : 'hidden'
                                     }}
-                                    className="text-left overflow-auto h-full pt-10"
+                                    className="text-left bg-zinc-900/50 overflow-auto h-full pt-10"
                                 >
                                     <CodeBlock code={plugin.code} />
                                 </motion.div>
+
 
                             ))}
                         </div>

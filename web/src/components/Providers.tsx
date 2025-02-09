@@ -14,7 +14,6 @@ import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { initMixpanel } from "../lib/mixpanelClient";
 
 const queryClient = new QueryClient();
@@ -26,8 +25,6 @@ export const config = createConfig({
     [baseSepolia.id]: http(),
     [arbitrumSepolia.id]: http(),
     [flowTestnet.id]: http(),
-
-
   },
 });
 

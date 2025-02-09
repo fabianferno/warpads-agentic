@@ -35,7 +35,7 @@ const timelineData = [
     },
     {
         phase: "Pivot",
-        title: "WarpAds (Agentic)",
+        title: "WarpAds (Agentic) - participating in the Ethglobal Agentic Hackathon",
         date: "Q1 2025",
         status: "In Progress",
         icon: Rocket,
@@ -43,8 +43,8 @@ const timelineData = [
         content: {
             description: "Pivoting to a new vision of AI-powered influencers, WarpAds (Agentic) is a new protocol that allows users to allow agent devs to monetize their AI agents and earn WADS tokens",
             achievements: [
+                "Completely rebuild the WarpAds protocol for agentic/LLM apps",
                 "Build an ad engine for agentic/LLM apps",
-                "Participate in the Ethglobal Agentic Hackathon",
                 "Develop SDKs and plugins",
                 "Incentivized testnet version for agents",
                 "Eigen layer AVS enabled incentive validation",
@@ -166,7 +166,8 @@ const Timeline = () => {
                             <div className="flex-1">
                                 <motion.div
                                     whileHover={{ translateY: -5 }}
-                                    className={`flex flex-col rounded-2xl bg-gradient-to-br ${item.gradient} p-8 ring-1 ring-white/10 transition-all duration-300 hover:ring-2 hover:ring-cyan-500/50`}
+                                    className={`flex flex-col rounded-2xl bg-gradient-to-br ${item.gradient} p-8 ring-1 ring-white/10 transition-all duration-300 hover:ring-2 hover:ring-cyan-500/50 ${item.phase === "Pivot" ? "ring-cyan-500/50 animate-pulse [animation-duration:2s]" : ""
+                                        }`}
                                 >
                                     <div className="flex items-center justify-between mb-4">
                                         <div>

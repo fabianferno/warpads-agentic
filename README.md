@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/86833bb7-2433-4ac0-a266-a0ef799ca982)
 
-# WarpAds CookieDAO Application
+# WarpAds (Agentic Ad Network)
 
 ##### Project Name
 
