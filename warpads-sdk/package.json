@@ -1,12 +1,21 @@
 {
 	"name": "warpads",
 	"version": "0.0.3",
+	"type": "module",
 	"scripts": {
 		"build": "tsc",
 		"prepare": "npm run build"
 	},
 	"main": "./dist/index.js",
+	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"files": [
 		"dist"
 	],
