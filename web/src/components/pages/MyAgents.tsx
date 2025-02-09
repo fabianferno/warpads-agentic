@@ -48,9 +48,7 @@ export default function MyAgents() {
     const fetchAgents = async () => {
       try {
         setIsLoading(true);
-        const API_BASE_URL =
-          process.env.NEXT_PUBLIC_API_BASE_URL ||
-          "https://warpads-cookie-hack.onrender.com";
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
         const response = await axios.get(`${API_BASE_URL}/get-my-agents`, {
           params: { address: address },
         });
