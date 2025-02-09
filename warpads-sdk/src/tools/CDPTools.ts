@@ -2,12 +2,12 @@ import {
   GET_AD_PROMPT_INPUT,
   GET_AD_PROMPT,
   createWarpAdsTool,
-} from "./WarpAdsTool";
+} from "./WarpAdsTool.js";
 import {
   TRACK_AD_PROMPT,
   TRACK_AD_PROMPT_INPUT,
   createAdTrackerTool,
-} from "./AdTrackerTool";
+} from "./AdTrackerTool.js";
 
 export function createCDPTools(apiKey: string) {
   return {

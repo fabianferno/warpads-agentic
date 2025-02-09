@@ -1,7 +1,7 @@
 import { Plugin, Evaluator, IAgentRuntime, Memory, State } from "@elizaos/core";
 
-import { getResponseWithAdAction } from "./actions/getResponseWithAd";
-import { callbackResponseAction } from "./actions/callbackResponse";
+import { getResponseWithAdAction } from "./actions/getResponseWithAd.js";
+import { callbackResponseAction } from "./actions/callbackResponse.js";
 
 export const adsPlugin: Plugin = {
   name: "Warpads",
