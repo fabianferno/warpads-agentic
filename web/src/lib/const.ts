@@ -1,9 +1,4 @@
-import {
-  baseSepolia,
-  arbitrumSepolia,
-  modeTestnet,
-  seiDevnet,
-} from "viem/chains";
+import { baseSepolia, arbitrumSepolia, flowTestnet } from "viem/chains";
 
 export const contractsConfig: {
   [key: number]: {
@@ -40,6 +35,6 @@ export const contractsConfig: {
     adcampaignAddress: "0xce0f39abbF9e8d42F9c64fF5EC7bfbb919bedE8E",
     warpadsAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97",
     warpTokenDecimals: 18,
-    blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
+    blockExplorerUrl: flowTestnet.blockExplorers.default.url,
   },
 };

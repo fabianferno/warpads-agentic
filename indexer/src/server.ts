@@ -70,11 +70,12 @@ const chains = [
     contractAddress: "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3",
     chainId: 421614,
   },
-  {
-    providerUrl: `https://testnet.evm.nodes.onflow.org`,
-    contractAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97",
-    chainId: 545,
-  },
+  // TODO: Make a poll
+  // {
+  //   providerUrl: `https://testnet.evm.nodes.onflow.org`,
+  //   contractAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97",
+  //   chainId: 545,
+  // },
 ];
 
 // Start listening to events on all chains

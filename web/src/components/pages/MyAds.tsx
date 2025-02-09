@@ -21,8 +21,6 @@ export default function MyAds() {
   const [isLoading, setIsLoading] = useState(true);
   const ref = useRef(null);
   const { address } = useAccount();
-  const chainId = useChainId();
-  const { writeContract, isPending: isClaimPending } = useWriteContract();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

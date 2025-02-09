@@ -122,28 +122,28 @@ export default function DocsPage() {
                                     <div>
                                         <h4 className="text-lg font-semibold text-white mb-2">Base Sepolia</h4>
                                         <div className="space-y-1 text-slate-300">
-                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0x93316EbF65Bd209b3832a6d383d53905A97f9D90</p>
-                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB</p>
-                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0x0DAbc440052ED94FfE69de2D704b1F151bF12c16</p>
-                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78</p>
+                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0x14F729862e63c4B4b9a1c6115Db90B6022de80B9</p>
+                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0x3817f9e86E537BCf61e36663BA725e5D573d50bF</p>
+                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0x8d6Cb187e6933b06807d5Db58e93c7A3fcB725c0</p>
+                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0xE13286840a109A412e67077eE70191740AAA4d18</p>
                                         </div>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-semibold text-white mb-2">Arbitrum Sepolia</h4>
                                         <div className="space-y-1 text-slate-300">
-                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0x923f68e4a026b4c9ead5b43dffc468c3bc52c045</p>
-                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0xf413442cd94dc9fec516613bf0f24bac4d57ddc5</p>
-                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0xa4134c57c8a3a1c1710cfaafed9dda063b534b92</p>
-                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad</p>
+                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0xAA0122575750fc7437D0de827329637A322bfee1</p>
+                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0x9fd03E8B51c7559d4B3Cc633609dB264FBE16825</p>
+                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0xe779738E801Bfd80B33Ce41c0c2b651EBe6A7109</p>
+                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3</p>
                                         </div>
                                     </div>
                                     <div>
                                         <h4 className="text-lg font-semibold text-white mb-2">Flow Testnet</h4>
                                         <div className="space-y-1 text-slate-300">
-                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0x923f68e4a026b4c9ead5b43dffc468c3bc52c045</p>
-                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0xf413442cd94dc9fec516613bf0f24bac4d57ddc5</p>
-                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0xa4134c57c8a3a1c1710cfaafed9dda063b534b92</p>
-                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0x070c0b63abc6604f84e062e1c648b85a5ae4a4ad</p>
+                                            <p><span className="text-cyan-400">warpTokenAddress:</span> 0x4Bac3740e3980731f041983B61C075a2D316e78A</p>
+                                            <p><span className="text-cyan-400">adspaceAddress:</span> 0x4Cbb5045BC463ac91D2dDD24AF4639F1D98f32Ef</p>
+                                            <p><span className="text-cyan-400">adcampaignAddress:</span> 0xce0f39abbF9e8d42F9c64fF5EC7bfbb919bedE8E</p>
+                                            <p><span className="text-cyan-400">warpadsAddress:</span> 0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97</p>
                                         </div>
                                     </div>
                                 </div>
