@@ -45,8 +45,8 @@ importers:
         specifier: ^4.21.2
         version: 4.21.2
       warpads-cdp:
-        specifier: ^0.0.2
-        version: 0.0.2(openai@4.83.0(ws@8.18.0)(zod@3.24.1))
+        specifier: ^0.0.3
+        version: 0.0.3(openai@4.83.0(ws@8.18.0)(zod@3.24.1))
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -1033,8 +1033,8 @@ packages:
       typescript:
         optional: true
 
-  warpads-cdp@0.0.2:
-    resolution: {integrity: sha512-RCN8lQIbuhrunOE1nTNQCUji0n3jzkcaKJKaAMMUgLCjD/vINsnQ8SgODNsQmOy5oiTqA77+aIUerGvkoS7Eqg==}
+  warpads-cdp@0.0.3:
+    resolution: {integrity: sha512-S4o2WuIoq6x+9JeYX91X/L6jlyuJwhiA1hhFpc+WeyfcaDKfi+IHeYvAX00Kdp7/M2yoMt7Wk9spWfhUDChXJA==}
 
   web-streams-polyfill@4.0.0-beta.3:
     resolution: {integrity: sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==}
@@ -2151,7 +2151,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  warpads-cdp@0.0.2(openai@4.83.0(ws@8.18.0)(zod@3.24.1)):
+  warpads-cdp@0.0.3(openai@4.83.0(ws@8.18.0)(zod@3.24.1)):
     dependencies:
       '@langchain/core': 0.3.39(openai@4.83.0(ws@8.18.0)(zod@3.24.1))
       '@langchain/langgraph': 0.2.45(@langchain/core@0.3.39(openai@4.83.0(ws@8.18.0)(zod@3.24.1)))
