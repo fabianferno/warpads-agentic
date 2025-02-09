@@ -6,8 +6,6 @@ import {
   IAgentRuntime,
   Memory,
   State,
-  ModelClass,
-  generateText,
 } from "@elizaos/core";
 import { createAdService } from "../services";
 import { getAdResponseExamples } from "../examples";

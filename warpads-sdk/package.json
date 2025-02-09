@@ -1,6 +1,6 @@
 {
 	"name": "warpads",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"scripts": {
 		"build": "tsc",
 		"prepare": "npm run build"
@@ -10,13 +10,6 @@
 	"files": [
 		"dist"
 	],
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
-		}
-		
-	},
 	"dependencies": {
 		"@elizaos/core": "0.25.6-alpha.1",
 		"@langchain/core": "^0.3.37",
