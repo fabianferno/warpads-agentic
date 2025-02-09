@@ -55,7 +55,7 @@ export const AdCampaignCreated = async (
     id: id,
     owner: owner,
     metadata: metadataJson.data,
-    priorityStake: Number(priorityStake) / 10 ** 18,
+    priorityStake: Number(BigInt(priorityStake) / BigInt(10 ** 18)),
     expiry: expiry,
     active: true,
     chainId: chainId,
