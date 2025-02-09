@@ -13,7 +13,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Upload, Loader2, ExternalLink } from "lucide-react";
-import { useAccount, useChainId, useWriteContract, useWatchContractEvent } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useWriteContract,
+  useWatchContractEvent,
+} from "wagmi";
 import Image from "next/image";
 import { contractsConfig } from "@/lib/const";
 import { WarpadsABI } from "@/lib/abi/Warpads";
@@ -36,7 +41,12 @@ export default function AdCampaignForm() {
   const { address } = useAccount();
   const [pinata, setPinata] = useState<PinataSDK | null>(null);
   const chainId = useChainId();
-  const { writeContract, isPending: isSubmitting, error: submitError } = useWriteContract();
+  const {
+    writeContract,
+    isPending: isSubmitting,
+    error: submitError,
+  } = useWriteContract();
+  const [isUploading, setIsUploading] = useState(false);
 
   const clearForm = () => {
     setCategories([]);
@@ -73,7 +83,10 @@ export default function AdCampaignForm() {
   useEffect(() => {
     if (submitError) {
       console.error(submitError);
-      toast.error(submitError?.message || "Failed to process transaction. Please try again.");
+      toast.error(
+        submitError?.message ||
+          "Failed to process transaction. Please try again."
+      );
     }
   }, [submitError]);
 
@@ -81,7 +94,7 @@ export default function AdCampaignForm() {
   useWatchContractEvent({
     address: contractsConfig[chainId]?.warpadsAddress,
     abi: WarpadsABI,
-    eventName: 'CampaignRegistered',
+    eventName: "CampaignRegistered",
     onLogs(logs) {
       const event = logs[0];
       if (event && event.transactionHash) {
@@ -127,7 +140,7 @@ export default function AdCampaignForm() {
     e.preventDefault();
     e.stopPropagation();
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -144,6 +157,7 @@ export default function AdCampaignForm() {
 
   const uploadImageToPinata = async () => {
     try {
+      setIsUploading(true);
       if (!imageFile || !pinata) {
         throw new Error("No image file selected or Pinata not initialized");
       }
@@ -154,6 +168,8 @@ export default function AdCampaignForm() {
       console.error("Error uploading image to Pinata: ", error);
       toast.error("Failed to upload image");
       throw error;
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -253,7 +269,6 @@ export default function AdCampaignForm() {
                 </p>
               </div>
 
-
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
@@ -298,7 +313,10 @@ export default function AdCampaignForm() {
 
                 <div className="space-y-2">
                   <Label htmlFor="categories" className="text-white">
-                    Categories <span className="text-xs text-slate-400">(Press Enter to add)</span>
+                    Categories{" "}
+                    <span className="text-xs text-slate-400">
+                      (Press Enter to add)
+                    </span>
                   </Label>
                   <Input
                     id="categories"
@@ -352,7 +370,6 @@ export default function AdCampaignForm() {
                           variant={"outline"}
                           className="text-sm w-full bg-slate-800/40 border-slate-700/50 text-white hover:bg-slate-700/50 ring-1 ring-slate-700/50"
                         >
-
                           {deadline
                             ? deadline.toLocaleDateString()
                             : "Select end date"}
@@ -405,7 +422,9 @@ export default function AdCampaignForm() {
                         <div className="h-full flex flex-col items-center justify-center text-slate-400 p-4 text-center">
                           <Upload className="w-8 h-8 mb-2" />
                           <p>Drop your image here or click to upload</p>
-                          <p className="text-sm mt-2">Recommended size: 1200x630px</p>
+                          <p className="text-sm mt-2">
+                            Recommended size: 1200x630px
+                          </p>
                         </div>
                       )}
                       <Input
@@ -421,10 +440,15 @@ export default function AdCampaignForm() {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isUploading}
                   className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white h-12 text-lg font-semibold transition-all duration-300"
                 >
-                  {isSubmitting ? (
+                  {isUploading ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Uploading to IPFS...
+                    </div>
+                  ) : isSubmitting ? (
                     <div className="flex items-center justify-center">
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                       Confirm in Wallet...

@@ -16,11 +16,10 @@ fabian@warpads.xyz
 
 ##### Tracks that you're submitting for
 
-- Cookie.fun track
-- Dedicated chain tracks
-  - Arbitrum Track
-  - Mode Track
-  - SEI Track
+- Autonome
+- Base
+- Flow
+- Eigen Layer
 
 ##### Description
 
@@ -46,36 +45,28 @@ Key Functionalities:
   1.  Operators help with validating and incentive calculations by using LLM computer use APIs to check with the tweets and the agent's influence.
   2.  Additionally we're working on wrapping this service over an Actively Validation Service with the Eigen Layer.
 
-##### How does your project utilize Cookie DataSwarm API
+##### Contract Address
 
-WarpAds uses the Cookie DataSwarm API to robustly calculate a “fame multiplier” based on average impressions and engagement counts. This multiplier helps determine reward distributions for ad context providers—mirroring how more influential figures earn higher revenues.
+Base
 
-##### How is your project on the Web3 x AI intersection?
+- warpTokenAddress: "0x14F729862e63c4B4b9a1c6115Db90B6022de80B9"
+- adspaceAddress: "0x3817f9e86E537BCf61e36663BA725e5D573d50bF"
+- adcampaignAddress: "0x8d6Cb187e6933b06807d5Db58e93c7A3fcB725c0"
+- warpadsAddress: "0xE13286840a109A412e67077eE70191740AAA4d18"
 
-WarpAds is positioned to become the defacto ad protocol for AI agents, enabling a paradigm shift in user experiences (agentic UX). By leveraging scalable and fast blockchain networks like Arbitrum, Mode, and Sei, WarpAds ensures a transparent, decentralized, and ethically driven ad ecosystem.
+Arbitrum
 
-##### Contract Address (if Applicable)
-
-Sei Devnet
-
-- warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90"
-- adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB"
-- adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16"
-- warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
-
-Arbitrum Sepolia
-
-- warpTokenAddress: "0xFCED24D3CD405DCdC62265846F51328a67142Af3"
-- adspaceAddress: "0x8B386Edef0750FFFA8d15e514992E919e21dc828"
-- adcampaignAddress: "0xb830f7702a262AbDcaDA58fc760a9D313587aF30"
+- warpTokenAddress: "0xAA0122575750fc7437D0de827329637A322bfee1"
+- adspaceAddress: "0x9fd03E8B51c7559d4B3Cc633609dB264FBE16825"
+- adcampaignAddress: "0xe779738E801Bfd80B33Ce41c0c2b651EBe6A7109"
 - warpadsAddress: "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3"
 
-Mode Testnet
+Flow
 
-- warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90"
-- adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB"
-- adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16"
-- warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
+- warpTokenAddress: "0x4Bac3740e3980731f041983B61C075a2D316e78A"
+- adspaceAddress: "0x4Cbb5045BC463ac91D2dDD24AF4639F1D98f32Ef"
+- adcampaignAddress: "0xce0f39abbF9e8d42F9c64fF5EC7bfbb919bedE8E"
+- warpadsAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97"
 
 ##### Deployed on (if application)
 
@@ -84,20 +75,12 @@ Render.com - Backend, Indexers, Agent
 
 ##### GitHub Repository
 
-https://github.com/fabianferno/warpads-cookie-hack
+https://github.com/LeoFranklin015/warpads-agentic-hack
 
 ##### Live deployment / Access instructions
 
-https://warpads-cookies.vercel.app/
+https://warpads.xyz/
 
 ##### Technical Documentation
 
-https://warpads-cookies.vercel.app/docs
-
-##### Do you plan on developing this project after the hackathon
-
-Yes, we have plans to apply for grants and continue working on this project and try to get more agents to use the platform.
-
-##### Anything else we should know
-
-We are also going to be submitting the project at EthGlobal Agentic Hackathon since both the timelines coincide and all the source code was developed within the timelines and are following the guidelines of the hackathon. We believe this will not be a problem but if it going to be a problem, please let us know so that we won't apply with this project anywhere else.
+https://warpads.xyz/docs
