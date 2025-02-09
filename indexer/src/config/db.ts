@@ -26,10 +26,31 @@ async function connectDB(): Promise<MongoClient> {
     });
 
     await client.connect();
+
     console.log("✅ MongoDB connection established");
 
     await client.db().command({ ping: 1 });
     console.log("Successfully connected to MongoDB.");
+
+    // Check if vector search index exists
+    const indexes = await client
+      .db()
+      .collection(`${env.NODE_ENV}_adCampaigns`)
+      .listSearchIndexes()
+      .toArray();
+
+    const vectorIndexExists = indexes.some(
+      (index) => index.name === "ad_vector_index"
+    );
+
+    if (!vectorIndexExists) {
+      console.warn(
+        "⚠️ Vector search index 'ad_vector_index' is missing. Create it in MongoDB Atlas."
+      );
+      //TODO: Create vector search index
+    } else {
+      console.log("✅ Vector search index found.");
+    }
 
     process.on("SIGINT", async () => {
       if (client) {

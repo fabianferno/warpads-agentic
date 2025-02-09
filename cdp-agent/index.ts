@@ -14,7 +14,7 @@ import cors from "cors";
 // Tool
 import { CdpTool } from "@coinbase/cdp-langchain";
 import { TwitterToolkit } from "@coinbase/twitter-langchain";
-import { Warpads } from "warpads-langgraph-plugin";
+import { Warpads } from "warpads";
 import {
   CACHE_PROMPT,
   CACHE_PROMPT_INPUT,

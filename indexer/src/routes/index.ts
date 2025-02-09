@@ -20,6 +20,10 @@ router.get("/", (req: Request, res: Response) => {
 router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   const { query } = req.body;
   const ad = await adEngine(query);
+  if (ad === "No ad found") {
+    res.status(404).send("No ad found");
+    return;
+  }
   await trackUsage(req.headers["x-api-key"] as string, ad.id, ad.chainId);
   if (ad?.ad.includes("No ad found")) {
     res.status(404).send("No ad found");

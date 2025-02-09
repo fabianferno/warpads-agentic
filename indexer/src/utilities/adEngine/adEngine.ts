@@ -55,6 +55,8 @@ The Output should be in the following format:
   "id": "string"
 }
 
+
+
 `,
     },
     {
@@ -91,12 +93,13 @@ The Output should be in the following format:
 
   const ad = data.choices[0].message.content.trim();
 
-  const adData = JSON.parse(ad);
-
   // Check if the OpenAI response indicates that no ad was found
-  if (adData.ad.includes("No ad found")) {
+  if (ad.includes("No ad found")) {
     return "No ad found";
   }
+
+  const adData = JSON.parse(ad);
+
   return adData;
 };
 
