@@ -14,7 +14,7 @@ import cors from "cors";
 // Tool
 import { CdpTool } from "@coinbase/cdp-langchain";
 import { TwitterToolkit } from "@coinbase/twitter-langchain";
-import { Warpads } from "warpads";
+import { Warpads } from "warpads-cdp";
 import {
   CACHE_PROMPT,
   CACHE_PROMPT_INPUT,
@@ -242,11 +242,13 @@ function createServer(agent: any, config: any) {
             type: "agent",
             content: chunk.agent.messages[0].content,
           });
+          console.log(chunk.agent.messages[0].content);
         } else if ("tools" in chunk) {
           responses.push({
             type: "tools",
             content: chunk.tools.messages[0].content,
           });
+          console.log(chunk.agent.messages[0].content);
         }
       }
 
