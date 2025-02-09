@@ -14,7 +14,7 @@ export const getAllAdCampaigns = async (owner: string) => {
         },
         {
           $lookup: {
-            from: "requestLogs",
+            from: `${env.NODE_ENV}_requestLogs`,
             localField: "id",
             foreignField: "adId",
             as: "insights",

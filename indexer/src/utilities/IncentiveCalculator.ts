@@ -10,7 +10,7 @@ export const calculateIncentive = async () => {
     .aggregate([
       {
         $lookup: {
-          from: "validatedLogs",
+          from: `${env.NODE_ENV}_validatedLogs`,
           localField: "_id",
           foreignField: "refResponseID",
           as: "found",
