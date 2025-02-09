@@ -85,7 +85,7 @@ export default function AdCampaignForm() {
       console.error(submitError);
       toast.error(
         submitError?.message ||
-          "Failed to process transaction. Please try again."
+        "Failed to process transaction. Please try again."
       );
     }
   }, [submitError]);
@@ -441,7 +441,7 @@ export default function AdCampaignForm() {
                 <Button
                   type="submit"
                   disabled={isSubmitting || isUploading}
-                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white h-12 text-lg font-semibold transition-all duration-300"
+                  className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 hover:text-white h-12 text-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isUploading ? (
                     <div className="flex items-center justify-center">
