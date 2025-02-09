@@ -68,7 +68,7 @@ Arbitrum Sepolia
 - warpTokenAddress: "0xFCED24D3CD405DCdC62265846F51328a67142Af3"
 - adspaceAddress: "0x8B386Edef0750FFFA8d15e514992E919e21dc828"
 - adcampaignAddress: "0xb830f7702a262AbDcaDA58fc760a9D313587aF30"
-- warpadsAddress: "0x327083bdc79F84d3B54970f23bf3AD61802c2A12"
+- warpadsAddress: "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3"
 
 Mode Testnet
 

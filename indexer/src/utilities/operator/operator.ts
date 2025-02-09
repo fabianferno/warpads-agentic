@@ -2,12 +2,7 @@ import { createWalletClient, http } from "viem";
 import { client } from "../../config/db";
 import { env } from "../../config/env";
 import { privateKeyToAccount } from "viem/accounts";
-import {
-  baseSepolia,
-  arbitrumSepolia,
-  seiDevnet,
-  modeTestnet,
-} from "viem/chains";
+import { baseSepolia, arbitrumSepolia, flowTestnet } from "viem/chains";
 import { WarpAdsABI } from "../../abi/WarpAds";
 import connectDB from "../../config/db";
 
@@ -17,11 +12,10 @@ export const operator = async () => {
   await connectDB();
   const db = client.db();
 
-  const BASE_CONTRACT_ADDRESS = "0x1ebd3946e37519b2b60809c0621f56212121dfc7";
+  const BASE_CONTRACT_ADDRESS = "0xE13286840a109A412e67077eE70191740AAA4d18";
   const ARBITRUM_CONTRACT_ADDRESS =
-    "0x00fF72F211f714CaF9C3E7C68f03E706f9AbD3d2";
-  const SEI_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
-  const MODE_CONTRACT_ADDRESS = "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78";
+    "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3";
+  const FLOW_CONTRACT_ADDRESS = "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97";
 
   // Create a client for the onchain
   const baseSepoliaWalletClient = createWalletClient({
@@ -37,16 +31,9 @@ export const operator = async () => {
     transport: http(),
   });
 
-  // Sei Devnet
-  const seiDevnetWalletClient = createWalletClient({
-    chain: seiDevnet,
-    account: privateKeyToAccount(env.OPERATOR_PRIVATE_KEY as `0x${string}`),
-    transport: http(),
-  });
-
-  // Mode testnet
-  const modeTestnetWalletClient = createWalletClient({
-    chain: modeTestnet,
+  // Flow Testnet
+  const flowTestnetWalletClient = createWalletClient({
+    chain: flowTestnet,
     account: privateKeyToAccount(env.OPERATOR_PRIVATE_KEY as `0x${string}`),
     transport: http(),
   });
@@ -72,11 +59,7 @@ export const operator = async () => {
       ids: [] as number[],
       rewards: [] as number[],
     },
-    seiDevnet: {
-      ids: [] as number[],
-      rewards: [] as number[],
-    },
-    modeTestnet: {
+    flowTestnet: {
       ids: [] as number[],
       rewards: [] as number[],
     },
@@ -93,12 +76,9 @@ export const operator = async () => {
     } else if (adSpace.chainId === 421614) {
       rewardsByChain.arbitrumSepolia.ids.push(adSpace.id);
       rewardsByChain.arbitrumSepolia.rewards.push(remainingReward * 10 ** 18);
-    } else if (adSpace.chainId === 713715) {
-      rewardsByChain.seiDevnet.ids.push(adSpace.id);
-      rewardsByChain.seiDevnet.rewards.push(remainingReward * 10 ** 18);
-    } else if (adSpace.chainId === 919) {
-      rewardsByChain.modeTestnet.ids.push(adSpace.id);
-      rewardsByChain.modeTestnet.rewards.push(remainingReward * 10 ** 18);
+    } else if (adSpace.chainId === 545) {
+      rewardsByChain.flowTestnet.ids.push(adSpace.id);
+      rewardsByChain.flowTestnet.rewards.push(remainingReward * 10 ** 18);
     }
   }
 
@@ -156,49 +136,28 @@ export const operator = async () => {
     console.log("Arbitrum Sepolia Rewards Updated");
   }
 
-  if (rewardsByChain.seiDevnet.ids.length > 0) {
-    await seiDevnetWalletClient.writeContract({
-      address: SEI_CONTRACT_ADDRESS,
-      abi: WarpAdsABI,
-      functionName: "setBatchClaimableRewards",
-      args: [rewardsByChain.seiDevnet.ids, rewardsByChain.seiDevnet.rewards],
-    });
-
-    for (let i = 0; i < rewardsByChain.seiDevnet.ids.length; i++) {
-      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-        { id: rewardsByChain.seiDevnet.ids[i] },
-        {
-          $set: {
-            onchainReward: rewardsByChain.seiDevnet.rewards[i] / 10 ** 18,
-          },
-        }
-      );
-    }
-
-    console.log("Sei Devnet Rewards Updated");
-  }
-
-  if (rewardsByChain.modeTestnet.ids.length > 0) {
-    await modeTestnetWalletClient.writeContract({
-      address: MODE_CONTRACT_ADDRESS,
+  if (rewardsByChain.flowTestnet.ids.length > 0) {
+    await flowTestnetWalletClient.writeContract({
+      address: FLOW_CONTRACT_ADDRESS,
       abi: WarpAdsABI,
       functionName: "setBatchClaimableRewards",
       args: [
-        rewardsByChain.modeTestnet.ids,
-        rewardsByChain.modeTestnet.rewards,
+        rewardsByChain.flowTestnet.ids,
+        rewardsByChain.flowTestnet.rewards,
       ],
     });
 
-    for (let i = 0; i < rewardsByChain.modeTestnet.ids.length; i++) {
+    for (let i = 0; i < rewardsByChain.flowTestnet.ids.length; i++) {
       await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-        { id: rewardsByChain.modeTestnet.ids[i] },
+        { id: rewardsByChain.flowTestnet.ids[i] },
         {
           $set: {
-            onchainReward: rewardsByChain.modeTestnet.rewards[i] / 10 ** 18,
+            onchainReward: rewardsByChain.flowTestnet.rewards[i] / 10 ** 18,
           },
         }
       );
     }
-    console.log("Mode Testnet Rewards Updated");
+
+    console.log("Flow Testnet Rewards Updated");
   }
 };
