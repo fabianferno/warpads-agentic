@@ -1,39 +1,49 @@
 {
-	"name": "warpads",
-	"version": "0.0.4",
-	"type": "module",
-	"scripts": {
-		"build": "tsc",
-		"prepare": "npm run build"
-	},
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		}
-	},
-	"files": [
-		"dist"
-	],
-	"dependencies": {
-		"@elizaos/core": "0.25.6-alpha.1",
-		"@langchain/core": "^0.3.37",
-		"@langchain/langgraph": "^0.2.44",
-		"axios": "^1.7.9",
-		"core": "link:@types/@elizaos/core",
-		"dotenv": "^16.4.7",
-		"zod": "^3.24.1"
-	},
-	"devDependencies": {
-		"@types/axios": "^0.14.4",
-		"@types/node": "^22.13.0",
-		"@vitest/coverage-v8": "^3.0.5",
-		"happy-dom": "^16.8.1",
-		"typescript": "^5.7.3",
-		"vitest": "^3.0.5"
-	}
+    "name": "warpads",
+    "version": "0.0.5",
+    "type": "module",
+    "scripts": {
+        "build": "rm -rf dist && tsc",
+        "prepare": "npm run build"
+    },
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.js"
+        },
+        "./core/*": {
+            "types": "./dist/core/*.d.ts",
+            "import": "./dist/core/*.js",
+            "require": "./dist/core/*.js"
+        },
+        "./tools/*": {
+            "types": "./dist/tools/*.d.ts",
+            "import": "./dist/tools/*.js",
+            "require": "./dist/tools/*.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "dependencies": {
+        "@elizaos/core": "0.25.6-alpha.1",
+        "@langchain/core": "^0.3.37",
+        "@langchain/langgraph": "^0.2.44",
+        "axios": "^1.7.9",
+        "core": "link:@types/@elizaos/core",
+        "dotenv": "^16.4.7",
+        "zod": "^3.24.1"
+    },
+    "devDependencies": {
+        "@types/axios": "^0.14.4",
+        "@types/node": "^22.13.0",
+        "@vitest/coverage-v8": "^3.0.5",
+        "happy-dom": "^16.8.1",
+        "typescript": "^5.7.3",
+        "vitest": "^3.0.5"
+    }
 }

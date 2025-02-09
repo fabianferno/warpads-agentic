@@ -1,4 +1,4 @@
-import { Ad, AdResponse } from "./types";
+import { Ad, AdResponse } from "./types.js";
 import axios from "axios";
 import dotenv from "dotenv";
 

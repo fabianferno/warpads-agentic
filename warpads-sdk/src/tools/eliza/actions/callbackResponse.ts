@@ -7,8 +7,8 @@ import {
   Memory,
   State,
 } from "@elizaos/core";
-import { createAdService } from "../services";
-import { callbackResponseExamples } from "../examples";
+import { createAdService } from "../services.js";
+import { callbackResponseExamples } from "../examples.js";
 
 export const callbackResponseAction: Action = {
   name: "CALLBACK_RESPONSE",

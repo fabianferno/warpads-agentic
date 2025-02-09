@@ -1,4 +1,4 @@
-import { createCDPTools } from "../tools/CDPTools";
+import { createCDPTools } from "../tools/CDPTools.js";
 
 type WarpadsConfig = {
   apiKey: string;

@@ -7,8 +7,8 @@ import {
   Memory,
   State,
 } from "@elizaos/core";
-import { createAdService } from "../services";
-import { getAdResponseExamples } from "../examples";
+import { createAdService } from "../services.js";
+import { getAdResponseExamples } from "../examples.js";
 
 export const getResponseWithAdAction: Action = {
   name: "GET_RESPONSE_WITH_AD",
