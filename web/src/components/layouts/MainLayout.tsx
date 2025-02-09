@@ -25,7 +25,9 @@ export default function Layout({
     { name: "My Agents", href: "/agent/my-agents" },
     { name: "My Campaigns", href: "/campaign/my-campaigns" },
     { name: "Docs", href: "/docs" },
+    { name: "Support", href: "https://forms.gle/ag9PNakiuXwasYLR8" },
   ];
+
 
 
 

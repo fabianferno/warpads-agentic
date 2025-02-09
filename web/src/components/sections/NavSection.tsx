@@ -11,6 +11,7 @@ const navigation = [
     { name: "For Advertisers", href: "/campaign/create" },
     { name: "For Developers", href: "/agent/register" },
     { name: "Docs", href: "/docs" },
+    { name: "Support", href: "https://forms.gle/ag9PNakiuXwasYLR8" },
 ];
 
 
