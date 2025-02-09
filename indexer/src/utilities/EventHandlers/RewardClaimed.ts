@@ -11,12 +11,23 @@ export const RewardClaimed = async (
 
   const db = client.db();
 
+  const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
+    id: adSpaceId,
+    chainId: chainId,
+  });
+
+  if (!adSpace) {
+    throw new Error("AdSpace not found");
+  }
+
+  const decrementAmount = Number(BigInt(amount) / BigInt(10 ** 18));
+
   const result = await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
     { id: adSpaceId, chainId: chainId },
     {
-      $inc: {
-        onchainReward: -Number(BigInt(amount) / BigInt(10 ** 18)),
-        reward: -Number(BigInt(amount) / BigInt(10 ** 18)),
+      $set: {
+        onchainReward: adSpace.onchainReward - decrementAmount,
+        reward: adSpace.reward - decrementAmount,
       },
     }
   );
