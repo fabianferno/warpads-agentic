@@ -1,7 +1,6 @@
 import { MongoClient } from "mongodb";
-import { env } from "./env";
 
-const MONGO_URI = env.MONGO_URI;
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
 
 if (!MONGO_URI) {
   throw new Error("MONGO_URI environment variable is required");
@@ -35,7 +34,7 @@ async function connectDB(): Promise<MongoClient> {
     // Check if vector search index exists
     const indexes = await client
       .db()
-      .collection(`${env.NODE_ENV}_adCampaigns`)
+      .collection(`${process.env.NODE_ENV || "development"}_adCampaigns`)
       .listSearchIndexes()
       .toArray();
 

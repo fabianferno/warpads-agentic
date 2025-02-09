@@ -1,5 +1,6 @@
 import connectDB, { client } from "./db";
 import "dotenv/config";
+import { operator } from "./operator";
 
 export const AVSOperatorScript = async () => {
   try {
@@ -29,10 +30,12 @@ export const AVSOperatorScript = async () => {
       console.log(`Calculated Twitter rewards: ${twitterRewards}`);
 
       // get the adSpace
-      const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
-        id: validation.adSpaceId,
-        chainId: validation.chainId,
-      });
+      const adSpace = await db
+        .collection(`${process.env.NODE_ENV || "development"}_adSpaces`)
+        .findOne({
+          id: validation.adSpaceId,
+          chainId: validation.chainId,
+        });
       console.log(`Found adSpace with id: ${validation.adSpaceId}`);
 
       // Calculate the total rewards
@@ -40,26 +43,30 @@ export const AVSOperatorScript = async () => {
       console.log(`Calculated total rewards: ${totalRewards}`);
 
       // Update the adSpace
-      await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-        {
-          id: validation.adSpaceId,
-          chainId: validation.chainId,
-        },
-        {
-          $set: {
-            reward: totalRewards,
+      await db
+        .collection(`${process.env.NODE_ENV || "development"}_adSpaces`)
+        .updateOne(
+          {
+            id: validation.adSpaceId,
+            chainId: validation.chainId,
           },
-        }
-      );
+          {
+            $set: {
+              reward: totalRewards,
+            },
+          }
+        );
       console.log(`Updated adSpace rewards for id: ${validation.adSpaceId}`);
 
       // Mark the validation as verified
-      await db.collection(`${env.NODE_ENV}_validatedLogs`).updateOne(
-        {
-          taskId: validation.taskId,
-        },
-        { $set: { verified: true } }
-      );
+      await db
+        .collection(`${process.env.NODE_ENV || "development"}_validatedLogs`)
+        .updateOne(
+          {
+            taskId: validation.taskId,
+          },
+          { $set: { verified: true } }
+        );
       console.log(
         `Marked validation as verified for taskId: ${validation.taskId}`
       );

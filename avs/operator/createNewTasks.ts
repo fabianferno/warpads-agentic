@@ -1,18 +1,25 @@
 import { ethers } from "ethers";
 import * as dotenv from "dotenv";
-const { db } = require("../utils/mongo");
 const fs = require("fs");
 const path = require("path");
+import { AVSOperatorScript } from "./calculateIncentive.ts";
 dotenv.config();
 
 if (!process.env.MONGO_URI) {
   throw new Error("MONGO_URI environment variable is required");
 }
 
+if (!process.env.NODE_ENV) {
+  throw new Error("NODE_ENV environment variable is required");
+}
+
+if (!process.env.PRIVATE_KEY) {
+  throw new Error("PRIVATE_KEY environment variable is required");
+}
+
 // Setup env variables
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-/// TODO: Hack
 let chainId = 31337;
 
 const avsDeploymentData = JSON.parse(
@@ -36,22 +43,6 @@ const warpAdsServiceManager = new ethers.Contract(
   wallet
 );
 
-async function getAgentIdsToBeProcessed() {
-  // TODO Review: Get the agentIds from the database
-  const agentIds = await db
-    .collection("requestLogs")
-    .aggregate([
-      {
-        $group: {
-          _id: "$agentId",
-          count: { $sum: 1 },
-        },
-      },
-    ])
-    .toArray();
-  return agentIds.map((agentId: any) => agentId.agentId);
-}
-
 async function createNewTask(agentId: string) {
   try {
     // Send a transaction to the createNewTask function
@@ -69,12 +60,7 @@ async function createNewTask(agentId: string) {
 // Function to create a new task with a random name every 15 seconds
 function startCreatingTasks() {
   setInterval(() => {
-    getAgentIdsToBeProcessed().then((agentIdsToBeProcessed) => {
-      for (const agentId of agentIdsToBeProcessed) {
-        console.log(`Creating new task with name: ${agentId}`);
-        createNewTask(agentId);
-      }
-    });
+    AVSOperatorScript();
   }, 90 * 60 * 1000); // 90 minutes
 }
 

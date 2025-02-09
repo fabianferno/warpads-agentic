@@ -21,7 +21,8 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "ethers": "^6.13.2",
-    "mongodb": "^5.11.0"
+    "mongodb": "^6.13.0",
+    "viem": "^2.22.23"
   },
   "devDependencies": {
     "@types/jest": "^29.5.13",
