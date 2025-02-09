@@ -3,6 +3,7 @@ import { env } from "../../config/env";
 
 export const RewardClaimed = async (
   adSpaceId: number,
+  chainId: number,
   user: string,
   amount: number
 ) => {
@@ -11,7 +12,7 @@ export const RewardClaimed = async (
   const db = client.db();
 
   const result = await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-    { adSpaceId },
+    { id: adSpaceId, chainId: chainId },
     {
       $inc: {
         onchainReward: -Number(BigInt(amount) / BigInt(10 ** 18)),

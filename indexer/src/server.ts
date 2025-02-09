@@ -142,7 +142,7 @@ const contractListener = async () => {
         console.log("User:", user);
         console.log("Amount:", amount);
         console.log("Additional args:", args);
-        await RewardClaimed(adSpaceId, user, amount);
+        await RewardClaimed(adSpaceId, 84532, user, amount);
       }
     );
 
@@ -193,7 +193,7 @@ const contractListener = async () => {
         console.log("User:", user);
         console.log("Amount:", amount);
         console.log("Additional args:", args);
-        await RewardClaimed(adSpaceId, user, amount);
+        await RewardClaimed(adSpaceId, 421614, user, amount);
       }
     );
 
@@ -245,7 +245,7 @@ const contractListener = async () => {
         console.log("User:", user);
         console.log("Amount:", amount);
         console.log("Additional args:", args);
-        await RewardClaimed(adSpaceId, user, amount);
+        await RewardClaimed(adSpaceId, 545, user, amount);
       }
     );
   } catch (error) {
