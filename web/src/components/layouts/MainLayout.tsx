@@ -16,12 +16,6 @@ export default function Layout({
 }>) {
   const {
     ready,
-    user,
-    authenticated,
-    login,
-    connectWallet,
-    logout,
-    linkWallet,
   } = usePrivy();
   const pathname = usePathname();
 

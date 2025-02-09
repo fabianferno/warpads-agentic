@@ -17,38 +17,29 @@ export const contractsConfig: {
 } = {
   // Base Sepolia
   84532: {
-    warpTokenAddress: "0xC76162e6e38D57086c0D03d5949D893fBDf9C03E",
-    adspaceAddress: "0x99E06E450F71bb54Fa5410393A361cDcb7789978",
-    adcampaignAddress: "0x79A124D200eDefba9836d988350c354387A7CD89",
-    warpadsAddress: "0x1EBD3946E37519B2b60809c0621F56212121DfC7",
+    warpTokenAddress: "0x14F729862e63c4B4b9a1c6115Db90B6022de80B9",
+    adspaceAddress: "0x3817f9e86E537BCf61e36663BA725e5D573d50bF",
+    adcampaignAddress: "0x8d6Cb187e6933b06807d5Db58e93c7A3fcB725c0",
+    warpadsAddress: "0xE13286840a109A412e67077eE70191740AAA4d18",
     warpTokenDecimals: 18,
     blockExplorerUrl: baseSepolia.blockExplorers.default.url,
   },
   // Arbitrum Sepolia
   421614: {
-    warpTokenAddress: "0xFCED24D3CD405DCdC62265846F51328a67142Af3",
-    adspaceAddress: "0x8B386Edef0750FFFA8d15e514992E919e21dc828",
-    adcampaignAddress: "0xb830f7702a262AbDcaDA58fc760a9D313587aF30",
-    warpadsAddress: "0x327083bdc79F84d3B54970f23bf3AD61802c2A12",
+    warpTokenAddress: "0xAA0122575750fc7437D0de827329637A322bfee1",
+    adspaceAddress: "0x9fd03E8B51c7559d4B3Cc633609dB264FBE16825",
+    adcampaignAddress: "0xe779738E801Bfd80B33Ce41c0c2b651EBe6A7109",
+    warpadsAddress: "0x9eD48b303ADddb3F5D40D2FD7E039b9FFbfAB0E3",
     warpTokenDecimals: 18,
     blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
   },
-  // Mode Testnet
-  919: {
-    warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90",
-    adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB",
-    adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16",
-    warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
+  // Flow Sepolia
+  545: {
+    warpTokenAddress: "0x4Bac3740e3980731f041983B61C075a2D316e78A",
+    adspaceAddress: "0x4Cbb5045BC463ac91D2dDD24AF4639F1D98f32Ef",
+    adcampaignAddress: "0xce0f39abbF9e8d42F9c64fF5EC7bfbb919bedE8E",
+    warpadsAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97",
     warpTokenDecimals: 18,
-    blockExplorerUrl: modeTestnet.blockExplorers.default.url,
-  },
-  // Sei testnet
-  713715: {
-    warpTokenAddress: "0x93316EbF65Bd209b3832a6d383d53905A97f9D90",
-    adspaceAddress: "0x57223AABb448F552Bd69cd48e4bCA980aDa9EAaB",
-    adcampaignAddress: "0x0DAbc440052ED94FfE69de2D704b1F151bF12c16",
-    warpadsAddress: "0xDb487D11Ea86Fa1722313721AD4423dcfEfcFD78",
-    warpTokenDecimals: 18,
-    blockExplorerUrl: seiDevnet.blockExplorers.default.url,
+    blockExplorerUrl: arbitrumSepolia.blockExplorers.default.url,
   },
 };

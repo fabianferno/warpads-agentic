@@ -8,8 +8,7 @@ import { type ThemeProviderProps } from "next-themes/dist/types";
 import {
   baseSepolia,
   arbitrumSepolia,
-  seiDevnet,
-  modeTestnet,
+  flowTestnet,
 } from "viem/chains";
 import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -22,12 +21,13 @@ const queryClient = new QueryClient();
 
 // Create wagmi config with all supported chains
 export const config = createConfig({
-  chains: [baseSepolia, arbitrumSepolia, seiDevnet, modeTestnet],
+  chains: [baseSepolia, arbitrumSepolia, flowTestnet],
   transports: {
     [baseSepolia.id]: http(),
     [arbitrumSepolia.id]: http(),
-    [seiDevnet.id]: http(),
-    [modeTestnet.id]: http(),
+    [flowTestnet.id]: http(),
+
+
   },
 });
 
@@ -66,7 +66,8 @@ export default function Providers({
         },
         loginMethods: ["email", "wallet", "google", "twitter"],
         defaultChain: baseSepolia,
-        supportedChains: [baseSepolia, arbitrumSepolia, seiDevnet],
+        supportedChains: [baseSepolia, arbitrumSepolia, flowTestnet],
+
       }}
     >
       <QueryClientProvider client={queryClient}>

@@ -3,8 +3,6 @@ export const chainLogos: { [key: number]: string } = {
   84532: "/chain-logos/base.svg",
   // Arbitrum Sepolia
   421614: "/chain-logos/arbitrum.svg",
-  // Sei Devnet
-  713715: "/chain-logos/sei.svg",
-  // Mode Testnet
-  919: "/chain-logos/mode.png",
+  // Flow Sepolia
+  545: "/chain-logos/flow.svg",
 };
