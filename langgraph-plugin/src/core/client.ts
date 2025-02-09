@@ -1,4 +1,3 @@
-import { warpadsTool } from "../tools";
 import { createCDPTools } from "../tools/CDPTools";
 
 type WarpadsConfig = {
@@ -7,10 +6,6 @@ type WarpadsConfig = {
 
 export class Warpads {
   constructor(private readonly config: WarpadsConfig) {}
-
-  async getTools() {
-    return warpadsTool;
-  }
 
   getCDPTools() {
     return createCDPTools(this.config.apiKey);

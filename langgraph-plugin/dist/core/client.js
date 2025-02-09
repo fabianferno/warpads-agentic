@@ -1,14 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WarpadsError = exports.Warpads = void 0;
-const tools_1 = require("../tools");
 const CDPTools_1 = require("../tools/CDPTools");
 class Warpads {
+    config;
     constructor(config) {
         this.config = config;
-    }
-    async getTools() {
-        return tools_1.warpadsTool;
     }
     getCDPTools() {
         return (0, CDPTools_1.createCDPTools)(this.config.apiKey);
