@@ -2,18 +2,12 @@ import axios from "axios";
 import connectDB, { client } from "../config/db";
 import { env } from "../config/env";
 
-export const calculateIncentive = async (agentId: number, chainId: number) => {
+export const calculateIncentive = async () => {
   await connectDB();
   const db = client.db();
   const adEngineResponses = await db
     .collection(`${env.NODE_ENV}_responseLogs`)
     .aggregate([
-      {
-        $match: {
-          id: agentId,
-          chainId: chainId,
-        },
-      },
       {
         $lookup: {
           from: "validatedLogs",
@@ -63,31 +57,29 @@ export const calculateIncentive = async (agentId: number, chainId: number) => {
     // Once the reward is calculated, store it in the response to validated
 
     await db.collection(`${env.NODE_ENV}_validatedLogs`).insertOne({
-      adSpaceId: agentId,
-      chainId: chainId,
+      adSpaceId: adEngineResponse.id,
+      chainId: adEngineResponse.chainId,
       refResponseID: adEngineResponse._id,
       validatedAt: new Date(),
       taskId: taskId,
     });
+
+    // store the reward in the database
+    // BAse Reward is 1
+
+    const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
+      id: adEngineResponse.id,
+      chainId: adEngineResponse.chainId,
+    });
+
+    await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
+      { id: adEngineResponse.id, chainId: adEngineResponse.chainId },
+      {
+        $set: {
+          reward: reward + 1 + (adSpace?.reward || 0),
+        },
+      }
+    );
+    console.log(`${adSpace?.metadata.name} has been validated`);
   });
-
-  const adSpace = await db.collection(`${env.NODE_ENV}_adSpaces`).findOne({
-    id: agentId,
-    chainId: chainId,
-  });
-  console.log(`${adSpace?.metadata.name} has been validated`);
-
-  // store the reward in the database
-  await db.collection(`${env.NODE_ENV}_adSpaces`).updateOne(
-    { id: agentId, chainId: chainId },
-    {
-      $set: {
-        reward: reward + adEngineResponses.length * 1 + (adSpace?.reward || 0),
-      },
-    }
-  );
-
-  return reward + adEngineResponses.length * 1;
 };
-
-// calculateIncentive(2);
