@@ -48,6 +48,11 @@ module.exports = {
       chainId: 919,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
+    flow_testnet: {
+      url: "https://testnet.evm.nodes.onflow.org",
+      chainId: 545,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
   },
   etherscan: {
     apiKey: {
@@ -56,6 +61,7 @@ module.exports = {
       arbitrum_sepolia: process.env.ETHERSCAN_API_KEY || "",
       mode_sepolia: process.env.ETHERSCAN_API_KEY || "",
       sei_devnet: process.env.ETHERSCAN_API_KEY || "",
+      flow_testnet: process.env.ETHERSCAN_API_KEY || "",
     },
     customChains: [
       {

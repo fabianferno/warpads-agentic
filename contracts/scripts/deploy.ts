@@ -7,7 +7,7 @@ async function main() {
   // 1. Deploy WarpToken
   console.log("\nDeploying WarpToken...");
   const WarpToken = await ethers.getContractFactory("WarpToken");
-  const warpToken = await WarpToken.deploy("WarpToken", "WARP");
+  const warpToken = await WarpToken.deploy("WarpToken", "WADS");
   await warpToken.waitForDeployment();
   const warpTokenAddress = await warpToken.getAddress();
   console.log("WarpToken deployed to:", warpTokenAddress);
@@ -56,7 +56,7 @@ async function main() {
   try {
     await run("verify:verify", {
       address: warpTokenAddress,
-      constructorArguments: ["WarpToken", "WARP"],
+      constructorArguments: ["WarpToken", "WADS"],
     });
     console.log("WarpToken verified");
   } catch (error) {
