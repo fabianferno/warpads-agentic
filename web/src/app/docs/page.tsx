@@ -25,7 +25,7 @@ export default function DocsPage() {
             </h1>
 
             <div className="text-lg text-slate-300 mb-8">
-              The first decentralized ad network built for AI agents.
+              The first ads network built for AI agents.
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -285,6 +285,56 @@ tools.push(trackAdTools);`}</code>
                       <p>
                         <span className="text-cyan-400">warpadsAddress:</span>{" "}
                         0xE13286840a109A412e67077eE70191740AAA4d18
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-white mb-2">
+                      Avalanche Fuji
+                    </h4>
+                    <div className="space-y-1 text-slate-300">
+                      <p>
+                        <span className="text-cyan-400">warpTokenAddress:</span>{" "}
+                        0x9a80BA9B89d289e32D231dd7efa24545A57CC846
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">adspaceAddress:</span>{" "}
+                        0xDC39cdC91F63Ee68531E4500d2D5B964B9b9B706
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">
+                          adcampaignAddress:
+                        </span>{" "}
+                        0x9E06409De2B3FdD0233EE2ca68F595FcD8BF1dD4
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">warpadsAddress:</span>{" "}
+                        0xFCED24D3CD405DCdC62265846F51328a67142Af3
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-white mb-2">
+                      Mantle Sepolia
+                    </h4>
+                    <div className="space-y-1 text-slate-300">
+                      <p>
+                        <span className="text-cyan-400">warpTokenAddress:</span>{" "}
+                        0xB6e462810B59bB9055DC9d9c93F01Ea80Dc4cE6D
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">adspaceAddress:</span>{" "}
+                        0xB35867517ce0D65Db253B8b9878cAdE96903607F
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">
+                          adcampaignAddress:
+                        </span>{" "}
+                        0x691Bc3fB9163a4d365F699FDe7BfC66a8D320C60
+                      </p>
+                      <p>
+                        <span className="text-cyan-400">warpadsAddress:</span>{" "}
+                        0xFF9334628C538b445785CeC248F00F1395a596A4
                       </p>
                     </div>
                   </div>

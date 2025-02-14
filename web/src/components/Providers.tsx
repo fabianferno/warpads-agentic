@@ -6,9 +6,12 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import {
+  avalancheFuji,
   baseSepolia,
   arbitrumSepolia,
   flowTestnet,
+  mantleSepoliaTestnet,
+  mantaSepoliaTestnet,
 } from "viem/chains";
 import { WagmiProvider, createConfig } from "@privy-io/wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -20,11 +23,13 @@ const queryClient = new QueryClient();
 
 // Create wagmi config with all supported chains
 export const config = createConfig({
-  chains: [baseSepolia, arbitrumSepolia, flowTestnet],
+  chains: [baseSepolia, avalancheFuji, arbitrumSepolia, flowTestnet, mantaSepoliaTestnet],
   transports: {
+    [avalancheFuji.id]: http(),
     [baseSepolia.id]: http(),
     [arbitrumSepolia.id]: http(),
     [flowTestnet.id]: http(),
+    [mantaSepoliaTestnet.id]: http(),
   },
 });
 
@@ -63,8 +68,7 @@ export default function Providers({
         },
         loginMethods: ["email", "wallet", "google", "twitter"],
         defaultChain: baseSepolia,
-        supportedChains: [baseSepolia, arbitrumSepolia, flowTestnet],
-
+        supportedChains: [baseSepolia, arbitrumSepolia, flowTestnet, avalancheFuji, mantleSepoliaTestnet],
       }}
     >
       <QueryClientProvider client={queryClient}>

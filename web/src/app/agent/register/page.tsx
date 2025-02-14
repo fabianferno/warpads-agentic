@@ -1,8 +1,8 @@
-import AdSpacePage from "@/components/pages/AdSpacePage";
+import RegisterAgentPage from "@/components/pages/RegisterAgentPage";
 import React from "react";
 
 const page = () => {
-  return <AdSpacePage />;
+  return <RegisterAgentPage />;
 };
 
 export default page;

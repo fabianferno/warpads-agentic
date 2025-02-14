@@ -10,6 +10,7 @@ import { operator } from "../utilities/operator/operator";
 import { calculateIncentive } from "../utilities/IncentiveCalculator";
 import { env } from "../config/env";
 import { getAllAdCampaigns } from "../utilities/GetAllAdCampaigns";
+import { client } from "../config/db";
 
 const router = Router();
 
@@ -30,6 +31,64 @@ router.get("/get-ad", authMiddleware, async (req: Request, res: Response) => {
   } else {
     res.status(200).send(ad.ad);
   }
+});
+
+router.get("/get-all-ads", async (req: Request, res: Response) => {
+  const db = client.db("warpads");
+
+  const adCampaigns = await db
+    .collection(`development_adCampaigns`)
+    .aggregate([
+      {
+        $lookup: {
+          from: `development_requestLogs`,
+          localField: "id",
+          foreignField: "adId",
+          as: "insights",
+        },
+      },
+      {
+        $addFields: {
+          "metadata.name": { $trim: { input: "$metadata.name" } },
+        },
+      },
+      {
+        $group: {
+          _id: "$metadata.name",
+          id: { $first: "$id" },
+          owner: { $first: "$owner" },
+          metadata: { $first: "$metadata" },
+          priorityStake: { $first: "$priorityStake" },
+          expiry: { $first: "$expiry" },
+          active: { $first: "$active" },
+          chainId: { $first: "$chainId" },
+          createdAt: { $first: "$createdAt" },
+          updatedAt: { $first: "$updatedAt" },
+          insights: { $first: "$insights" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          owner: 1,
+          metadata: 1,
+          priorityStake: 1,
+          expiry: 1,
+          active: 1,
+          chainId: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          "insights.id": 1,
+          "insights.adId": 1,
+          "insights.adSpaceId": 1,
+          "insights.requestedAt": 1,
+        },
+      },
+    ])
+    .toArray();
+
+  res.status(200).send(adCampaigns);
 });
 
 router.get("/get-my-agents", async (req: Request, res: Response) => {

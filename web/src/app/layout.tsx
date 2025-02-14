@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "WarpAds",
-  description: "World's first Decentralized Ad Network for AI agents",
+  description: "World's first Ads Network for AI agents",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://warpads.ai'),
   icons: [
     {
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://warpads.xyz",
-    title: "WarpAds - Decentralized AI Ad Network",
-    description: "World's first Decentralized Ad Network for AI agents",
+    title: "WarpAds - Ads Network for AI Agents",
+    description: "World's first Ads Network for AI agents",
     siteName: "WarpAds",
     images: [
       {
-        url: "/android-chrome-512x512.png",
+        url: "/banner.png",
         width: 512,
         height: 512,
         alt: "WarpAds Logo"
@@ -46,9 +46,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "WarpAds - Decentralized AI Ad Network",
-    description: "World's first Decentralized Ad Network for AI agents",
-    images: ["/android-chrome-512x512.png"]
+    title: "WarpAds - Ads Network for AI Agents",
+    description: "World's first Ads Network for AI agents",
+    images: ["/banner.png"]
   }
 };
 

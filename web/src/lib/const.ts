@@ -1,4 +1,10 @@
-import { baseSepolia, arbitrumSepolia, flowTestnet } from "viem/chains";
+import {
+  baseSepolia,
+  arbitrumSepolia,
+  flowTestnet,
+  mantleSepoliaTestnet,
+  avalancheFuji,
+} from "viem/chains";
 
 export const contractsConfig: {
   [key: number]: {
@@ -10,6 +16,15 @@ export const contractsConfig: {
     blockExplorerUrl: string;
   };
 } = {
+  // Avalanche Fuji
+  43113: {
+    warpTokenAddress: "0x9a80BA9B89d289e32D231dd7efa24545A57CC846",
+    adspaceAddress: "0xDC39cdC91F63Ee68531E4500d2D5B964B9b9B706",
+    adcampaignAddress: "0x9E06409De2B3FdD0233EE2ca68F595FcD8BF1dD4",
+    warpadsAddress: "0xFCED24D3CD405DCdC62265846F51328a67142Af3",
+    warpTokenDecimals: 18,
+    blockExplorerUrl: avalancheFuji.blockExplorers.default.url,
+  },
   // Base Sepolia
   84532: {
     warpTokenAddress: "0x14F729862e63c4B4b9a1c6115Db90B6022de80B9",
@@ -36,5 +51,14 @@ export const contractsConfig: {
     warpadsAddress: "0x8A5fA1b0A754Ca969a748bF507b41c76aB43DC97",
     warpTokenDecimals: 18,
     blockExplorerUrl: flowTestnet.blockExplorers.default.url,
+  },
+  // Mantle Sepolia Testnet
+  5003: {
+    warpTokenAddress: "0xB6e462810B59bB9055DC9d9c93F01Ea80Dc4cE6D",
+    adspaceAddress: "0xB35867517ce0D65Db253B8b9878cAdE96903607F",
+    adcampaignAddress: "0x691Bc3fB9163a4d365F699FDe7BfC66a8D320C60",
+    warpadsAddress: "0xFF9334628C538b445785CeC248F00F1395a596A4",
+    warpTokenDecimals: 18,
+    blockExplorerUrl: mantleSepoliaTestnet.blockExplorers.default.url,
   },
 };

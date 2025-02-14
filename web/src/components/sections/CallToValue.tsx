@@ -34,7 +34,7 @@ const CodeBlock = ({ code }: { code: string }) => (
 const plugins = [
     {
         name: "ElizaOS Plugin",
-        image: "/assets/Plugin1.png",
+        image: "/images/Plugin1.png",
         code: `
         import { warpAdsPlugin } from "@elizaos/plugin-warpads";
 
@@ -52,7 +52,7 @@ return new AgentRunTime({
     },
     {
         name: "LangChain CDP Plugin",
-        image: "/assets/Plugin2.jpg",
+        image: "/images/Plugin2.jpg",
         code: `
         const { WarpAdsToolkit } = require("@warpads-toolkit/langchain");
 

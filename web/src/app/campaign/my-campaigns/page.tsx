@@ -1,8 +1,8 @@
-import MyAds from "@/components/pages/MyAds";
+import MyAdsPage from "@/components/pages/MyAdsPage";
 import React from "react";
 
 const page = () => {
-  return <MyAds />;
+  return <MyAdsPage />;
 };
 
 export default page;

@@ -1,8 +1,8 @@
-import MyAgents from "@/components/pages/MyAgents";
+import MyAgentsPage from "@/components/pages/MyAgentsPage";
 import React from "react";
 
 const page = () => {
-  return <MyAgents />;
+  return <MyAgentsPage />;
 };
 
 export default page;

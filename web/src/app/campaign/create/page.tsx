@@ -1,8 +1,8 @@
-import AdCampaignForm from "@/components/pages/AdCampaignPage";
+import CreateCampaignPage from "@/components/pages/CreateCampaignPage";
 import React from "react";
 
 const page = () => {
-  return <AdCampaignForm />;
+  return <CreateCampaignPage />;
 };
 
 export default page;

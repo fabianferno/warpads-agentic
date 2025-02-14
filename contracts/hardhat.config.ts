@@ -34,7 +34,6 @@ module.exports = {
       url: `https://opt-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
-
     base_sepolia: {
       url: `https://base-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
@@ -53,6 +52,26 @@ module.exports = {
       chainId: 545,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
+    mantle_sepolia: {
+      url: `https://rpc.sepolia.mantle.xyz`,
+      chainId: 5003,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
+    avalanche_fuji: {
+      url: "https://api.avax-test.network/ext/bc/C/rpc",
+      chainId: 43113,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
+    inEVM: {
+      url: "https://mainnet.rpc.inevm.com/http",
+      chainId: 2525,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
+    inEVM_testnet: {
+      url: "https://testnet.rpc.inevm.com/http",
+      chainId: 2424,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
   },
   etherscan: {
     apiKey: {
@@ -62,6 +81,10 @@ module.exports = {
       mode_sepolia: process.env.ETHERSCAN_API_KEY || "",
       sei_devnet: process.env.ETHERSCAN_API_KEY || "",
       flow_testnet: process.env.ETHERSCAN_API_KEY || "",
+      avalanche_fuji: process.env.ETHERSCAN_API_KEY || "",
+      mantle_sepolia: process.env.ETHERSCAN_API_KEY || "",
+      inEVM: process.env.ETHERSCAN_API_KEY || "",
+      inEVM_testnet: process.env.ETHERSCAN_API_KEY || "",
     },
     customChains: [
       {
