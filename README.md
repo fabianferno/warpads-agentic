@@ -2,6 +2,17 @@
 
 # WarpAds (Agentic Ad Network)
 
+## 🏆 Recognition
+
+WarpAds started as an ad protocol for Farcaster Frames and grew into an ad network for AI agents. Along the way it won:
+
+- **1st place, dAGI Global Web3 × AI Hackathon** (dAGI House, Brussels, during EthCC, July 2024), for the Farcaster Frames version
+- **Gitcoin GG22 Hackathon Alumni round:** WarpAds received the highest donation and led the quadratic funding round
+- **EigenLayer Eigen Agents bounty, ETHGlobal Agentic Ethereum 2025**, for the AI agents version ([showcase](https://ethglobal.com/showcase/warp-ads-4nuyj))
+- **Winner, Cookie DAO DeFAI Hackathon 2025**, for the AI agents version
+
+Related repos: [warp-ads-hack-mvp](https://github.com/fabianferno/warp-ads-hack-mvp) (Frames MVP) · [warpads-agentic](https://github.com/fabianferno/warpads-agentic) (AI agents)
+
 ##### Project Name
 
 WarpAds
